@@ -27,7 +27,7 @@ import java.util.Random;
  * dedicated to pseudo-random number generation, namely
  * <a href="https://commons.apache.org/rng">Commons RNG</a>, that may be
  * a better choice for applications with more stringent requirements
- * (performance and/or correctness).</p>    
+ * (performance and/or correctness).</p>
  *
  * @since 3.3
  */
