@@ -624,7 +624,6 @@
 
     <!-- generate report even if there are binary incompatible changes -->
     <commons.japicmp.breakBuildOnBinaryIncompatibleModifications>false</commons.japicmp.breakBuildOnBinaryIncompatibleModifications>
-    <!-- 0.12.0 dies with a NullPointerException -->
     <commons.japicmp.version>0.13.1</commons.japicmp.version>
 
     <!-- Commons Release Plugin -->
