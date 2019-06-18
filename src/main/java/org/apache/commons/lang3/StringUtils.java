@@ -27,8 +27,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import org.checkerframework.common.value.qual.EnsuresMinLenIf;
-
 /**
  * <p>Operations on {@link java.lang.String} that are
  * {@code null} safe.</p>
@@ -211,9 +209,9 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 2.0
      */
-    @EnsuresMinLenIf(expression = "#1", result = false, targetValue = 1)
-    public static boolean isEmpty(final CharSequence cs) {
-        return cs == null || cs.length() == 0;
+    public static String abbreviate(final String str, final int maxWidth) {
+        final String defaultAbbrevMarker = "...";
+        return abbreviate(str, defaultAbbrevMarker, 0, maxWidth);
     }
 
     /**
@@ -4007,41 +4005,7 @@ public class StringUtils {
      * @return the joined String, {@code null} if null array input
      * @since 3.2
      */
-    public static String join(final double[] array, final char separator) {
-        if (array == null) {
-            return null;
-        }
-        return join(array, separator, 0, array.length);
-    }
-
-
-    /**
-     * <p>Joins the elements of the provided array into a single String
-     * containing the provided list of elements.</p>
-     *
-     * <p>No delimiter is added before or after the list.
-     * Null objects or empty strings within the array are represented by
-     * empty strings.</p>
-     *
-     * <pre>
-     * StringUtils.join(null, *)               = null
-     * StringUtils.join([], *)                 = ""
-     * StringUtils.join([null], *)             = ""
-     * StringUtils.join(["a", "b", "c"], ';')  = "a;b;c"
-     * StringUtils.join(["a", "b", "c"], null) = "abc"
-     * StringUtils.join([null, "", "a"], ';')  = ";;a"
-     * </pre>
-     *
-     * @param array  the array of values to join together, may be null
-     * @param separator  the separator character to use
-     * @param startIndex the first index to start joining from.  It is
-     * an error to pass in an end index past the end of the array
-     * @param endIndex the index to stop joining from (exclusive). It is
-     * an error to pass in an end index past the end of the array
-     * @return the joined String, {@code null} if null array input
-     * @since 2.0
-     */
-    public static String join(final Object[] array, final char separator, final int startIndex, final int endIndex) {
+    public static String join(final double[] array, final char separator, final int startIndex, final int endIndex) {
         if (array == null) {
             return null;
         }
@@ -4114,7 +4078,7 @@ public class StringUtils {
      * @param separator
      *            the separator character to use
      * @param startIndex
-     *            the first index to start joining from. It is an error to pass in an end index past the end of the
+     *            the first index to start joining from. It is an error to pass in a start index past the end of the
      *            array
      * @param endIndex
      *            the index to stop joining from (exclusive). It is an error to pass in an end index past the end of
@@ -4195,7 +4159,7 @@ public class StringUtils {
      * @param separator
      *            the separator character to use
      * @param startIndex
-     *            the first index to start joining from. It is an error to pass in an end index past the end of the
+     *            the first index to start joining from. It is an error to pass in a start index past the end of the
      *            array
      * @param endIndex
      *            the index to stop joining from (exclusive). It is an error to pass in an end index past the end of
@@ -4204,55 +4168,6 @@ public class StringUtils {
      * @since 3.2
      */
     public static String join(final int[] array, final char separator, final int startIndex, final int endIndex) {
-        if (array == null) {
-            return null;
-        }
-        final int noOfItems = endIndex - startIndex;
-        if (noOfItems <= 0) {
-            return EMPTY;
-        }
-        final StringBuilder buf = newStringBuilder(noOfItems);
-        for (int i = startIndex; i < endIndex; i++) {
-            if (i > startIndex) {
-                buf.append(separator);
-            }
-            buf.append(array[i]);
-        }
-        return buf.toString();
-    }
-
-    /**
-     * <p>
-     * Joins the elements of the provided array into a single String containing the provided list of elements.
-     * </p>
-     *
-     * <p>
-     * No delimiter is added before or after the list. Null objects or empty strings within the array are represented
-     * by empty strings.
-     * </p>
-     *
-     * <pre>
-     * StringUtils.join(null, *)               = null
-     * StringUtils.join([], *)                 = ""
-     * StringUtils.join([null], *)             = ""
-     * StringUtils.join([1, 2, 3], ';')  = "1;2;3"
-     * StringUtils.join([1, 2, 3], null) = "123"
-     * </pre>
-     *
-     * @param array
-     *            the array of values to join together, may be null
-     * @param separator
-     *            the separator character to use
-     * @param startIndex
-     *            the first index to start joining from. It is an error to pass in an end index past the end of the
-     *            array
-     * @param endIndex
-     *            the index to stop joining from (exclusive). It is an error to pass in an end index past the end of
-     *            the array
-     * @return the joined String, {@code null} if null array input
-     * @since 3.2
-     */
-    public static String join(final double[] array, final char separator, final int startIndex, final int endIndex) {
         if (array == null) {
             return null;
         }
@@ -4422,7 +4337,7 @@ public class StringUtils {
      * @param list  the {@code List} of values to join together, may be null
      * @param separator  the separator character to use
      * @param startIndex the first index to start joining from.  It is
-     * an error to pass in an end index past the end of the list
+     * an error to pass in a start index past the end of the list
      * @param endIndex the index to stop joining from (exclusive). It is
      * an error to pass in an end index past the end of the list
      * @return the joined String, {@code null} if null list input
@@ -4460,7 +4375,7 @@ public class StringUtils {
      * @param list  the {@code List} of values to join together, may be null
      * @param separator  the separator character to use
      * @param startIndex the first index to start joining from.  It is
-     * an error to pass in an end index past the end of the list
+     * an error to pass in a start index past the end of the list
      * @param endIndex the index to stop joining from (exclusive). It is
      * an error to pass in an end index past the end of the list
      * @return the joined String, {@code null} if null list input
@@ -9457,16 +9372,16 @@ public class StringUtils {
      * </p>
      *
      * <pre>
-     * StringUtils.wrap(null, *)        = null
-     * StringUtils.wrap("", *)          = ""
-     * StringUtils.wrap("ab", '\0')     = "ab"
-     * StringUtils.wrap("ab", 'x')      = "xabx"
-     * StringUtils.wrap("ab", '\'')     = "'ab'"
-     * StringUtils.wrap("\"ab\"", '\"') = "\"ab\""
-     * StringUtils.wrap("/", '/')  = "/"
-     * StringUtils.wrap("a/b/c", '/')  = "/a/b/c/"
-     * StringUtils.wrap("/a/b/c", '/')  = "/a/b/c/"
-     * StringUtils.wrap("a/b/c/", '/')  = "/a/b/c/"
+     * StringUtils.wrapIfMissing(null, *)        = null
+     * StringUtils.wrapIfMissing("", *)          = ""
+     * StringUtils.wrapIfMissing("ab", '\0')     = "ab"
+     * StringUtils.wrapIfMissing("ab", 'x')      = "xabx"
+     * StringUtils.wrapIfMissing("ab", '\'')     = "'ab'"
+     * StringUtils.wrapIfMissing("\"ab\"", '\"') = "\"ab\""
+     * StringUtils.wrapIfMissing("/", '/')  = "/"
+     * StringUtils.wrapIfMissing("a/b/c", '/')  = "/a/b/c/"
+     * StringUtils.wrapIfMissing("/a/b/c", '/')  = "/a/b/c/"
+     * StringUtils.wrapIfMissing("a/b/c/", '/')  = "/a/b/c/"
      * </pre>
      *
      * @param str
@@ -9497,20 +9412,20 @@ public class StringUtils {
      * </p>
      *
      * <pre>
-     * StringUtils.wrap(null, *)         = null
-     * StringUtils.wrap("", *)           = ""
-     * StringUtils.wrap("ab", null)      = "ab"
-     * StringUtils.wrap("ab", "x")       = "xabx"
-     * StringUtils.wrap("ab", "\"")      = "\"ab\""
-     * StringUtils.wrap("\"ab\"", "\"")  = "\"ab\""
-     * StringUtils.wrap("ab", "'")       = "'ab'"
-     * StringUtils.wrap("'abcd'", "'")   = "'abcd'"
-     * StringUtils.wrap("\"abcd\"", "'") = "'\"abcd\"'"
-     * StringUtils.wrap("'abcd'", "\"")  = "\"'abcd'\""
-     * StringUtils.wrap("/", "/")  = "/"
-     * StringUtils.wrap("a/b/c", "/")  = "/a/b/c/"
-     * StringUtils.wrap("/a/b/c", "/")  = "/a/b/c/"
-     * StringUtils.wrap("a/b/c/", "/")  = "/a/b/c/"
+     * StringUtils.wrapIfMissing(null, *)         = null
+     * StringUtils.wrapIfMissing("", *)           = ""
+     * StringUtils.wrapIfMissing("ab", null)      = "ab"
+     * StringUtils.wrapIfMissing("ab", "x")       = "xabx"
+     * StringUtils.wrapIfMissing("ab", "\"")      = "\"ab\""
+     * StringUtils.wrapIfMissing("\"ab\"", "\"")  = "\"ab\""
+     * StringUtils.wrapIfMissing("ab", "'")       = "'ab'"
+     * StringUtils.wrapIfMissing("'abcd'", "'")   = "'abcd'"
+     * StringUtils.wrapIfMissing("\"abcd\"", "'") = "'\"abcd\"'"
+     * StringUtils.wrapIfMissing("'abcd'", "\"")  = "\"'abcd'\""
+     * StringUtils.wrapIfMissing("/", "/")  = "/"
+     * StringUtils.wrapIfMissing("a/b/c", "/")  = "/a/b/c/"
+     * StringUtils.wrapIfMissing("/a/b/c", "/")  = "/a/b/c/"
+     * StringUtils.wrapIfMissing("a/b/c/", "/")  = "/a/b/c/"
      * </pre>
      *
      * @param str
