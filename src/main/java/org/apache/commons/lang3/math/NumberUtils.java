@@ -1622,6 +1622,7 @@ public class NumberUtils {
         if (StringUtils.isEmpty(str)) {
             return false;
         }
+        @SuppressWarnings("value:assignment.type.incompatible") // !StringUtils.isEmpty(str) => @MinLen(1)
         final char @MinLen(1) [] chars = str.toCharArray();
         int sz = chars.length;
         boolean hasExp = false;
@@ -1748,6 +1749,10 @@ public class NumberUtils {
      * @return {@code true} if the string is a parsable number.
      * @since 3.4
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #6, #7, #9: !StringUtils.isEmpty(str) => @MinLen(1)
+    #8: str.length() != 1 && !StringUtils.isEmpty(str) => str.length > 1
+    */
     public static boolean isParsable(final String str) {
         if (StringUtils.isEmpty(str)) {
             return false;
@@ -1759,9 +1764,9 @@ public class NumberUtils {
             if (str.length() == 1) {
                 return false;
             }
-            return withDecimalsParsing(str, 1);
+            return withDecimalsParsing(str, 1); // #8
         }
-        return withDecimalsParsing(str, 0);
+        return withDecimalsParsing(str, 0); // #9
     }
 
     private static boolean withDecimalsParsing(final String str, final @IndexFor("#1") int beginIdx) {

@@ -645,6 +645,7 @@
           <artifactId>apache-rat-plugin</artifactId>
           <configuration>
             <excludes>
+              <exclude>/Stubs/*</exclude>
               <exclude>site-content/**</exclude>
               <exclude>src/site/resources/.htaccess</exclude>
               <exclude>src/site/resources/download_lang.cgi</exclude>
