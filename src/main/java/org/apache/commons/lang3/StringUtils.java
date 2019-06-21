@@ -31,6 +31,7 @@ import org.checkerframework.common.value.qual.EnsuresMinLenIf;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.SameLen;
 
 /**
  * <p>Operations on {@link java.lang.String} that are
@@ -6673,13 +6674,12 @@ public class StringUtils {
      * @since 2.4
      */
     @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible","index:array.access.unsafe.low"}) /*
-    #1: searchLength = replacementLength is checked in #0.1
     #2: textIndex != -1 and is an index searched for in the string, hence a valid index
     #3: textIndex != -1 => replaceIndex != -1
     #4: searchLength = replacementLeng as checked in #0.1
     */
     private static String replaceEach(
-            final String text, final String[] searchList, final String[] replacementList, final boolean repeat, final int timeToLive) {
+            final String text, final String @SameLen("#3") [] searchList, final String @SameLen("#2") [] replacementList, final boolean repeat, final int timeToLive) {
 
         // mchyzer Performance note: This creates very few new objects (one major goal)
         // let me know if there are performance requests, we can create a harness to measure
@@ -6750,7 +6750,7 @@ public class StringUtils {
             if (searchList[i] == null || replacementList[i] == null) { // #1
                 continue;
             }
-            final int greater = replacementList[i].length() - searchList[i].length(); // #1
+            final int greater = replacementList[i].length() - searchList[i].length();
             if (greater > 0) {
                 increase += 3 * greater; // assume 3 matches
             }

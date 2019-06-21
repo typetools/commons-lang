@@ -442,7 +442,7 @@ public class Conversion {
      * @throws IllegalArgumentException if {@code src} is empty
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    /*@SuppressWarnings("index:argument.type.incompatible") /*
+    @SuppressWarnings("index:argument.type.incompatible") /*
     #1: beSrcPos + 1 - srcLen = beSrcPos + 1 - Math.min(4, beSrcPos + 1) which has min value 0
         4 - srcLen = 4 - Math.min(4, beSrcPos + 1) which has min value 0
         srcLen is @NonNegative and @LTLengthOf(value = "#1", offset = "#2 - 1"), i.e., srcLen < src.length - beSrcPos - 1 + srcLen + 1 => 0 < src.length - src.length + 1 + srcPos => 0 < 1 + srcPos which is true
