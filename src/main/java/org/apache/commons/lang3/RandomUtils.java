@@ -19,6 +19,7 @@ package org.apache.commons.lang3;
 import java.util.Random;
 
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LessThan;
 
 /**
  * <p>Utility library that supplements the standard {@link Random} class.</p>
@@ -101,8 +102,7 @@ public class RandomUtils {
      *             {@code startInclusive} is negative
      * @return the random integer
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: Validate.isTrue ensures endExclusive >= startInclusive and both are non negative as well
-    public static int nextInt(final int startInclusive, final int endExclusive) {
+    public static int nextInt(final @LessThan("#2") int startInclusive, final int endExclusive) {
         Validate.isTrue(endExclusive >= startInclusive,
                 "Start value must be smaller or equal to end value.");
         Validate.isTrue(startInclusive >= 0, "Both range values must be non-negative.");
@@ -121,6 +121,7 @@ public class RandomUtils {
      * @see #nextInt(int, int)
      * @since 3.5
      */
+    @SuppressWarnings("index:argument.type.incompatible") // 0 < Integer.MAX_VALUE
     public static int nextInt() {
         return nextInt(0, Integer.MAX_VALUE);
     }
