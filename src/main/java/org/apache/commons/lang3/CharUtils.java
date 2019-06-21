@@ -310,7 +310,7 @@ public class CharUtils {
      */
     public static String toString(final @NonNegative char ch) {
         if (ch < 128) {
-            return CHAR_STRING_ARRAY[ch]; // #1
+            return CHAR_STRING_ARRAY[ch];
         }
         return new String(new char[] {ch});
     }
@@ -332,11 +332,12 @@ public class CharUtils {
      * @param ch  the character to convert
      * @return a String containing the one specified character
      */
-    public static String toString(final Character ch) {
+    @SuppressWarnings("index:argument.type.incompatible") // #1: @NonNegative argument as defined in parameter to the function
+    public static String toString(final @NonNegative Character ch) {
         if (ch == null) {
             return null;
         }
-        return toString(ch.charValue());
+        return toString(ch.charValue()); // #1
     }
 
     //--------------------------------------------------------------------------

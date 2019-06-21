@@ -21,6 +21,7 @@ import java.util.Random;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LessThan;
 
 /**
  * <p>Operations for random {@code String}s.</p>
@@ -111,7 +112,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAscii(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAscii(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomAscii(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -140,7 +141,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAlphabetic(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAlphabetic(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomAlphabetic(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -170,7 +171,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAlphanumeric(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAlphanumeric(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomAlphanumeric(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -200,7 +201,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomGraph(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomGraph(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomGraph(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -229,7 +230,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomNumeric(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomNumeric(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomNumeric(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -259,7 +260,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomPrint(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomPrint(final @LessThan("#2") int minLengthInclusive, final int maxLengthExclusive) {
         return randomPrint(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
