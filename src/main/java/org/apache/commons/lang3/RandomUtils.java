@@ -18,6 +18,8 @@ package org.apache.commons.lang3;
 
 import java.util.Random;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+
 /**
  * <p>Utility library that supplements the standard {@link Random} class.</p>
  *
@@ -77,8 +79,7 @@ public class RandomUtils {
      * @return the random byte array
      * @throws IllegalArgumentException if {@code count} is negative
      */
-    @SuppressWarnings("index:array.length.negative") // Validate.isTrue => count >= 0
-    public static byte[] nextBytes(final int count) {
+    public static byte[] nextBytes(final @NonNegative int count) {
         Validate.isTrue(count >= 0, "Count cannot be negative.");
 
         final byte[] result = new byte[count];

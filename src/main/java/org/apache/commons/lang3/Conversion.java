@@ -22,6 +22,7 @@ import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.common.value.qual.MinLen;
 
 
 /**
@@ -292,8 +293,7 @@ public class Conversion {
      * @throws IllegalArgumentException if {@code src} is empty
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    @SuppressWarnings("index:argument.type.incompatible") // if src.length == 0, it throws an IllegalArgumentException
-    public static char binaryToHexDigit(final boolean[] src) {
+    public static char binaryToHexDigit(final boolean @MinLen(1) [] src) {
         return binaryToHexDigit(src, 0);
     }
 
@@ -355,8 +355,7 @@ public class Conversion {
      *             {@code src.length > 8}
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    @SuppressWarnings("index:argument.type.incompatible") // if src.length == 0, it throws an IllegalArgumentException
-    public static char binaryToHexDigitMsb0_4bits(final boolean[] src) {
+    public static char binaryToHexDigitMsb0_4bits(final boolean @MinLen(1) [] src) {
         return binaryToHexDigitMsb0_4bits(src, 0);
     }
 
@@ -423,8 +422,7 @@ public class Conversion {
      * @throws IllegalArgumentException if {@code src} is empty
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    @SuppressWarnings("index:argument.type.incompatible") // If src is empty, IllegalArgumentException is thrown
-    public static char binaryBeMsb0ToHexDigit(final boolean[] src) {
+    public static char binaryBeMsb0ToHexDigit(final boolean @MinLen(1) [] src) {
         return binaryBeMsb0ToHexDigit(src, 0);
     }
 
@@ -444,13 +442,13 @@ public class Conversion {
      * @throws IllegalArgumentException if {@code src} is empty
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    @SuppressWarnings("index:argument.type.incompatible") /*
+    /*@SuppressWarnings("index:argument.type.incompatible") /*
     #1: beSrcPos + 1 - srcLen = beSrcPos + 1 - Math.min(4, beSrcPos + 1) which has min value 0
         4 - srcLen = 4 - Math.min(4, beSrcPos + 1) which has min value 0
         srcLen is @NonNegative and @LTLengthOf(value = "#1", offset = "#2 - 1"), i.e., srcLen < src.length - beSrcPos - 1 + srcLen + 1 => 0 < src.length - src.length + 1 + srcPos => 0 < 1 + srcPos which is true
         Also, srcLen is @LTLengthOf(value = "#3", offset = "#4 - 1"), i.e., srcLen < paddedSrc.length - 4 + srclen + 1 => 0 < 4 - 4 + 1 which is true   
     */
-    public static char binaryBeMsb0ToHexDigit(boolean[] src, @IndexFor("#1") int srcPos) {
+    public static char binaryBeMsb0ToHexDigit(boolean @MinLen(1) [] src, @IndexFor("#1") int srcPos) {
         if (src.length == 0) {
             throw new IllegalArgumentException("Cannot convert an empty array.");
         }

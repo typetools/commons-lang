@@ -87,8 +87,7 @@ public class LocaleUtils {
      * @throws IllegalArgumentException if the string is an invalid format
      * @see Locale#forLanguageTag(String)
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: str.length > 3 as checked by #0.1
-    public static Locale toLocale(final String str) {
+    public static Locale toLocale(final @MinLen(3) String str) {
         if (str == null) {
             return null;
         }
