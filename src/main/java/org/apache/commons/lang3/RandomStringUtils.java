@@ -298,7 +298,9 @@ public class RandomStringUtils {
      *  numeric characters
      * @return the random string
      */
-    @SuppressWarnings("index:argument.type.incompatible") // null array is handled differently
+    @SuppressWarnings("index:argument.type.incompatible") /* If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
+    */
     public static String random(final int count, final @NonNegative int start, final @NonNegative int end, final boolean letters, final boolean numbers) {
         return random(count, start, end, letters, numbers, null, RANDOM);
     }
@@ -459,7 +461,9 @@ public class RandomStringUtils {
      * @return the random string
      * @throws IllegalArgumentException if {@code count} &lt; 0 or the string is empty.
      */
-    @SuppressWarnings("index:argument.type.incompatible") // null array is handled differently
+    @SuppressWarnings("index:argument.type.incompatible") /* If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
+    */
     public static String random(final int count, final String chars) {
         if (chars == null) {
             return random(count, 0, 0, false, false, null, RANDOM);
@@ -480,7 +484,8 @@ public class RandomStringUtils {
      * @throws IllegalArgumentException if {@code count} &lt; 0.
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
-    #1: null array is handled differently
+    #1: If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
     #2: if chars.length == 0 and chars != null, an IllegalArgumentException is thrown
     */
     public static String random(final int count, final char... chars) {
