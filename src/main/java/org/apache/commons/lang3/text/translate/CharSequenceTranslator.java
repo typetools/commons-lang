@@ -52,7 +52,7 @@ public abstract class CharSequenceTranslator {
      * @return int count of codepoints consumed
      * @throws IOException if and only if the Writer produces an IOException
      */
-    public abstract int translate(CharSequence input, @IndexFor("#1") int index, Writer out) throws IOException;
+    public abstract int translate(@MinLen(1) CharSequence input, @IndexFor("#1") int index, Writer out) throws IOException;
 
     /**
      * Helper for non-Writer usage.

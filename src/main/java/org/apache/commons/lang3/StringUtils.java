@@ -32,6 +32,10 @@ import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.SameLen;
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.LTEqLengthOf;
+import org.checkerframework.common.value.qual.ArrayLen;
 
 /**
  * <p>Operations on {@link java.lang.String} that are
@@ -215,7 +219,7 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 2.0
      */
-    public static String abbreviate(final String str, final int maxWidth) {
+    public static String abbreviate(final String str, final @NonNegative int maxWidth) {
         final String defaultAbbrevMarker = "...";
         return abbreviate(str, defaultAbbrevMarker, 0, maxWidth);
     }
@@ -255,7 +259,7 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 2.0
      */
-    public static String abbreviate(final String str, final int offset, final int maxWidth) {
+    public static String abbreviate(final String str, final @NonNegative int offset, final @NonNegative int maxWidth) {
         final String defaultAbbrevMarker = "...";
         return abbreviate(str, defaultAbbrevMarker, offset, maxWidth);
     }
@@ -296,7 +300,7 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 3.6
      */
-    public static String abbreviate(final String str, final String abbrevMarker, final int maxWidth) {
+    public static String abbreviate(final String str, final String abbrevMarker, final @NonNegative int maxWidth) {
         return abbreviate(str, abbrevMarker, 0, maxWidth);
     }
 
@@ -337,7 +341,14 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 3.6
      */
-    public static String abbreviate(final String str, final String abbrevMarker, int offset, final int maxWidth) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: offset <= abbrevMarkerLength + 1, and maxWidth >= abbrevMarkerLength + 1 as checked by #0.1, hence maxwidth - abbrevMarkerLength >= 1
+        Also, maxWidth < str.length(), hence maxWidth - abbrevMarkerLength < str.length()
+    #2: offset is @IndexOrHigh("str") as ensured by #0.3
+    #3: By #0.4, maxWidth - abbrevMarkerLength < str.length() - offset and offset is IndexOrHigh("str") as ensured by #0.3
+    #4: By #0.5, (maxWidth - abbrevMarkerLength) < str.length() - offset and offset is IndexOrHigh("str") as ensured by 0.3
+    */
+    public static String abbreviate(final String str, final String abbrevMarker, @NonNegative int offset, final @NonNegative int maxWidth) {
         if (isEmpty(str) || isEmpty(abbrevMarker)) {
             return str;
         }
@@ -346,28 +357,28 @@ public class StringUtils {
         final int minAbbrevWidth = abbrevMarkerLength + 1;
         final int minAbbrevWidthOffset = abbrevMarkerLength + abbrevMarkerLength + 1;
 
-        if (maxWidth < minAbbrevWidth) {
+        if (maxWidth < minAbbrevWidth) { // #0.1
             throw new IllegalArgumentException(String.format("Minimum abbreviation width is %d", minAbbrevWidth));
         }
-        if (str.length() <= maxWidth) {
+        if (str.length() <= maxWidth) { // #0.2
             return str;
         }
-        if (offset > str.length()) {
+        if (offset > str.length()) { // #0.3
             offset = str.length();
         }
-        if (str.length() - offset < maxWidth - abbrevMarkerLength) {
-            offset = str.length() - (maxWidth - abbrevMarkerLength);
+        if (str.length() - offset < maxWidth - abbrevMarkerLength) { // #0.5
+            offset = str.length() - (maxWidth - abbrevMarkerLength); // #4
         }
         if (offset <= abbrevMarkerLength+1) {
-            return str.substring(0, maxWidth - abbrevMarkerLength) + abbrevMarker;
+            return str.substring(0, maxWidth - abbrevMarkerLength) + abbrevMarker; // #1
         }
         if (maxWidth < minAbbrevWidthOffset) {
             throw new IllegalArgumentException(String.format("Minimum abbreviation width with offset is %d", minAbbrevWidthOffset));
         }
-        if (offset + maxWidth - abbrevMarkerLength < str.length()) {
-            return abbrevMarker + abbreviate(str.substring(offset), abbrevMarker, maxWidth - abbrevMarkerLength);
+        if (offset + maxWidth - abbrevMarkerLength < str.length()) { // #0.4
+            return abbrevMarker + abbreviate(str.substring(offset), abbrevMarker, maxWidth - abbrevMarkerLength); // #2
         }
-        return abbrevMarker + str.substring(str.length() - (maxWidth - abbrevMarkerLength));
+        return abbrevMarker + str.substring(str.length() - (maxWidth - abbrevMarkerLength)); // #3
     }
 
     /**
@@ -399,22 +410,27 @@ public class StringUtils {
      * @return the abbreviated String if the above criteria is met, or the original String supplied for abbreviation.
      * @since 2.5
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: #0.1 ensures length < str.length(), hence targetSting < str.length() and length >= middle.length() + 2,
+        hence by definitions in #0.2 and #0.3 startOffset is @IndexFor("str")
+    #2: By #0.4, str.length() - targetSting/2 where targetSting < str.length() as explained in #1 yields @IndexOrHigh("str")
+    */
     public static String abbreviateMiddle(final String str, final String middle, final int length) {
         if (isEmpty(str) || isEmpty(middle)) {
             return str;
         }
 
-        if (length >= str.length() || length < middle.length()+2) {
+        if (length >= str.length() || length < middle.length()+2) { // #0.1
             return str;
         }
 
-        final int targetSting = length-middle.length();
-        final int startOffset = targetSting/2+targetSting%2;
-        final int endOffset = str.length()-targetSting/2;
+        final int targetSting = length-middle.length(); // #0.2
+        final int startOffset = targetSting/2+targetSting%2; // #0.3
+        final int endOffset = str.length()-targetSting/2; // #0.4
 
-        return str.substring(0, startOffset) +
+        return str.substring(0, startOffset) + // #1
             middle +
-            str.substring(endOffset);
+            str.substring(endOffset); // #2
     }
 
     /**
@@ -2026,6 +2042,7 @@ public class StringUtils {
      * or if there is no common prefix.
      * @since 2.4
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: smallIndexOfDiff = indexOfDifference(strs) is @IndexOrHigh for each element of strs array, but cannot annotate the return of indexOfDifference() to express so
     public static String getCommonPrefix(final String... strs) {
         if (strs == null || strs.length == 0) {
             return EMPTY;
@@ -2042,7 +2059,7 @@ public class StringUtils {
             return EMPTY;
         } else {
             // we found a common initial character sequence
-            return strs[0].substring(0, smallestIndexOfDiff);
+            return strs[0].substring(0, smallestIndexOfDiff); // #1
         }
     }
 
@@ -2256,6 +2273,7 @@ public class StringUtils {
      * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/similarity/LevenshteinDistance.html">
      * LevenshteinDistance</a> instead
      */
+    @SuppressWarnings("index:array.access.unsafe.high.constant") // #1: p has length n + 1 where n = s.length, hence p[0] is valid
     @Deprecated
     public static int getLevenshteinDistance(CharSequence s, CharSequence t) {
         if (s == null || t == null) {
@@ -2295,9 +2313,9 @@ public class StringUtils {
         }
 
         for (j = 1; j <= m; j++) {
-            upper_left = p[0];
+            upper_left = p[0]; // #1
             t_j = t.charAt(j - 1);
-            p[0] = j;
+            p[0] = j; // #1
 
             for (i = 1; i <= n; i++) {
                 upper = p[i];
@@ -2346,6 +2364,7 @@ public class StringUtils {
      * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/similarity/LevenshteinDistance.html">
      * LevenshteinDistance</a> instead
      */
+    @SuppressWarnings("index:array.access.unsafe.high") // #1: d has length n + 1 where n is s.length, hence d[0] is valid
     @Deprecated
     public static int getLevenshteinDistance(CharSequence s, CharSequence t, final int threshold) {
         if (s == null || t == null) {
@@ -2438,7 +2457,7 @@ public class StringUtils {
         // iterates through t
         for (int j = 1; j <= m; j++) {
             final char t_j = t.charAt(j - 1); // jth character of t
-            d[0] = j;
+            d[0] = j; // #1
 
             // compute stripe indices, constrain to array size
             final int min = Math.max(1, j - threshold);
@@ -2922,6 +2941,8 @@ public class StringUtils {
      * @since 2.4
      * @since 3.0 Changed signature from indexOfDifference(String...) to indexOfDifference(CharSequence...)
      */
+    @SuppressWarnings("index:argument.type.incompatible") /* #1: stringPos goes till shortestStrLen - 1, shortestStrLen is the minimum length in the set of Strings,
+    hence stringPos is @IndexFor all the strings */
     public static int indexOfDifference(final CharSequence... css) {
         if (css == null || css.length <= 1) {
             return INDEX_NOT_FOUND;
@@ -2959,9 +2980,9 @@ public class StringUtils {
         // find the position with the first difference across all strings
         int firstDiff = -1;
         for (int stringPos = 0; stringPos < shortestStrLen; stringPos++) {
-            final char comparisonChar = css[0].charAt(stringPos);
+            final char comparisonChar = css[0].charAt(stringPos); // #1
             for (int arrayPos = 1; arrayPos < arrayLen; arrayPos++) {
-                if (css[arrayPos].charAt(stringPos) != comparisonChar) {
+                if (css[arrayPos].charAt(stringPos) != comparisonChar) { // #1
                     firstDiff = stringPos;
                     break;
                 }
@@ -3005,7 +3026,10 @@ public class StringUtils {
      * @since 3.0 Changed signature from indexOfDifference(String, String) to
      * indexOfDifference(CharSequence, CharSequence)
      */
-    public static int indexOfDifference(final CharSequence cs1, final CharSequence cs2) {
+    @SuppressWarnings("index:return.type.incompatible") /* #1: when i exits from the previous loop, it is either one of the lengths of cs1 or cs2
+    or less than both of these length(when there is a mismatch in between in characters), either way, i can't be more than min(cs1.length(), cs2.length())
+    */
+    public static @GTENegativeOne @LTEqLengthOf({"#1","#2"}) int indexOfDifference(final CharSequence cs1, final CharSequence cs2) {
         if (cs1 == cs2) {
             return INDEX_NOT_FOUND;
         }
@@ -3019,7 +3043,7 @@ public class StringUtils {
             }
         }
         if (i < cs2.length() || i < cs1.length()) {
-            return i;
+            return i; // #1
         }
         return INDEX_NOT_FOUND;
     }
@@ -5359,7 +5383,13 @@ public class StringUtils {
         return str.toLowerCase(locale);
     }
 
-    private static int[] matches(final CharSequence first, final CharSequence second) {
+    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    #1: matches (ms1's length) is equal to the number of non -1 elements of matchIndexes as ensured by the previous loop
+    #2: matches (ms2's length) is equal to the number of boolean true elements of matchFlags as ensured by the previous loop
+    #3: ms1.length = ms2.length = matches
+    #4: min is either first or second, whichever has lesser length, hence min.length() <= both first and second
+    */
+    private static int @ArrayLen(4) [] matches(final CharSequence first, final CharSequence second) {
         CharSequence max, min;
         if (first.length() > second.length()) {
             max = first;
@@ -5388,25 +5418,25 @@ public class StringUtils {
         final char[] ms2 = new char[matches];
         for (int i = 0, si = 0; i < min.length(); i++) {
             if (matchIndexes[i] != -1) {
-                ms1[si] = min.charAt(i);
+                ms1[si] = min.charAt(i); // #1
                 si++;
             }
         }
         for (int i = 0, si = 0; i < max.length(); i++) {
             if (matchFlags[i]) {
-                ms2[si] = max.charAt(i);
+                ms2[si] = max.charAt(i); // #2
                 si++;
             }
         }
         int transpositions = 0;
         for (int mi = 0; mi < ms1.length; mi++) {
-            if (ms1[mi] != ms2[mi]) {
+            if (ms1[mi] != ms2[mi]) { // #3
                 transpositions++;
             }
         }
         int prefix = 0;
         for (int mi = 0; mi < min.length(); mi++) {
-            if (first.charAt(mi) == second.charAt(mi)) {
+            if (first.charAt(mi) == second.charAt(mi)) { // #4
                 prefix++;
             } else {
                 break;
@@ -5502,6 +5532,13 @@ public class StringUtils {
      *
      * @since 3.0
      */
+    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    #1: inside the loop, count can reach a maximum size, as it is incremented only a maximum once per iteration,
+        and it is post-increment, hence when it is used as index, it can reach a maximum size - 1 
+    #2: count is @IndexOrHigh("newChars") as it is incremented maximum once per iteration.
+        If whitespacesCount > 0, newChars will be @MinLen(1), as the loop runs at least once, hence count - 1 will be @IndexFor("newChars") if count != 0
+        count is 0 only when there is only one whitespace and that is at the start, which is handled by #0.1
+    */
     public static String normalizeSpace(final String str) {
         // LANG-1020: Improved performance significantly by normalizing manually instead of using regex
         // See https://github.com/librucha/commons-lang-normalizespaces-benchmark for performance test
@@ -5518,19 +5555,19 @@ public class StringUtils {
             final boolean isWhitespace = Character.isWhitespace(actualChar);
             if (isWhitespace) {
                 if (whitespacesCount == 0 && !startWhitespaces) {
-                    newChars[count++] = SPACE.charAt(0);
+                    newChars[count++] = SPACE.charAt(0); // #1
                 }
                 whitespacesCount++;
             } else {
                 startWhitespaces = false;
-                newChars[count++] = (actualChar == 160 ? 32 : actualChar);
+                newChars[count++] = (actualChar == 160 ? 32 : actualChar); // #1
                 whitespacesCount = 0;
             }
         }
-        if (startWhitespaces) {
+        if (startWhitespaces) { // #0.1
             return EMPTY;
         }
-        return new String(newChars, 0, count - (whitespacesCount > 0 ? 1 : 0)).trim();
+        return new String(newChars, 0, count - (whitespacesCount > 0 ? 1 : 0)).trim(); // #2
     }
 
     /**
@@ -6619,7 +6656,7 @@ public class StringUtils {
      *             and/or size 0)
      * @since 2.4
      */
-    public static String replaceEach(final String text, final String[] searchList, final String[] replacementList) {
+    public static String replaceEach(final String text, final String @SameLen("#3") [] searchList, final String @SameLen("#2") [] replacementList) {
         return replaceEach(text, searchList, replacementList, false, 0);
     }
 
@@ -6848,7 +6885,7 @@ public class StringUtils {
      *             and/or size 0)
      * @since 2.4
      */
-    public static String replaceEachRepeatedly(final String text, final String[] searchList, final String[] replacementList) {
+    public static String replaceEachRepeatedly(final String text, final String @SameLen("#3") [] searchList, final String @SameLen("#2") [] replacementList) {
         // timeToLive should be 0 if not used or nothing to replace, else it's
         // the length of the replace array
         final int timeToLive = searchList == null ? 0 : searchList.length;
@@ -8924,16 +8961,17 @@ public class StringUtils {
      * @return an array of code points
      * @since 3.6
      */
+    @SuppressWarnings("index:argument.type.incompatible") // s is @MinLen(1) as ensured by #0.1
     public static int[] toCodePoints(final CharSequence str) {
         if (str == null) {
             return null;
         }
-        if (str.length() == 0) {
+        if (str.length() == 0) { // #0.1
             return ArrayUtils.EMPTY_INT_ARRAY;
         }
 
         final String s = str.toString();
-        final int[] result = new int[s.codePointCount(0, s.length())];
+        final int[] result = new int[s.codePointCount(0, s.length())]; // #1
         int index = 0;
         for (int i = 0; i < result.length; i++) {
             result[i] = s.codePointAt(index);
