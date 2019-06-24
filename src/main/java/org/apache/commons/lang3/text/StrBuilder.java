@@ -104,7 +104,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     /** Internal data storage. */
     protected char[] buffer; // TODO make private?
     /** Current size of the buffer. */
-    protected @NonNegative @LTEqLengthOf("this.buffer") int size; // TODO make private?
+    protected @NonNegative @LTEqLengthOf({"this","this.buffer"}) int size; // TODO make private?
     /** The new line. */
     private String newLine;
     /** The null text. */
@@ -198,9 +198,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      *
      * @return the length
      */
-    @SuppressWarnings("override.return.invalid") // it says required is @LTEqLengthOf("this"), which does not makes sense, it should be @LTEqLengthOf("this.buffer")
     @Override
-    public @NonNegative @LTEqLengthOf("this.buffer") int length() {
+    public @NonNegative @LTEqLengthOf("this") int length() {
         return size;
     }
 
@@ -321,8 +320,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the character at the index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
+    @SuppressWarnings("index:array.access.unsafe.high") // @IndexFor("this") => @IndexFor("this.buffer")
     @Override
-    public char charAt(final int index) {
+    public char charAt(final @IndexFor("this") int index) {
         if (index < 0 || index >= length()) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -339,7 +339,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @throws IndexOutOfBoundsException if the index is invalid
      */
-    public StrBuilder setCharAt(final int index, final char ch) {
+    public StrBuilder setCharAt(final @IndexFor("this.buffer") int index, final char ch) {
         if (index < 0 || index >= length()) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -411,12 +411,13 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param destination  the destination array, null will cause an array to be created
      * @return the input array, unless that was null or too small
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: buffer.length may be a minimum 0, and 0 is always @IndexOrHigh("buffer")
     public char[] getChars(char[] destination) {
         final int len = length();
         if (destination == null || destination.length < len) {
             destination = new char[len];
         }
-        System.arraycopy(buffer, 0, destination, 0, len);
+        System.arraycopy(buffer, 0, destination, 0, len); // #1
         return destination;
     }
 
@@ -591,7 +592,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param str  the string to append
      * @return this, to enable chaining
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + strLen) => size + strLen is @NonNegative @LTEqLengthOf("this.buffer")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + strLen) => len + strLen is @NonNegative @LTEqLengthOf("this.buffer"), and len is @INdexOrHigh("this.buffer") as well
     public StrBuilder append(final String str) {
         if (str == null) {
             return appendNull();
@@ -600,7 +601,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (strLen > 0) {
             final int len = length();
             ensureCapacity(len + strLen);
-            str.getChars(0, strLen, buffer, len);
+            str.getChars(0, strLen, buffer, len); // #2
             size += strLen; // #1
         }
         return this;
@@ -616,7 +617,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param length  the length to append, must be valid
      * @return this, to enable chaining
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + length) => size + length is @NonNegative @LTEqLengthOf("this.buffer")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final String str, final int startIndex, final int length) {
         if (str == null) {
             return appendNull();
@@ -723,7 +724,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param str  the string buffer to append
      * @return this, to enable chaining
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + strLen) => size + strLen to be @LTEqLengthOf("this.buffer")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final StringBuffer str) {
         if (str == null) {
             return appendNull();
@@ -747,7 +748,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param length  the length to append, must be valid
      * @return this, to enable chaining
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + length) => size + length to be @LTEqLengthOf("this.buffer")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final StringBuffer str, final int startIndex, final int length) {
         if (str == null) {
             return appendNull();
@@ -775,7 +776,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @since 3.2
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + strLen) => size + strLen to be @LTEqLengthOf("this.buffer")
+@SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final StringBuilder str) {
         if (str == null) {
             return appendNull();
@@ -800,7 +801,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @since 3.2
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible") // #1: ensureCapacity(len + length) => size + length to be @LTEqLengthOf("this.buffer")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final StringBuilder str, final int startIndex, final int length) {
         if (str == null) {
             return appendNull();
@@ -2201,7 +2202,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * Matchers can be used to perform advanced replace behaviour.
      * For example you could write a matcher to replace
      * where the character 'a' is followed by a number.
-     *BUILD FAILURE
+     *
      * @param matcher  the matcher to use to find the deletion, null causes no action
      * @param replaceStr  the replace string, null is equivalent to an empty string
      * @return this, to enable chaining
@@ -3145,7 +3146,10 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
 
         /** {@inheritDoc} */
-        @SuppressWarnings("index:return.type.incompatible") // #1: returns the ASCII value of the character which is @NonNegative
+        @SuppressWarnings({"index:return.type.incompatible","index:argument.type.incompatible"}) /* 
+        #1: returns the ASCII value of the character which is @NonNegative
+            Also, ready() => pos++ < StrBuilder.this.size()
+        */
         @Override
         public @GTENegativeOne int read() {
             if (ready() == false) {

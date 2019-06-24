@@ -940,7 +940,7 @@ public class NumberUtils {
         }
         return Long.decode(str);
     }
-    
+
     /**
      * <p>Convert a <code>String</code> to a <code>BigInteger</code>;
      * since 3.2 it handles hex (0x or #) and octal (0) notations.</p>
