@@ -1934,18 +1934,19 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param ch  the character to delete
      * @return this, to enable chaining
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.low","index:argument.type.incompatible"})/*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.low","index:argument.type.incompatible","index:array.access.unsafe.high"})/*
     #1: start = i before the while loop, and i = i - len = i - i + start = start which is @NonNegative
     #2: start = i < size => start is @NonNegative and @LTLengthOf("this.buffer")
         i < size and ++i < size => i is @NonNegative and @LTEqLengthOf("this.buffer")
         len = i - start, i >= start, as i has been incremented after start = i, hence len is @NonNegative and @LTEqLengthOf("this,buffer")
+    #3: ++i < size is checked as the condition for the loop
     */
     public StrBuilder deleteAll(final char ch) {
         for (@NonNegative int i = 0; i < size; i++) {
             if (buffer[i] == ch) {
                 final @NonNegative int start = i;
                 while (++i < size) {
-                    if (buffer[i] != ch) {
+                    if (buffer[i] != ch) { // #3
                         break;
                     }
                 }

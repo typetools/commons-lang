@@ -651,9 +651,6 @@ public class NumberUtils {
      * @return Number created from the string (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
      */
-    @SuppressWarnings("argument.type.incompatible")/*
-    #1, #2, #3: !StringUtils.isBlank(str) => str.length != 0
-    */
     public static Number createNumber(final String str) {
         if (str == null) {
             return null;
