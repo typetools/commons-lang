@@ -320,7 +320,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the character at the index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
-    @SuppressWarnings("index:array.access.unsafe.high") // @IndexFor("this") => @IndexFor("this.buffer")
+    @SuppressWarnings("index:array.access.unsafe.high") // 0 <= index < length()
     @Override
     public char charAt(final @IndexFor("this") int index) {
         if (index < 0 || index >= length()) {
@@ -339,7 +339,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @throws IndexOutOfBoundsException if the index is invalid
      */
-    public StrBuilder setCharAt(final @IndexFor("this.buffer") int index, final char ch) {
+    @SuppressWarnings("index:array.access.unsafe.high") // 0 <= index <= length()
+    public StrBuilder setCharAt(final @IndexFor("this") int index, final char ch) {
         if (index < 0 || index >= length()) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -2564,7 +2565,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param ch  the character to find
      * @return the first index of the character, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int indexOf(final char ch) {
+    public @IndexOrLow("this") int indexOf(final char ch) {
         return indexOf(ch, 0);
     }
 
@@ -2575,7 +2576,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the first index of the character, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int indexOf(final char ch, int startIndex) {
+    public @IndexOrLow("this") int indexOf(final char ch, int startIndex) {
         startIndex = (startIndex < 0 ? 0 : startIndex);
         if (startIndex >= size) {
             return -1;
@@ -2597,7 +2598,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param str  the string to find, null returns -1
      * @return the first index of the string, or -1 if not found
      */
-    public @GTENegativeOne @LTLengthOf(value = {"this.buffer"}, offset = {"#1.length() - 1"}) int indexOf(final String str) {
+    public @GTENegativeOne @LTLengthOf(value = {"this"}, offset = {"#1.length() - 1"}) int indexOf(final String str) {
         return indexOf(str, 0);
     }
 
@@ -2618,7 +2619,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     #5: i + j when being used as index has max value len + strLen - 2 = size - strLen + 1 + strLen - 2 = size - 1 which is a valid index
     #6 i = len here, len = size - strLen + 1, which is @LTLengthOf(value = {"this.buffer"}, offset = {"strLen - 1"})
     */
-    public @GTENegativeOne @LTLengthOf(value = {"this.buffer"}, offset = {"#1.length() - 1"}) int indexOf(final String str, int startIndex) {
+    public @GTENegativeOne @LTLengthOf(value = {"this"}, offset = {"#1.length() - 1"}) int indexOf(final String str, int startIndex) {
         startIndex = (startIndex < 0 ? 0 : startIndex);
         if (str == null || startIndex >= size) {
             return -1; // #1
@@ -2657,7 +2658,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param matcher  the matcher to use, null returns -1
      * @return the first index matched, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int indexOf(final StrMatcher matcher) {
+    public @IndexOrLow("this") int indexOf(final StrMatcher matcher) {
         return indexOf(matcher, 0);
     }
 
@@ -2673,7 +2674,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the first index matched, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int indexOf(final StrMatcher matcher, int startIndex) {
+    public @IndexOrLow("this") int indexOf(final StrMatcher matcher, int startIndex) {
         startIndex = (startIndex < 0 ? 0 : startIndex);
         if (matcher == null || startIndex >= size) {
             return -1;
@@ -2695,7 +2696,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param ch  the character to find
      * @return the last index of the character, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final char ch) {
+    public @IndexOrLow("this") int lastIndexOf(final char ch) {
         return lastIndexOf(ch, size - 1);
     }
 
@@ -2706,7 +2707,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the last index of the character, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final char ch, int startIndex) {
+    public @IndexOrLow("this") int lastIndexOf(final char ch, int startIndex) {
         startIndex = (startIndex >= size ? size - 1 : startIndex);
         if (startIndex < 0) {
             return -1;
@@ -2727,7 +2728,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param str  the string to find, null returns -1
      * @return the last index of the string, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final String str) {
+    public @IndexOrLow("this") int lastIndexOf(final String str) {
         return lastIndexOf(str, size - 1);
     }
 
@@ -2746,7 +2747,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     #2: i + j when used as the index of buffer has the max value startIndex - strLen + 1 + strLen - 2 = startIndex - 1 < buffer.length
     #3: i is -1 here, which is a valid return value
     */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final String str, int startIndex) {
+    public @IndexOrLow("this") int lastIndexOf(final String str, int startIndex) {
         startIndex = (startIndex >= size ? size - 1 : startIndex);
         if (str == null || startIndex < 0) {
             return -1;
@@ -2783,7 +2784,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param matcher  the matcher to use, null returns -1
      * @return the last index matched, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final StrMatcher matcher) {
+    public @IndexOrLow("this") int lastIndexOf(final StrMatcher matcher) {
         return lastIndexOf(matcher, size);
     }
 
@@ -2799,7 +2800,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the last index matched, or -1 if not found
      */
-    public @IndexOrLow("this.buffer") int lastIndexOf(final StrMatcher matcher, int startIndex) {
+    public @IndexOrLow("this") int lastIndexOf(final StrMatcher matcher, int startIndex) {
         startIndex = (startIndex >= size ? size - 1 : startIndex);
         if (matcher == null || startIndex < 0) {
             return -1;
