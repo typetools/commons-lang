@@ -258,6 +258,7 @@ public class ArrayUtils {
         if (array == null) {
             return null;
         }
+        @SuppressWarnings("index:argument.type.incompatible") // array.length * 1.5 is always @NonNegative, hence the argument is @NonNegative
         final Map<Object, Object> map = new HashMap<>((int) (array.length * 1.5));
         for (int i = 0; i < array.length; i++) {
             final Object object = array[i];
@@ -2127,6 +2128,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final boolean[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2137,11 +2142,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); //#0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final boolean aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final boolean aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2169,6 +2174,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final byte[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2179,11 +2188,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final byte aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final byte aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2211,6 +2220,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final char[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2221,11 +2234,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final char aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final char aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2253,6 +2266,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final double[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2263,11 +2280,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final double aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final double aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2295,6 +2312,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final float[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2305,11 +2326,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final float aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final float aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
 
     }
@@ -2338,6 +2359,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final int[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2348,11 +2373,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final int aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final int aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2380,6 +2405,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final long[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2390,11 +2419,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final long aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final long aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2422,6 +2451,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final Object[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2432,11 +2465,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final Object aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final Object aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2464,6 +2497,10 @@ public class ArrayUtils {
     * @param len the number of elements to swap starting with the given indices
     * @since 3.5
     */
+   @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final short[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2477,11 +2514,11 @@ public class ArrayUtils {
         if (offset1 == offset2) {
             return;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final short aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final short aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -5367,6 +5404,7 @@ public class ArrayUtils {
      * @since 2.1
      * @throws IllegalArgumentException if both arguments are null
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static <T> T[] add(final T[] array, final T element) {
         Class<?> type;
         if (array != null) {
@@ -5379,7 +5417,7 @@ public class ArrayUtils {
         @SuppressWarnings("unchecked") // type must be T
         final
         T[] newArray = (T[]) copyArrayGrow1(array, type);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5404,9 +5442,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static boolean[] add(final boolean[] array, final boolean element) {
         final boolean[] newArray = (boolean[]) copyArrayGrow1(array, Boolean.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5431,9 +5470,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static byte[] add(final byte[] array, final byte element) {
         final byte[] newArray = (byte[]) copyArrayGrow1(array, Byte.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5458,9 +5498,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static char[] add(final char[] array, final char element) {
         final char[] newArray = (char[]) copyArrayGrow1(array, Character.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5485,9 +5526,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static double[] add(final double[] array, final double element) {
         final double[] newArray = (double[]) copyArrayGrow1(array, Double.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5512,9 +5554,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static float[] add(final float[] array, final float element) {
         final float[] newArray = (float[]) copyArrayGrow1(array, Float.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5539,9 +5582,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static int[] add(final int[] array, final int element) {
         final int[] newArray = (int[]) copyArrayGrow1(array, Integer.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5566,9 +5610,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static long[] add(final long[] array, final long element) {
         final long[] newArray = (long[]) copyArrayGrow1(array, Long.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5593,9 +5638,10 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
     public static short[] add(final short[] array, final short element) {
         final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
-        newArray[newArray.length - 1] = element;
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5608,11 +5654,12 @@ public class ArrayUtils {
      * size 1 array of this type.
      * @return A new copy of the array of size 1 greater than the input.
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: arrayLength < newArray.length as newArray.length = arrayLength + 1
     private static Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
         if (array != null) {
             final int arrayLength = Array.getLength(array);
             final Object newArray = Array.newInstance(array.getClass().getComponentType(), arrayLength + 1);
-            System.arraycopy(array, 0, newArray, 0, arrayLength);
+            System.arraycopy(array, 0, newArray, 0, arrayLength); // #1
             return newArray;
         }
         return Array.newInstance(newArrayComponentType, 1);
