@@ -223,10 +223,11 @@ public class FastDateParser implements DateParser, Serializable {
             return literal();
         }
 
+        @SuppressWarnings("index:argument.type.incompatible") // #1: ++currentIdx < pattern.length() is checked
         private StrategyAndWidth letterPattern(final char c) {
             final int begin = currentIdx;
             while (++currentIdx < pattern.length()) {
-                if (pattern.charAt(currentIdx) != c) {
+                if (pattern.charAt(currentIdx) != c) { // #1
                     break;
                 }
             }

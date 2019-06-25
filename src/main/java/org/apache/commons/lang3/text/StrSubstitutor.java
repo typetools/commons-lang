@@ -816,7 +816,7 @@ public class StrSubstitutor {
                                         pos, offset, bufEnd)) != 0) { // #3
                             // found a nested variable start
                             nestedVarCount++;
-                            pos += endMatchLen; 
+                            pos += endMatchLen;
                             continue;
                         }
 

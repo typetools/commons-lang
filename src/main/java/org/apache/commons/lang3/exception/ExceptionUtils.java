@@ -255,12 +255,9 @@ public class ExceptionUtils {
      * @return an array of stack trace frames, never null
      * @since 2.0
      */
-    @SuppressWarnings({"value:assignment.type.incompatible","index:array.access.unsafe.low"})/*
+    @SuppressWarnings("value:assignment.type.incompatible")/*
     #1: getThrowables(throwable) returns an array of minimum length 1 if throwable != null
-    #2: i != 0 => i - 1 >= 0
-    #3: i > 0 inside the loop
-    #4: i > 0 inside the loop
-    */ 
+    */
     public static String[] getRootCauseStackTrace(final Throwable throwable) {
         if (throwable == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
@@ -272,13 +269,13 @@ public class ExceptionUtils {
         for (int i = count; --i >= 0;) {
             final List<String> trace = nextTrace;
             if (i != 0) {
-                nextTrace = getStackFrameList(throwables[i - 1]); // #2
+                nextTrace = getStackFrameList(throwables[i - 1]);
                 removeCommonFrames(trace, nextTrace);
             }
             if (i == count - 1) {
-                frames.add(throwables[i].toString()); // #3
+                frames.add(throwables[i].toString());
             } else {
-                frames.add(WRAPPED_MARKER + throwables[i].toString()); // #4
+                frames.add(WRAPPED_MARKER + throwables[i].toString());
             }
             frames.addAll(trace);
         }
