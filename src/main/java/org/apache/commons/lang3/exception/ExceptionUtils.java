@@ -257,7 +257,7 @@ public class ExceptionUtils {
      */
     @SuppressWarnings("value:assignment.type.incompatible")/*
     #1: getThrowables(throwable) returns an array of minimum length 1 if throwable != null
-    */
+    */ 
     public static String[] getRootCauseStackTrace(final Throwable throwable) {
         if (throwable == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
