@@ -621,7 +621,7 @@ public class StrSubstitutor {
      * @param source  the buffer to replace in, updated, null returns zero
      * @return true if altered
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1 source.length() is as required by the annotations @LTLengthOf(value = "source", offset = "-1") 
+    @SuppressWarnings("index:argument.type.incompatible") // #1 source.length() is as required by the annotations @LTLengthOf(value = "source", offset = "-1")
     public boolean replaceIn(final StringBuffer source) {
         if (source == null) {
             return false;
@@ -664,7 +664,7 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: source.length() is as required @LTLengthOf(value="source", offset="-1"), can't find the length function in the stub file
+    @SuppressWarnings("index:argument.type.incompatible") // #1: source.length() is @LTEqLengthOf("source")
     public boolean replaceIn(final StringBuilder source) {
         if (source == null) {
             return false;
