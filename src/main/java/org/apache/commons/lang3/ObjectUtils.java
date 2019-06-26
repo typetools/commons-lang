@@ -32,6 +32,10 @@ import org.apache.commons.lang3.exception.CloneFailedException;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrBuilder;
 
+import org.checkerframework.checker.index.qual.PolySameLen;
+import org.checkerframework.checker.index.qual.PolyLowerBound;
+import org.checkerframework.checker.index.qual.PolyUpperBound;
+
 /**
  * <p>Operations on {@code Object}.</p>
  *
@@ -655,7 +659,7 @@ public class ObjectUtils {
      *  and a positive value if c1 &gt; c2
      * @see java.util.Comparator#compare(Object, Object)
      */
-    public static <T extends Comparable<? super T>> int compare(final T c1, final T c2, final boolean nullGreater) {
+    public static <T extends Comparable<? super T>> int compare(final @PolySameLen @PolyLowerBound @PolyUpperBound T c1, final @PolySameLen @PolyLowerBound @PolyUpperBound T c2, final boolean nullGreater) {
         if (c1 == c2) {
             return 0;
         } else if (c1 == null) {

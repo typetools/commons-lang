@@ -33,6 +33,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.PolySameLen;
+import org.checkerframework.checker.index.qual.PolyLowerBound;
+import org.checkerframework.checker.index.qual.PolyUpperBound;
 
 /**
  * <p>Operations on arrays, primitive arrays (like {@code int[]}) and
@@ -7592,7 +7595,7 @@ public class ArrayUtils {
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
             @Override
-            public int compare(final T o1, final T o2) {
+            public int compare(final @PolySameLen @PolyUpperBound @PolyLowerBound T o1, final @PolySameLen @PolyUpperBound @PolyLowerBound T o2) {
                 return o1.compareTo(o2);
             }
         });
@@ -7846,21 +7849,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static boolean[] removeAllOccurences(final boolean[] array, final boolean element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7878,21 +7887,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static char[] removeAllOccurences(final char[] array, final char element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7910,21 +7925,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static byte[] removeAllOccurences(final byte[] array, final byte element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7942,21 +7963,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static short[] removeAllOccurences(final short[] array, final short element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7974,21 +8001,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static int[] removeAllOccurences(final int[] array, final int element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8006,21 +8039,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static long[] removeAllOccurences(final long[] array, final long element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8038,21 +8077,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static float[] removeAllOccurences(final float[] array, final float element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8070,21 +8115,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static double[] removeAllOccurences(final double[] array, final double element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8103,21 +8154,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static <T> T[] removeAllOccurences(final T[] array, final T element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
