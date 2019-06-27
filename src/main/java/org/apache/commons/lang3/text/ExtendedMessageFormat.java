@@ -518,12 +518,11 @@ public class ExtendedMessageFormat extends MessageFormat {
         final char[] c = pattern.toCharArray();
         final @LTEqLengthOf("c") int lastHold = start;
         for (@IndexOrHigh("c") int i = pos.getIndex(); i < pattern.length(); i++) { // #2
-            switch (c[pos.getIndex()]) { // #3
-            case QUOTE:
+            if (c[pos.getIndex()] == QUOTE) { // #3
                 next(pos);
                 return appendTo == null ? null : appendTo.append(c, lastHold,
                         pos.getIndex() - lastHold); // #4
-            default:
+            } else {
                 next(pos);
             }
         }
