@@ -37,7 +37,7 @@ public class UnicodeUnescaper extends CharSequenceTranslator {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("argument.type.incompatible") /*
+    @SuppressWarnings("index:argument.type.incompatible") /*
     #1 index + i + 4 <= input.length() as checked by the if statement
     #2 False positive, argument to out.write() need not be non negative
     */

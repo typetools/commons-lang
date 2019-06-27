@@ -651,7 +651,7 @@ public class NumberUtils {
      * @return Number created from the string (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
      */
-    @SuppressWarnings("argument.type.incompatible")/*
+    /*@SuppressWarnings("value:argument.type.incompatible")/*
     #1, #2, #3: !StringUtils.isBlank(str) => str.length != 0
     */
     public static Number createNumber(final String str) {
@@ -940,7 +940,7 @@ public class NumberUtils {
         }
         return Long.decode(str);
     }
-    
+
     /**
      * <p>Convert a <code>String</code> to a <code>BigInteger</code>;
      * since 3.2 it handles hex (0x or #) and octal (0) notations.</p>
@@ -1184,7 +1184,7 @@ public class NumberUtils {
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0 
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (array[j] > max) {
