@@ -8249,7 +8249,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static boolean[] insert(final int index, final boolean[] array, final boolean... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static boolean[] insert(final @IndexOrHigh("#2") int index, final boolean[] array, final boolean... values) {
         if (array == null) {
             return null;
         }
@@ -8262,12 +8270,12 @@ public class ArrayUtils {
 
         final boolean[] result = new boolean[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8291,7 +8299,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static byte[] insert(final int index, final byte[] array, final byte... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static byte[] insert(final @IndexOrHigh("#2") int index, final byte[] array, final byte... values) {
         if (array == null) {
             return null;
         }
@@ -8304,12 +8320,12 @@ public class ArrayUtils {
 
         final byte[] result = new byte[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8333,7 +8349,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static char[] insert(final int index, final char[] array, final char... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static char[] insert(final @IndexOrHigh("#2") int index, final char[] array, final char... values) {
         if (array == null) {
             return null;
         }
@@ -8346,12 +8370,12 @@ public class ArrayUtils {
 
         final char[] result = new char[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8375,7 +8399,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static double[] insert(final int index, final double[] array, final double... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static double[] insert(final @IndexOrHigh("#2") int index, final double[] array, final double... values) {
         if (array == null) {
             return null;
         }
@@ -8388,12 +8420,12 @@ public class ArrayUtils {
 
         final double[] result = new double[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8417,7 +8449,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static float[] insert(final int index, final float[] array, final float... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static float[] insert(final @IndexOrHigh("#2") int index, final float[] array, final float... values) {
         if (array == null) {
             return null;
         }
@@ -8430,12 +8470,12 @@ public class ArrayUtils {
 
         final float[] result = new float[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8459,7 +8499,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static int[] insert(final int index, final int[] array, final int... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static int[] insert(final @IndexOrHigh("#2") int index, final int[] array, final int... values) {
         if (array == null) {
             return null;
         }
@@ -8472,12 +8520,12 @@ public class ArrayUtils {
 
         final int[] result = new int[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8501,7 +8549,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static long[] insert(final int index, final long[] array, final long... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static long[] insert(final @IndexOrHigh("#2") int index, final long[] array, final long... values) {
         if (array == null) {
             return null;
         }
@@ -8514,12 +8570,12 @@ public class ArrayUtils {
 
         final long[] result = new long[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8543,7 +8599,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static short[] insert(final int index, final short[] array, final short... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static short[] insert(final @IndexOrHigh("#2") int index, final short[] array, final short... values) {
         if (array == null) {
             return null;
         }
@@ -8556,12 +8620,12 @@ public class ArrayUtils {
 
         final short[] result = new short[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8586,8 +8650,16 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
     @SafeVarargs
-    public static <T> T[] insert(final int index, final T[] array, final T... values) {
+    public static <T> T[] insert(final @IndexOrHigh("#2") int index, final T[] array, final T... values) {
         /*
          * Note on use of @SafeVarargs:
          *
@@ -8611,12 +8683,12 @@ public class ArrayUtils {
         final
         T[] result = (T[]) Array.newInstance(type, array.length + values.length);
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
