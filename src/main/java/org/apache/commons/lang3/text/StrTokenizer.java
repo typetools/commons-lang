@@ -745,7 +745,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *  immediately after the delimiter, or if end of string found,
      *  then the length of string
      */
-    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range", "index:array.access.unsafe.low"}) /* 
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range", "index:array.access.unsafe.low"}) /*
     #1, #2, #3, #4, #5: pos < len is checked as the condition for the while loop, and when all the compound assignments happen (#0.1, #0.2, #0.3, #0.4, #0.5), there is a continue statement,
     hence the loop starts again and pos < len is checked. Also, pos++ can happen only once, either in #1 or in #5 because both are complementary if-else parts,
     hence srcChars[pos++] is also validin #1 and #5 as pos < len

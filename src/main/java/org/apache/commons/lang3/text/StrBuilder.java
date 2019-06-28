@@ -3161,7 +3161,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
 
         /** {@inheritDoc} */
-        @SuppressWarnings({"index:argument.type.incompatible", "index:return.type.incompatible", "index:compound.assignment.type.incompatible"}) /* 
+        @SuppressWarnings({"index:argument.type.incompatible", "index:return.type.incompatible", "index:compound.assignment.type.incompatible"}) /*
         #1: pos + len <= size() and len > 0 => pos is @LTLengthOf("b")
         #2: len > 0 => pos + len is @NonNegative
         #3: len >= 0 and pos + len <= size => len <= size
