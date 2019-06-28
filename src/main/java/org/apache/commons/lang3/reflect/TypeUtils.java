@@ -1114,6 +1114,10 @@ public class TypeUtils {
                 : isAssignable(value.getClass(), type, null);
     }
 
+    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
+       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2 
+       have to be same at the start of the second loop, an element is to be added for sure 
+    */
     /**
      * <p>This method strips out the redundant upper bound types in type
      * variable types and wildcard types (or it would with wildcard types if
@@ -1135,10 +1139,6 @@ public class TypeUtils {
      * @return an array containing the values from {@code bounds} minus the
      * redundant types.
      */
-    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
-       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2 
-       have to be same at the start of the second loop, an element is to be added for sure 
-    */
     public static Type[] normalizeUpperBounds(final Type[] bounds) {
         Validate.notNull(bounds, "null value specified for bounds array");
         // don't bother if there's only one (or none) type
