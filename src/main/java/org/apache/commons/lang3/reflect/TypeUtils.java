@@ -1554,7 +1554,7 @@ public class TypeUtils {
      * @param variables expected map keys
      * @return array of map values corresponding to specified keys
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:compound.assignment.type.incompatible"})/*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"})/*
     #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result") 
     */
     private static Type[] extractTypeArgumentsFrom(final Map<TypeVariable<?>, Type> mappings, final TypeVariable<?>[] variables) {
@@ -1837,7 +1837,7 @@ public class TypeUtils {
         return buf.toString();
     }
 
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
     private static void appendRecursiveTypes(final StringBuilder buf, final int @LTLengthOf(value = {"#3"}, offset = {"-1"}) [] recursiveTypeIndexes, final Type[] argumentTypes) {
         for (@IndexOrHigh("argumentTypes") int i = 0; i < recursiveTypeIndexes.length; i++) { // #1
             appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>');

@@ -449,7 +449,7 @@ public class MethodUtils {
         return method.invoke(null, args);
     }
 
-    @SuppressWarnings({"value:assignment.type.incompatible","argument.type.incompatible"}) // isVarArgs() => args and methodParameterTypes have at lease 1 element
+    @SuppressWarnings({"value:assignment.type.incompatible", "argument.type.incompatible"}) // isVarArgs() => args and methodParameterTypes have at lease 1 element
     private static Object[] toVarArgs(final Method method, Object[] args) {
         if (method.isVarArgs()) {
             final Class<?> @MinLen(1) [] methodParameterTypes = method.getParameterTypes();
@@ -468,7 +468,7 @@ public class MethodUtils {
      * @return an array of the variadic arguments passed to the method
      * @since 3.5
      */
-    @SuppressWarnings({"index:assignment.type.incompatible","index:argument.type.incompatible"})/*
+    @SuppressWarnings({"index:assignment.type.incompatible", "index:argument.type.incompatible"})/*
     #1: args.length > methodParameterTypes.length
     #2: varArgLength -> no. of componenets to be copied, varArgLength <= args.length and varArgsArray.length, hence valid argument
     */
@@ -776,7 +776,7 @@ public class MethodUtils {
      * @param toClassArray
      * @return the aggregate number of inheritance hops between assignable argument class types.
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.high"}) // #3: ClassUtils.isAssignable() => toClassArray.length = classArray.length, hence offset is @IndexOrHigh("toClassArray") as well and offset < classArray.length and toClassArray.length inside the loop
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #3: ClassUtils.isAssignable() => toClassArray.length = classArray.length, hence offset is @IndexOrHigh("toClassArray") as well and offset < classArray.length and toClassArray.length inside the loop
     private static int distance(final Class<?>[] classArray, final Class<?>[] toClassArray) {
         int answer = 0;
 
@@ -784,7 +784,7 @@ public class MethodUtils {
         if (!ClassUtils.isAssignable(classArray, toClassArray, true)) {
             return -1;
         }
-        for (@IndexOrHigh({"classArray","toClassArray"}) int offset = 0; offset < classArray.length; offset++) { // #3
+        for (@IndexOrHigh({"classArray", "toClassArray"}) int offset = 0; offset < classArray.length; offset++) { // #3
             // Note InheritanceUtils.distance() uses different scoring system.
             if (classArray[offset].equals(toClassArray[offset])) { // offset < classArray.length
                 continue;
@@ -836,7 +836,7 @@ public class MethodUtils {
             }
             // necessary to get arguments every time in the case that we are including interfaces
             final Map<TypeVariable<?>, Type> typeArguments = TypeUtils.getTypeArguments(declaringClass, m.getDeclaringClass());
-            for (@IndexOrHigh({"method.getGenericParameterTypes()","m.getGenericParameterTypes()"}) int i = 0; i < parameterTypes.length; i++) { // #4
+            for (@IndexOrHigh({"method.getGenericParameterTypes()", "m.getGenericParameterTypes()"}) int i = 0; i < parameterTypes.length; i++) { // #4
                 final Type childType = TypeUtils.unrollVariables(typeArguments, method.getGenericParameterTypes()[i]); // i < parameterTypes.length
                 final Type parentType = TypeUtils.unrollVariables(typeArguments, m.getGenericParameterTypes()[i]); // i < parameterTypes.length
                 if (!TypeUtils.equals(childType, parentType)) {

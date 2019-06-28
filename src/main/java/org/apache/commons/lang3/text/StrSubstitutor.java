@@ -763,7 +763,7 @@ public class StrSubstitutor {
      * @return the length change that occurs, unless priorVariables is null when the int
      *  represents a boolean flag as to whether any change occurred.
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:compound.assignment.type.incompatible","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible", "array.access.unsafe.high.range"}) /*
     #1, #2, #3: pos < bufEnd => pos is @LTLengthOf(chars)
     #4: pos < bufEnd because if pos += endMatchLenpos happens, it is followed by continue statement, hence pos < bufEnd is always checked
     #5: startPos + startMatchLen is the initial pos which is checked pos < bufEnd as a condition in this loop

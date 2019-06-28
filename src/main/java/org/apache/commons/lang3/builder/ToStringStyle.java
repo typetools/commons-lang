@@ -448,7 +448,7 @@ public abstract class ToStringStyle implements Serializable {
         final int sepLen = fieldSeparator.length();
         if (len > 0 && sepLen > 0 && len >= sepLen) {
             boolean match = true;
-            for (@NonNegative @LTEqLengthOf({"buffer","fieldSeparator"}) int i = 0; i < sepLen; i++) { // #1
+            for (@NonNegative @LTEqLengthOf({"buffer", "fieldSeparator"}) int i = 0; i < sepLen; i++) { // #1
                 if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) { // #2
                     match = false;
                     break;

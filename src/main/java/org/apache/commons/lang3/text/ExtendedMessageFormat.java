@@ -147,7 +147,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      *
      * @param pattern String
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:compound.assignment.type.incompatible","index:array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: readArgumentIndex(pattern, next(pos)) will throw an exception if next(pos) is not a valid index, hence the new pos_index is a valid index as well
     #2: formatDescription = parseFormatDescription(pattern, next(pos)); will throw an exception if next(pos) is not a valid index, hence the new pos_index is a valid index as well
     #3: If the path of #1 and/or #2 is followed, pos_index is valid due to the above argument, else it is valid due to the check pos_index < pattern.length()
@@ -334,7 +334,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param pos current parse position
      * @return argument index
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:assignment.type.incompatible"})/*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:assignment.type.incompatible"})/*
     #1: initial parsing position
     #2: pos.getIndex() will be equal to pattern.length() here as it is the value with which it exits from the loop
     */
@@ -490,7 +490,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param appendTo optional StringBuilder to append
      * @return <code>appendTo</code>
      */
-    @SuppressWarnings({"index:assignment.type.incompatible","index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:assignment.type.incompatible", "index:array.access.unsafe.high", "index:argument.type.incompatible"}) /*
     #1, #2 : pos.getIndex() returns the current parse position which is always @LTEqLengthOf("pattern")
     #3: i goes from pos.getIndex() to pattern.length() - 1, and next(pos) in every case => pos goes from current parse position till pattern.length() - 1
     #4: lastHold is the initial parse position, hence lastHold <= pos.getIndex()
