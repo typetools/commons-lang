@@ -167,26 +167,23 @@ public class ExtendedMessageFormat extends MessageFormat {
         final ParsePosition pos = new ParsePosition(0);
         final char @SameLen("pattern") [] c = pattern.toCharArray();
         int fmtCount = 0;
-        int pos_index = pos.getIndex();
-        while (pos_index < pattern.length()) {
-            switch (c[pos_index]) {
+        while (pos.getIndex() < pattern.length()) {
+            switch (c[pos.getIndex()]) {
             case QUOTE:
                 appendQuotedString(pattern, pos, stripCustom);
                 break;
             case START_FE:
                 fmtCount++;
                 seekNonWs(pattern, pos);
-                final int start = pos_index;
+                final int start = pos.getIndex();
                 final int index = readArgumentIndex(pattern, next(pos));
                 stripCustom.append(START_FE).append(index);
                 seekNonWs(pattern, pos);
-                pos_index = pos.getIndex();
                 Format format = null;
                 String formatDescription = null;
-                if (c[pos_index] == START_FMT) { // #1
+                if (c[pos.getIndex()] == START_FMT) { // #1
                     formatDescription = parseFormatDescription(pattern,
                             next(pos));
-                    pos_index = pos.getIndex();
                     format = getFormat(formatDescription);
                     if (format == null) {
                         stripCustom.append(START_FMT).append(formatDescription);
@@ -196,15 +193,14 @@ public class ExtendedMessageFormat extends MessageFormat {
                 foundDescriptions.add(format == null ? null : formatDescription);
                 Validate.isTrue(foundFormats.size() == fmtCount);
                 Validate.isTrue(foundDescriptions.size() == fmtCount);
-                if (c[pos_index] != END_FE) { // #2
+                if (c[pos.getIndex()] != END_FE) { // #2
                     throw new IllegalArgumentException(
                             "Unreadable format element at position " + start);
                 }
                 //$FALL-THROUGH$
             default:
-                stripCustom.append(c[pos_index]); // #3
+                stripCustom.append(c[pos.getIndex()]); // #3
                 next(pos);
-                pos_index = pos.getIndex();
             }
         }
         super.applyPattern(stripCustom.toString());
@@ -429,9 +425,8 @@ public class ExtendedMessageFormat extends MessageFormat {
         final ParsePosition pos = new ParsePosition(0);
         int fe = -1;
         int depth = 0;
-        int pos_index = pos.getIndex();
-        while (pos_index < pattern.length()) {
-            final char c = pattern.charAt(pos_index);
+        while (pos.getIndex() < pattern.length()) {
+            final char c = pattern.charAt(pos.getIndex());
             switch (c) {
             case QUOTE:
                 appendQuotedString(pattern, pos, sb);
@@ -439,7 +434,6 @@ public class ExtendedMessageFormat extends MessageFormat {
             case START_FE:
                 depth++;
                 sb.append(START_FE).append(readArgumentIndex(pattern, next(pos)));
-                pos_index = pos.getIndex();
                 // do not look for custom patterns when they are embedded, e.g. in a choice
                 if (depth == 1) {
                     fe++;
@@ -455,7 +449,6 @@ public class ExtendedMessageFormat extends MessageFormat {
             default:
                 sb.append(c);
                 next(pos);
-                pos_index = pos.getIndex();
             }
         }
         return sb.toString();
