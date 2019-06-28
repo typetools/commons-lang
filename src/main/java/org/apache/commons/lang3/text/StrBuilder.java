@@ -913,7 +913,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param length  the length to append, must be valid
      * @return this, to enable chaining
      */
-     @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) /*
     #1: ensureCapacity(len + length) => length <= str.buffer.length - len, 
     #2: ensureCapacity(len + length) => size + length to be @LTEqLengthOf("this.buffer")
     */
@@ -1786,7 +1786,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @throws IndexOutOfBoundsException if the index is invalid
      */
-    @SuppressWarnings({"index:argument.type.incompatible", "array.access.unsafe.low","array.access.unsafe.high", "compound.assignment.type.incompatible"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "array.access.unsafe.low", "array.access.unsafe.high", "compound.assignment.type.incompatible"}) /*
     #1: validateIndex(index) => index is @LTEqLengthOf("buffer"), but ensureCapacity(size + 4) makes index @LTLengthOf("buffer"),
         also, size - index <= buffer.length - index - 4 (because initially index <= size, but ensureCapacity(size + 4) increased buffer.length to at least size + 4)
     #2: validateIndex(index) => index is @LTEqLengthOf("buffer"), but ensureCapacity(size + 5) makes index @LTLengthOf("buffer"),
@@ -1934,7 +1934,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param ch  the character to delete
      * @return this, to enable chaining
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.low","index:argument.type.incompatible", "index:array.access.unsafe.high"})/*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.low", "index:argument.type.incompatible", "index:array.access.unsafe.high"})/*
     #1: start = i before the while loop, and i = i - len = i - i + start = start which is @NonNegative
     #2: start = i < size => start is @NonNegative and @LTLengthOf("this.buffer")
         i < size and ++i < size => i is @NonNegative and @LTEqLengthOf("this.buffer")
