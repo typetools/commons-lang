@@ -211,7 +211,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @throws IndexOutOfBoundsException if the length is negative
      */
-    @SuppressWarnings("assignment.type.incompatible") // #1, #2: ensurecapacity(length) makes the buffer array of the size length*2 if length > size 
+    @SuppressWarnings("assignment.type.incompatible") // #1, #2: ensurecapacity(length) makes the buffer array of the size length*2 if length > size
     public StrBuilder setLength(final int length) {
         if (length < 0) {
             throw new StringIndexOutOfBoundsException(length);
@@ -391,7 +391,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @throws IndexOutOfBoundsException if startIndex is invalid,
      *  or if endIndex is invalid (but endIndex greater than size is valid)
      */
-    @SuppressWarnings("index:argument.type.incompatible") /* #1: startIndex is a valid index for buffer as checked by validateRange and 
+    @SuppressWarnings("index:argument.type.incompatible") /* #1: startIndex is a valid index for buffer as checked by validateRange and
     0 is always @LTLengthOf(value={"this.buffer", "chars"}, offset={"startIndex - 1", "-1"}) as startIndex can be maximum this.buffer.length()
     */
     public char[] toCharArray(final int startIndex, int endIndex) {
@@ -659,7 +659,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @since 3.4
      */
-    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /* #1: ensureCapacity(len + length) => length <= buffer.length - len, 
+    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /* #1: ensureCapacity(len + length) => length <= buffer.length - len,
     also length is buf.remaining() so it ensured length <= buf.array.length - (buf.arrayOffset() + buf.position)
     buf.arrayOffset() (where the offset of the buffer is) + buf.position() (relative position of the current buffer) is @LTLengthOf("buf.array()")
     #2: ensureCapacity(len + length) => size + length is @LTEqLengthOf("this.buffer")
@@ -690,7 +690,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @since 3.4
      */
-    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /* #1: ensureCapacity(len + length) => length <= buffer.length - len, 
+    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /* #1: ensureCapacity(len + length) => length <= buffer.length - len,
     buf.arrayOffset() (where the offset of the buffer is) + buf.position() (relative position of the current buffer) + startIndex(which is between 0 and buf.remaining()) is @LTLengthOf("buf.array()")
     startIndex + length <= totalLength => length <= buf.remaining() - startIndex, buf.remaining() is the number of characters left to be read = buf.array().length - buf.arrayOffset() - buf.position()
     hence, length is @LTLengthOf(value = "buf.array()", offset = "buf.arrayOffset() + buf.position() + startIndex") as well
@@ -914,7 +914,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) /*
-    #1: ensureCapacity(len + length) => length <= str.buffer.length - len, 
+    #1: ensureCapacity(len + length) => length <= str.buffer.length - len,
     #2: ensureCapacity(len + length) => size + length to be @LTEqLengthOf("this.buffer")
     */
     public StrBuilder append(final char[] chars, final int startIndex, final int length) {
@@ -1751,9 +1751,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @throws IndexOutOfBoundsException if any index is invalid
      */
     @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /*
-    #1: validateIndex(index) implies index to be @IndexOrHigh("buffer"), but ensureCapacity(size + length) 
+    #1: validateIndex(index) implies index to be @IndexOrHigh("buffer"), but ensureCapacity(size + length)
         for length > 0 increases the size of buffer hence making index to be @IndexFor("buffer")
-        ensureCapacity(size + length) for length > 0 => size - index to be @NonNegative, 
+        ensureCapacity(size + length) for length > 0 => size - index to be @NonNegative,
         also size - index <= buffer.length - index - length because of ensureCapacity(size + length)
     #2: offset >= 0, and offset + length <= chars.length, but length > 0, hence offset < chars.length
     #3: ensureCapacity(size + length) => size + length is @LTEqLengthOf("this.buffer")
@@ -2083,8 +2083,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
     #1: validateRange => startIndex and endIndex are valid indices for buffer and endIndex - startIndex is @NonNegative,
-    insertLen is also @NonNegative and @LTEqLengthOf("replaceStr") 
-    */ 
+    insertLen is also @NonNegative and @LTEqLengthOf("replaceStr")
+    */
     public StrBuilder replace(final int startIndex, int endIndex, final String replaceStr) {
         endIndex = validateRange(startIndex, endIndex);
         final int insertLen = (replaceStr == null ? 0 : replaceStr.length());
@@ -3148,7 +3148,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
 
         /** {@inheritDoc} */
-        @SuppressWarnings({"index:return.type.incompatible", "index:argument.type.incompatible"}) /* 
+        @SuppressWarnings({"index:return.type.incompatible", "index:argument.type.incompatible"}) /*
         #1: returns the ASCII value of the character which is @NonNegative
             Also, ready() => pos++ < StrBuilder.this.size()
         */

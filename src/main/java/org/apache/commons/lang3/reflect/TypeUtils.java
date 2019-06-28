@@ -1115,8 +1115,8 @@ public class TypeUtils {
     }
 
     /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
-       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2 
-       have to be same at the start of the second loop, an element is to be added for sure 
+       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2
+       have to be same at the start of the second loop, an element is to be added for sure
     */
     /**
      * <p>This method strips out the redundant upper bound types in type
@@ -1555,7 +1555,7 @@ public class TypeUtils {
      * @return array of map values corresponding to specified keys
      */
     @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"})/*
-    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result") 
+    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result")
     */
     private static Type[] extractTypeArgumentsFrom(final Map<TypeVariable<?>, Type> mappings, final TypeVariable<?>[] variables) {
         final Type @SameLen("variables") [] result = new Type[variables.length];
@@ -1850,7 +1850,7 @@ public class TypeUtils {
         }
     }
     @SuppressWarnings("index:assignment.type.incompatible")/*
-    #3: Array.copyOf(array, n) returns an array of length n 
+    #3: Array.copyOf(array, n) returns an array of length n
     #4: Keeps on adding an element every time this statement is carried out, hence no. of elements <= no. of times loop runs, hence @LTEqLengthOf("p.getActualTypeArguments()")
     */
     private static int @LTLengthOf(value = {"#1.getActualTypeArguments()"}, offset = {"-1"}) [] findRecursiveTypes(final ParameterizedType p) {

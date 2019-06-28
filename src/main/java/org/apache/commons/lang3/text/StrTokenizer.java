@@ -425,7 +425,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous sequential token, or null when no more tokens are found
      */
-    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0 
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0
     public String previousToken() {
         if (hasPrevious()) {
             return tokens[--tokenPos];
@@ -554,7 +554,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous token
      */
-    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0 
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0
     @Override
     public String previous() {
         if (hasPrevious()) {
@@ -746,8 +746,8 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *  then the length of string
      */
     @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range", "index:array.access.unsafe.low"}) /* 
-    #1, #2, #3, #4, #5: pos < len is checked as the condition for the while loop, and when all the compound assignments happen (#0.1, #0.2, #0.3, #0.4, #0.5), there is a continue statement, 
-    hence the loop starts again and pos < len is checked. Also, pos++ can happen only once, either in #1 or in #5 because both are complementary if-else parts, 
+    #1, #2, #3, #4, #5: pos < len is checked as the condition for the while loop, and when all the compound assignments happen (#0.1, #0.2, #0.3, #0.4, #0.5), there is a continue statement,
+    hence the loop starts again and pos < len is checked. Also, pos++ can happen only once, either in #1 or in #5 because both are complementary if-else parts,
     hence srcChars[pos++] is also validin #1 and #5 as pos < len
     */
     private int readWithQuotes(final char[] srcChars, final @IndexFor("#1") int start, final int len, final StrBuilder workArea,

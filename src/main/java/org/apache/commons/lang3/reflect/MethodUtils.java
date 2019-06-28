@@ -807,7 +807,7 @@ public class MethodUtils {
      * @throws NullPointerException if the specified method is {@code null}
      * @since 3.2
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /* 
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /*
     #4: getGenericParameterTypes() returns an array of Types that represent the formal parameter types of the method object, hence all instances of a class will have the same length of the array returned,
     hence,  method.getGenericParameterTypes().length =  m.getGenericParameterTypes().length = parameterTypes.length and i < parameterTypes.length inside the loop
     */
