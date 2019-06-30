@@ -620,9 +620,6 @@ public class NumberUtils {
     // 45 45.5 45E7 4.5E7 Hex Oct Binary xxxF xxxD xxxf xxxd
     // plus minus everything. Prolly more. A lot are not separable.
 
-    /*@SuppressWarnings("value:argument.type.incompatible")/*
-    #1, #2, #3: !StringUtils.isBlank(str) => str.length != 0
-    */
     /**
      * <p>Turns a string value into a java.lang.Number.</p>
      *
