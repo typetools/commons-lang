@@ -794,7 +794,7 @@ public class FastDateParser implements DateParser, Serializable {
                 return false;
             }
 
-            @SuppressWarnings("index:argument.type.incompatible") // pos.getIndex() return the current parse position, which has to be @LTEqLengthOf("source"), also, pos.getIndex() <= idx, as idx is set to pos.getIndex() and then incremented 
+            @SuppressWarnings("index:argument.type.incompatible") // pos.getIndex() return the current parse position, which has to be @LTEqLengthOf("source"), also, pos.getIndex() <= idx, as idx is set to pos.getIndex() and then incremented
             final int value = Integer.parseInt(source.substring(pos.getIndex(), idx));
             pos.setIndex(idx);
 
