@@ -7554,6 +7554,11 @@ public class ArrayUtils {
      * @since 3.2
      */
     // package protected for access by unit tests
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: srcLength - removals is @NonNegative as it is the number of items remaining after removal, and removals is the no. of items to remove
+    #2: count = set - srcIndex, and set is the index of the next bit from srcIndex, set != -1 => set is @IndexFor("array"), hence set - srcIndex is also @IndexFor("array")
+        count = set - srcIndex < src.length as set < src.length
+    */
     static Object removeAll(final Object array, final BitSet indices) {
         final int srcLength = getLength(array);
         // No need to check maxIndex here, because method only currently called from removeElements()
@@ -7563,7 +7568,7 @@ public class ArrayUtils {
 //            throw new IndexOutOfBoundsException("Index: " + (maxIndex-1) + ", Length: " + srcLength);
 //        }
         final int removals = indices.cardinality(); // true bits are items to remove
-        final Object result = Array.newInstance(array.getClass().getComponentType(), srcLength - removals);
+        final Object result = Array.newInstance(array.getClass().getComponentType(), srcLength - removals); // #1
         int srcIndex = 0;
         int destIndex = 0;
         int count;
@@ -7571,14 +7576,14 @@ public class ArrayUtils {
         while ((set = indices.nextSetBit(srcIndex)) != -1) {
             count = set - srcIndex;
             if (count > 0) {
-                System.arraycopy(array, srcIndex, result, destIndex, count);
+                System.arraycopy(array, srcIndex, result, destIndex, count); // #2
                 destIndex += count;
             }
             srcIndex = indices.nextClearBit(set);
         }
         count = srcLength - srcIndex;
         if (count > 0) {
-            System.arraycopy(array, srcIndex, result, destIndex, count);
+            System.arraycopy(array, srcIndex, result, destIndex, count); // #2
         }
         return result;
     }
@@ -7594,6 +7599,7 @@ public class ArrayUtils {
      */
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
+            @SuppressWarnings("index:override.param.invalid") // can't find compare() in java.lang.Comparable
             @Override
             public int compare(final @PolySameLen @PolyUpperBound @PolyLowerBound T o1, final @PolySameLen @PolyUpperBound @PolyLowerBound T o2) {
                 return o1.compareTo(o2);
