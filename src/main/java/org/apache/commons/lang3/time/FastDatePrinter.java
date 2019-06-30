@@ -36,7 +36,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.LTEqLengthOf;
 import org.checkerframework.checker.index.qual.LTLengthOf;
-import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.GTENegativeOne;
 import org.checkerframework.common.value.qual.MinLen;
 
@@ -700,7 +699,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * @param buffer the buffer to append to.
      * @param value the value to append digits from.
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.high"}) /*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /*
     #2: value/10 in every iteration => loop can run a maximum of 10 times because log(Integer.MAX_VALUE) = 9.3, and work.length = 10, hence work[digit++] can have a maximum value of work[9]
     #3: digit exits the previous loop with a non negative value, hence --digit>=0 => minimum value of digit to be -1
     */
@@ -910,8 +909,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         /**
          * {@inheritDoc}
          */
-        @SuppressWarnings("index:array.access.unsafe.high") // mValues has same number of elements as number of possible elements by calendar.get(mField), calendar.get(mField) starts from 0, hence a valid index 
         @Override
+        @SuppressWarnings("index:array.access.unsafe.high") // mValues has same number of elements as number of possible elements by calendar.get(mField), calendar.get(mField) starts from 0, hence a valid index
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
             buffer.append(mValues[calendar.get(mField)]);
         }

@@ -1114,6 +1114,10 @@ public class TypeUtils {
                 : isAssignable(value.getClass(), type, null);
     }
 
+    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
+       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2
+       have to be same at the start of the second loop, an element is to be added for sure
+    */
     /**
      * <p>This method strips out the redundant upper bound types in type
      * variable types and wildcard types (or it would with wildcard types if
@@ -1135,10 +1139,6 @@ public class TypeUtils {
      * @return an array containing the values from {@code bounds} minus the
      * redundant types.
      */
-    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
-       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2 
-       have to be same at the start of the second loop, an element is to be added for sure 
-    */
     public static Type[] normalizeUpperBounds(final Type[] bounds) {
         Validate.notNull(bounds, "null value specified for bounds array");
         // don't bother if there's only one (or none) type
@@ -1554,8 +1554,8 @@ public class TypeUtils {
      * @param variables expected map keys
      * @return array of map values corresponding to specified keys
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:compound.assignment.type.incompatible"})/*
-    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result") 
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"})/*
+    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result")
     */
     private static Type[] extractTypeArgumentsFrom(final Map<TypeVariable<?>, Type> mappings, final TypeVariable<?>[] variables) {
         final Type @SameLen("variables") [] result = new Type[variables.length];
@@ -1837,7 +1837,7 @@ public class TypeUtils {
         return buf.toString();
     }
 
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
     private static void appendRecursiveTypes(final StringBuilder buf, final int @LTLengthOf(value = {"#3"}, offset = {"-1"}) [] recursiveTypeIndexes, final Type[] argumentTypes) {
         for (@IndexOrHigh("argumentTypes") int i = 0; i < recursiveTypeIndexes.length; i++) { // #1
             appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>');
@@ -1850,7 +1850,7 @@ public class TypeUtils {
         }
     }
     @SuppressWarnings("index:assignment.type.incompatible")/*
-    #3: Array.copyOf(array, n) returns an array of length n 
+    #3: Array.copyOf(array, n) returns an array of length n
     #4: Keeps on adding an element every time this statement is carried out, hence no. of elements <= no. of times loop runs, hence @LTEqLengthOf("p.getActualTypeArguments()")
     */
     private static int @LTLengthOf(value = {"#1.getActualTypeArguments()"}, offset = {"-1"}) [] findRecursiveTypes(final ParameterizedType p) {

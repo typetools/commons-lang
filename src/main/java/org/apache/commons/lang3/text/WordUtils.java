@@ -275,7 +275,7 @@ public class WordUtils {
      *               if blank string is provided a space character will be used
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    @SuppressWarnings({"index:assignment.type.incompatible","index:compound.assignment.type.incompatible"}) /*
+    @SuppressWarnings({"index:assignment.type.incompatible", "index:compound.assignment.type.incompatible"}) /*
     #1: matcher is on the substring of str that starts with offset index, hence (offset + matcher.end())'s max value = offset + str.length() - 1 - offset = str.length() - 1
     #2, #3: matcher is on the substring of str that starts with offset index, hence (offset + matcher.start())'s max value = offset + str.length() - 1 - offset = str.length() - 1, spaceToWrapAt's maximum value is str.length() - 1
     #4: matcher is on the substring of str that starts with offset + wrapLength index, hence (offset + wrapLength + matcher.start())'s max value = offset + wrapLength + str.length() - 1 - offset - wrapLength = str.length() - 1
@@ -663,7 +663,7 @@ public class WordUtils {
      * @see #initials(String)
      * @since 2.2
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:compound.assignment.type.incompatible"}) // count can reach the maximum value of strLen/2 by this assignment, and the maximum value to be used in the index can be (strLen-1)/2, because when count++ happens, lastWasGap is set to false, and it will require at least one more run to set lastWasGapto true and then count++ can happen in the next iteration
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"}) // count can reach the maximum value of strLen/2 by this assignment, and the maximum value to be used in the index can be (strLen-1)/2, because when count++ happens, lastWasGap is set to false, and it will require at least one more run to set lastWasGapto true and then count++ can happen in the next iteration
     public static String initials(final String str, final char... delimiters) {
         if (StringUtils.isEmpty(str)) {
             return str;

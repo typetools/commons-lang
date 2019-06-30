@@ -937,7 +937,7 @@
               <compilerArgs>
                 <!-- location of the annotated JDK, which comes from a Maven dependency -->
                 <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                <arg>-AskipDefs=^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.|^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.text\.</arg>
+                <arg>-AskipDefs=/src/test/java/org/apache/commons/lang3/builder/|/src/test/java/org/apache/commons/lang3/exception/|/src/test/java/org/apache/commons/lang3/math/|/src/test/java/org/apache/commons/lang3/reflect/|/src/test/java/org/apache/commons/lang3/text/|/src/test/java/org/apache/commons/lang3/time/|/src/test/java/org/apache/commons/lang3/|^org\.apache\.commons\.lang3\.</arg>
                 <arg>-Astubs=/Stubs/</arg>
               </compilerArgs>
             </configuration>
