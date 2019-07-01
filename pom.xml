@@ -1041,6 +1041,11 @@
       </plugins>
     </build>
 </profile>
+<profile>
+    <activation>
+      <jdk>8</jdk>
+    </activation>
+</profile>
 
 </profiles>
 </project>
