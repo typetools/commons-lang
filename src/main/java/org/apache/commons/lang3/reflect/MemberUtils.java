@@ -24,7 +24,6 @@ import java.lang.reflect.Modifier;
 
 import org.apache.commons.lang3.ClassUtils;
 
-import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
 
 /**

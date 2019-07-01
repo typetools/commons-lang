@@ -1181,7 +1181,7 @@ public class NumberUtils {
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0 
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (array[j] > max) {
