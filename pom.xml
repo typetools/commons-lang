@@ -1043,9 +1043,4 @@
 </profile>
 
 </profiles>
-    <settings>
-      <activeProfiles>
-        <activeProfile>profile-1</activeProfile>
-      </activeProfiles>
-    </settings>
 </project>
