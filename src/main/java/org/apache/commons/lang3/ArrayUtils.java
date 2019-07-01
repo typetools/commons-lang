@@ -36,6 +36,7 @@ import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.PolySameLen;
 import org.checkerframework.checker.index.qual.PolyLowerBound;
 import org.checkerframework.checker.index.qual.PolyUpperBound;
+import org.checkerframework.checker.index.qual.SameLen;
 
 /**
  * <p>Operations on arrays, primitive arrays (like {@code int[]}) and
@@ -346,7 +347,8 @@ public class ArrayUtils {
      * @param array  the array to shallow clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static <T> T[] clone(final T[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static <T> T @SameLen("#1") [] clone(final T[] array) {
         if (array == null) {
             return null;
         }
@@ -362,7 +364,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static long[] clone(final long[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static long @SameLen("#1") [] clone(final long[] array) {
         if (array == null) {
             return null;
         }
@@ -378,7 +381,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static int[] clone(final int[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static int @SameLen("#1") [] clone(final int[] array) {
         if (array == null) {
             return null;
         }
@@ -394,7 +398,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static short[] clone(final short[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static short @SameLen("#1") [] clone(final short[] array) {
         if (array == null) {
             return null;
         }
@@ -410,7 +415,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static char[] clone(final char[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static char @SameLen("#1") [] clone(final char[] array) {
         if (array == null) {
             return null;
         }
@@ -426,7 +432,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static byte[] clone(final byte[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static byte @SameLen("#1") [] clone(final byte[] array) {
         if (array == null) {
             return null;
         }
@@ -442,7 +449,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static double[] clone(final double[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static double @SameLen("#1") [] clone(final double[] array) {
         if (array == null) {
             return null;
         }
@@ -458,7 +466,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static float[] clone(final float[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static float @SameLen("#1") [] clone(final float[] array) {
         if (array == null) {
             return null;
         }
@@ -474,7 +483,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static boolean[] clone(final boolean[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static boolean @SameLen("#1") [] clone(final boolean[] array) {
         if (array == null) {
             return null;
         }
