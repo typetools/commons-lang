@@ -38,11 +38,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
 
-import org.checkerframework.checker.index.qual.LTEqLengthOf;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.SameLen;
 import org.checkerframework.common.value.qual.MinLen;
-import org.checkerframework.checker.index.qual.LTLengthOf;
 
 /**
  * <p> Utility methods focusing on type inspection, particularly with regard to
@@ -1114,6 +1113,10 @@ public class TypeUtils {
                 : isAssignable(value.getClass(), type, null);
     }
 
+    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
+       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2
+       have to be same at the start of the second loop, an element is to be added for sure
+    */
     /**
      * <p>This method strips out the redundant upper bound types in type
      * variable types and wildcard types (or it would with wildcard types if
@@ -1135,10 +1138,6 @@ public class TypeUtils {
      * @return an array containing the values from {@code bounds} minus the
      * redundant types.
      */
-    /* this method returns a non empty array for a non empty argument, if bounds. length < 2. it returns bounds(which was non empty)
-       If bounds.length > 2, there is a nested loop in which if two types are same, an element is added surely, and because type1 and type2 
-       have to be same at the start of the second loop, an element is to be added for sure 
-    */
     public static Type[] normalizeUpperBounds(final Type[] bounds) {
         Validate.notNull(bounds, "null value specified for bounds array");
         // don't bother if there's only one (or none) type
@@ -1554,8 +1553,8 @@ public class TypeUtils {
      * @param variables expected map keys
      * @return array of map values corresponding to specified keys
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:compound.assignment.type.incompatible"})/*
-    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result") 
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"})/*
+    #7: result.length = variables.length, hence result[index++] is valid, also, index++ is a valid assignment for @IndexOrHigh("result")
     */
     private static Type[] extractTypeArgumentsFrom(final Map<TypeVariable<?>, Type> mappings, final TypeVariable<?>[] variables) {
         final Type @SameLen("variables") [] result = new Type[variables.length];
@@ -1826,10 +1825,10 @@ public class TypeUtils {
             buf.append('.').append(raw.getSimpleName());
         }
 
-        final int @LTEqLengthOf("p.getActualTypeArguments()") [] recursiveTypeIndexes = findRecursiveTypes(p);
+        final @IndexFor("p.getActualTypeArguments()") int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
 
         if (recursiveTypeIndexes.length > 0) {
-            appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments());
+            appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments()); // #0.1
         } else {
             appendAllTo(buf.append('<'), ", ", p.getActualTypeArguments()).append('>');
         }
@@ -1837,10 +1836,14 @@ public class TypeUtils {
         return buf.toString();
     }
 
-    @SuppressWarnings({"index:compound.assignment.type.incompatible","index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
-    private static void appendRecursiveTypes(final StringBuilder buf, final int @LTLengthOf(value = {"#3"}, offset = {"-1"}) [] recursiveTypeIndexes, final Type[] argumentTypes) {
-        for (@IndexOrHigh("argumentTypes") int i = 0; i < recursiveTypeIndexes.length; i++) { // #1
-            appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>');
+    @SuppressWarnings("index:array.access.unsafe.high") /*
+    #1: recursiveTypeIndexes.length <= argumentTypes.length. This function is called only by parameterizedTypeToString() in #0.1 and revursiveTypeIndexes is defined in #0.2
+    findRecursiveTypes(p) returns an array with length <= p.getActualTypeArguments().length as can be seen in the loop which adds an element to the array,
+    it runs from 0 to p.getActualTypeArguments().length - 1
+    */
+    private static void appendRecursiveTypes(final StringBuilder buf, final @IndexFor("#3") int[] recursiveTypeIndexes, final Type[] argumentTypes) {
+        for (int i = 0; i < recursiveTypeIndexes.length; i++) {
+            appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>'); // #1
         }
 
         final Type[] argumentsFiltered = ArrayUtils.removeAll(argumentTypes, recursiveTypeIndexes);
@@ -1849,17 +1852,15 @@ public class TypeUtils {
             appendAllTo(buf.append('<'), ", ", argumentsFiltered).append('>');
         }
     }
-    @SuppressWarnings("index:assignment.type.incompatible")/*
-    #3: Array.copyOf(array, n) returns an array of length n 
-    #4: Keeps on adding an element every time this statement is carried out, hence no. of elements <= no. of times loop runs, hence @LTEqLengthOf("p.getActualTypeArguments()")
-    */
-    private static int @LTLengthOf(value = {"#1.getActualTypeArguments()"}, offset = {"-1"}) [] findRecursiveTypes(final ParameterizedType p) {
-        final Type @SameLen("p.getActualTypeArguments()") [] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length); // #3
-        int @LTLengthOf(value = {"p.getActualTypeArguments()"}, offset = {"-1"}) [] indexesToRemove = {};
+
+    @SuppressWarnings("index:return.type.incompatible") // only the indices of filteredArgumentTypes is added, which is a copy of p.getActualTypeArguments()
+    private static @IndexFor("#1.getActualTypeArguments()") int[] findRecursiveTypes(final ParameterizedType p) {
+        final Type[] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length);
+        int[] indexesToRemove = {};
         for (int i = 0; i < filteredArgumentTypes.length; i++) {
             if (filteredArgumentTypes[i] instanceof TypeVariable<?>) {
                 if (containsVariableTypeSameParametrizedTypeBound(((TypeVariable<?>) filteredArgumentTypes[i]), p)) {
-                    indexesToRemove = ArrayUtils.add(indexesToRemove, i); // #4
+                    indexesToRemove = ArrayUtils.add(indexesToRemove, i);
                 }
             }
         }
