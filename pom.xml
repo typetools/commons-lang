@@ -999,8 +999,54 @@
         </plugins>
       </build>
     </profile>
-      <profile>
+  <profile>
     <id>checker</id>
+    <dependencies>
+      <dependency>
+        <groupId>org.checkerframework</groupId>
+        <artifactId>jdk8</artifactId>
+        <version>1.9.13</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.10</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>properties</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.3</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+            <annotationProcessors>
+              <annotationProcessor>org.checkerframework.checker.index.IndexChecker</annotationProcessor>
+            </annotationProcessors>
+            <compilerArgs>
+              <arg>-Xbootclasspath/p:${org.checkerframework:jdk8:jar}</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+</profile>
+
+<profile>
+  <activation>
+      <jdk>[9,)</jdk>
+    </activation>
+    <id>checker-8+</id>
     <dependencies>
       <dependency>
         <groupId>org.checkerframework</groupId>
