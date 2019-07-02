@@ -1017,14 +1017,17 @@
         </plugins>
       </build>
     </profile>
-      <profile>
-    <id>checker</id>
-    <dependencies>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>jdk8</artifactId>
-        <version>1.9.13</version>
-        <scope>provided</scope>
+    <profile>
+      <activation>
+        <jdk>8</jdk>
+      </activation>
+      <id>checker</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>jdk8</artifactId>
+          <version>1.9.13</version>
+          <scope>provided</scope>
       </dependency>
     </dependencies>
     <build>
