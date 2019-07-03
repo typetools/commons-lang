@@ -32,6 +32,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.PolySameLen;
 import org.checkerframework.checker.index.qual.PolyLowerBound;
@@ -3268,7 +3270,7 @@ public class ArrayUtils {
      * @return the index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final Object[] array, final Object objectToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final Object[] array, final Object objectToFind) {
         return indexOf(array, objectToFind, 0);
     }
 
@@ -3286,7 +3288,7 @@ public class ArrayUtils {
      * @return the index of the object within the array starting at the index,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3319,7 +3321,7 @@ public class ArrayUtils {
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final Object[] array, final Object objectToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final Object[] array, final Object objectToFind) {
         return lastIndexOf(array, objectToFind, Integer.MAX_VALUE);
     }
 
@@ -3337,7 +3339,7 @@ public class ArrayUtils {
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final Object[] array, final Object objectToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final Object[] array, final Object objectToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3387,7 +3389,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final long[] array, final long valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final long[] array, final long valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3405,7 +3407,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final long[] array, final long valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final long[] array, final long valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3430,7 +3432,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final long[] array, final long valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final long[] array, final long valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3448,7 +3450,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final long[] array, final long valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final long[] array, final long valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3490,7 +3492,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final int[] array, final int valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final int[] array, final int valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3508,7 +3510,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final int[] array, final int valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final int[] array, final int valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3533,7 +3535,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final int[] array, final int valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final int[] array, final int valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3551,7 +3553,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final int[] array, final int valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final int[] array, final int valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3593,7 +3595,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final short[] array, final short valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final short[] array, final short valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3611,7 +3613,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final short[] array, final short valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final short[] array, final short valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3636,7 +3638,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final short[] array, final short valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final short[] array, final short valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3654,7 +3656,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final short[] array, final short valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final short[] array, final short valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3697,7 +3699,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int indexOf(final char[] array, final char valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final char[] array, final char valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3716,7 +3718,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int indexOf(final char[] array, final char valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3742,7 +3744,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int lastIndexOf(final char[] array, final char valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final char[] array, final char valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3761,7 +3763,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3804,7 +3806,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final byte[] array, final byte valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final byte[] array, final byte valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3822,7 +3824,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3847,7 +3849,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final byte[] array, final byte valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final byte[] array, final byte valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3865,7 +3867,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final byte[] array, final byte valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final byte[] array, final byte valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3907,7 +3909,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3924,7 +3926,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, final double tolerance) {
         return indexOf(array, valueToFind, 0, tolerance);
     }
 
@@ -3942,7 +3944,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -3974,7 +3976,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4001,7 +4003,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -4018,7 +4020,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, final double tolerance) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE, tolerance);
     }
 
@@ -4036,7 +4038,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4070,7 +4072,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4131,7 +4133,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final float[] array, final float valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final float[] array, final float valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -4149,7 +4151,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final float[] array, final float valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final float[] array, final float valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4174,7 +4176,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final float[] array, final float valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final float[] array, final float valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -4192,7 +4194,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final float[] array, final float valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final float[] array, final float valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4234,7 +4236,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final boolean[] array, final boolean valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final boolean[] array, final boolean valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -4253,7 +4255,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null}
      *  array input
      */
-    public static int indexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4279,7 +4281,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final boolean[] array, final boolean valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final boolean[] array, final boolean valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -4297,7 +4299,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -6115,7 +6117,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static <T> T[] removeElement(final T[] array, final Object element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6182,7 +6183,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static boolean[] removeElement(final boolean[] array, final boolean element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6249,7 +6249,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static byte[] removeElement(final byte[] array, final byte element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6316,7 +6315,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static char[] removeElement(final char[] array, final char element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6383,7 +6381,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static double[] removeElement(final double[] array, final double element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6450,7 +6447,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static float[] removeElement(final float[] array, final float element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6517,7 +6513,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static int[] removeElement(final int[] array, final int element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6584,7 +6579,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static long[] removeElement(final long[] array, final long element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -6651,7 +6645,6 @@ public class ArrayUtils {
      *         occurrence of the specified element.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index != INDEX_NOT_FOUND => index is @IndexFor("array")
     public static short[] removeElement(final short[] array, final short element) {
         final int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
@@ -7869,7 +7862,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    /*@SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
