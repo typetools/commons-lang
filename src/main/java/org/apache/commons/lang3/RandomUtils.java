@@ -111,7 +111,7 @@ public class RandomUtils {
             return startInclusive;
         }
 
-        return startInclusive + RANDOM.nextInt(endExclusive - startInclusive); // #1
+        return startInclusive + RANDOM.nextInt(endExclusive - startInclusive);
     }
 
     /**

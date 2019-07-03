@@ -417,6 +417,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param customPatterns The custom patterns to re-insert, if any
      * @return full pattern
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: pos.getIndex() < pattern.length() as checked by the loop condition
     private String insertFormats(final String pattern, final ArrayList<String> customPatterns) {
         if (!containsElements(customPatterns)) {
             return pattern;
@@ -426,7 +427,7 @@ public class ExtendedMessageFormat extends MessageFormat {
         int fe = -1;
         int depth = 0;
         while (pos.getIndex() < pattern.length()) {
-            final char c = pattern.charAt(pos.getIndex());
+            final char c = pattern.charAt(pos.getIndex()); // #1
             switch (c) {
             case QUOTE:
                 appendQuotedString(pattern, pos, sb);

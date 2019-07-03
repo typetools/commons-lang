@@ -380,7 +380,7 @@ public class ClassUtils {
      * @return the package name or an empty string
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
-    #1, #2: Acording to the documentation, the name cannot end with '[', hence the subtring has @MinLen(1)
+    #1, #2: According to the documentation, the name cannot end with '[', hence the subtring has @MinLen(1)
     #3, #4: className after the previous loop has @MinLen(1) as explained in #1, #2
     */
     public static String getPackageName(String className) {

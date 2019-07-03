@@ -3532,7 +3532,7 @@ public class StringUtils {
      * @since 2.0
      * @since 3.0 Changed signature from isBlank(String) to isBlank(CharSequence)
      */
-    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // if not all characters are whitespace, at least one non whitespace whatacter
+    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // if not all characters are whitespace, at least one non whitespace character
     @EnsuresMinLenIf(expression = "#1", result = false, targetValue = 1)
     public static boolean isBlank(final CharSequence cs) {
         int strLen;

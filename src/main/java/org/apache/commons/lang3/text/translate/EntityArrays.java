@@ -162,7 +162,7 @@ public class EntityArrays {
     }
 
     private static final String[][] HTML40_EXTENDED_ESCAPE = {
-        // <!-- Latin Extended-B -->k #ISO8859_1_ESCAPE()} to get the full list of
+        // <!-- Latin Extended-B -->
         {"\u0192", "&fnof;"}, // latin small f with hook = function= florin, U+0192 ISOtech -->
         // <!-- Greek -->
         {"\u0391", "&Alpha;"}, // greek capital letter alpha, U+0391 -->

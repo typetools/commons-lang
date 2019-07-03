@@ -1034,6 +1034,7 @@
             </annotationProcessors>
             <compilerArgs>
               <arg>-Xbootclasspath/p:${org.checkerframework:jdk8:jar}</arg>
+              <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.</arg>
             </compilerArgs>
           </configuration>
         </plugin>

@@ -37,6 +37,7 @@ import org.checkerframework.checker.index.qual.PolySameLen;
 import org.checkerframework.checker.index.qual.PolyLowerBound;
 import org.checkerframework.checker.index.qual.PolyUpperBound;
 import org.checkerframework.checker.index.qual.SameLen;
+import org.checkerframework.common.value.qual.MinLen;
 
 /**
  * <p>Operations on arrays, primitive arrays (like {@code int[]}) and
@@ -5422,7 +5423,7 @@ public class ArrayUtils {
      * @since 2.1
      * @throws IllegalArgumentException if both arguments are null
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static <T> T[] add(final T[] array, final T element) {
         Class<?> type;
         if (array != null) {
@@ -5433,8 +5434,7 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Arguments cannot both be null");
         }
         @SuppressWarnings("unchecked") // type must be T
-        final
-        T[] newArray = (T[]) copyArrayGrow1(array, type);
+        final T[] newArray = (T[]) copyArrayGrow1(array, type);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5460,7 +5460,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static boolean[] add(final boolean[] array, final boolean element) {
         final boolean[] newArray = (boolean[]) copyArrayGrow1(array, Boolean.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5488,7 +5488,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static byte[] add(final byte[] array, final byte element) {
         final byte[] newArray = (byte[]) copyArrayGrow1(array, Byte.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5516,7 +5516,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static char[] add(final char[] array, final char element) {
         final char[] newArray = (char[]) copyArrayGrow1(array, Character.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5544,7 +5544,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static double[] add(final double[] array, final double element) {
         final double[] newArray = (double[]) copyArrayGrow1(array, Double.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5572,7 +5572,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static float[] add(final float[] array, final float element) {
         final float[] newArray = (float[]) copyArrayGrow1(array, Float.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5600,7 +5600,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static int[] add(final int[] array, final int element) {
         final int[] newArray = (int[]) copyArrayGrow1(array, Integer.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5628,7 +5628,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static long[] add(final long[] array, final long element) {
         final long[] newArray = (long[]) copyArrayGrow1(array, Long.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5656,7 +5656,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() returns an array of size array.length + 1, hence newArray.length != 0
+    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static short[] add(final short[] array, final short element) {
         final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
         newArray[newArray.length - 1] = element; // #1
@@ -5672,15 +5672,19 @@ public class ArrayUtils {
      * size 1 array of this type.
      * @return A new copy of the array of size 1 greater than the input.
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: arrayLength < newArray.length as newArray.length = arrayLength + 1
-    private static Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
+    @SuppressWarnings({"index:argument.type.incompatible","value:return.type.incompatible"}) /*
+    #1: arrayLength < newArray.length as newArray.length = arrayLength + 1
+    #2: newArray has length array.length + 1, hence it is @MinLen(1)
+    #3: Array.newInstance(--,1) gives an array of length 1
+    */
+    private static @MinLen(1) Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
         if (array != null) {
             final int arrayLength = Array.getLength(array);
             final Object newArray = Array.newInstance(array.getClass().getComponentType(), arrayLength + 1);
             System.arraycopy(array, 0, newArray, 0, arrayLength); // #1
-            return newArray;
+            return newArray; // #2
         }
-        return Array.newInstance(newArrayComponentType, 1);
+        return Array.newInstance(newArrayComponentType, 1); // #3
     }
 
     /**
@@ -7565,7 +7569,7 @@ public class ArrayUtils {
      */
     // package protected for access by unit tests
     @SuppressWarnings("index:argument.type.incompatible") /*
-    #1: srcLength - removals is @NonNegative as it is the number of items remaining after removal, and removals is the no. of items to remove
+    #1: removals is the number of items removed, which cannot be greater than the length of the original array, so srcLength - removals is @NonNegative
     #2: count = set - srcIndex, and set is the index of the next bit from srcIndex, set != -1 => set is @IndexFor("array"), hence set - srcIndex is also @IndexFor("array")
         count = set - srcIndex < src.length as set < src.length
     */
@@ -7865,7 +7869,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    /*@SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -7877,7 +7881,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index]; // #1
+        final @IndexFor("array") int[] indices = new int[array.length - index]; // #1
         indices[0] = index; // #1
         int count = 1;
 

@@ -179,7 +179,7 @@ public class CharUtils {
      */
     public static char toChar(final @MinLen(1) String str) {
         Validate.isTrue(StringUtils.isNotEmpty(str), "The String must not be empty");
-        return str.charAt(0); // #1
+        return str.charAt(0);
     }
 
     /**
