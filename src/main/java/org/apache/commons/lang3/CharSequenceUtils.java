@@ -269,7 +269,7 @@ public class CharSequenceUtils {
      * @return whether the region matched
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
-    #1: Made a pull request in the typetools that these parameters need not have any annotations
+    #1: Made a pull request in the typetools that these parameters need not have any annotations, https://github.com/typetools/annotated-libraries/pull/25
     #2: srcLen < length => index1++ is @LTEqLengthOf("cs")
     #3: otherLen < length => index2++ is @LTEqLengthOf("cs")
     */
