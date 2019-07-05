@@ -1029,6 +1029,8 @@
                 <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
                 <arg>-AskipDefs=/src/test/java/org/apache/commons/lang3/builder/|/src/test/java/org/apache/commons/lang3/exception/|/src/test/java/org/apache/commons/lang3/math/|/src/test/java/org/apache/commons/lang3/reflect/|/src/test/java/org/apache/commons/lang3/text/|/src/test/java/org/apache/commons/lang3/time/|/src/test/java/org/apache/commons/lang3/|^org\.apache\.commons\.lang3\.|^org\.apache\.commons\.lang3\text\.</arg>
                 <arg>-Astubs=/Stubs/</arg>
+                <arg>-ArequirePrefixInWarningSuppressions</arg>
+                <arg>-AwarnUnneededSuppressions</arg>
               </compilerArgs>
             </configuration>
           </plugin>
@@ -1055,6 +1057,8 @@
               <annotationProcessor>org.checkerframework.checker.index.IndexChecker</annotationProcessor>
             </annotationProcessors>
             <compilerArgs>
+              <arg>-ArequirePrefixInWarningSuppressions</arg>
+              <arg>-AwarnUnneededSuppressions</arg>
               <arg>-Xbootclasspath/p:${org.checkerframework:jdk8:jar}</arg>
             </compilerArgs>
           </configuration>
