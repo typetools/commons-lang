@@ -341,7 +341,7 @@ public class StringUtils {
      * @throws IllegalArgumentException if the width is too small
      * @since 3.6
      */
-    @SuppressWarnings("index:argument.type.incompatible") /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:assignment.type.incompatible"}) /*
     #1: offset <= abbrevMarkerLength + 1, and maxWidth >= abbrevMarkerLength + 1 as checked by #0.1, hence maxwidth - abbrevMarkerLength >= 1
         Also, maxWidth < str.length(), hence maxWidth - abbrevMarkerLength < str.length()
     #2: offset is @IndexOrHigh("str") as ensured by #0.3
@@ -5536,7 +5536,7 @@ public class StringUtils {
      */
     @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
     #1: inside the loop, count can reach a maximum size, as it is incremented only a maximum once per iteration,
-        and it is post-increment, hence when it is used as index, it can reach a maximum size - 1 
+        and it is post-increment, hence when it is used as index, it can reach a maximum size - 1
     #2: count is @IndexOrHigh("newChars") as it is incremented maximum once per iteration.
         If whitespacesCount > 0, newChars will be @MinLen(1), as the loop runs at least once, hence count - 1 will be @IndexFor("newChars") if count != 0
         count is 0 only when there is only one whitespace and that is at the start, which is handled by #0.1
@@ -7185,17 +7185,18 @@ public class StringUtils {
      * @param len  the length of the required String
      * @return the rightmost characters, {@code null} if null String input
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: if len > str.length(), len is made to be str.length() by #0.1, also len is checked to be @NonNegative by #0.2
     public static String right(final String str, final int len) {
         if (str == null) {
             return null;
         }
-        if (len < 0) {
+        if (len < 0) { // #0.2
             return EMPTY;
         }
-        if (str.length() <= len) {
+        if (str.length() <= len) { // #0.1
             return str;
         }
-        return str.substring(str.length() - len);
+        return str.substring(str.length() - len); // #1
     }
 
     /**

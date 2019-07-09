@@ -7598,7 +7598,7 @@ public class ArrayUtils {
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
             @Override
-            public int compare(final T o1, final T o2) {
+            public int compare(final @PolySameLen @PolyLowerBound @PolyUpperBound T o1, final @PolySameLen @PolyLowerBound @PolyUpperBound T o2) {
                 return o1.compareTo(o2);
             }
         });
