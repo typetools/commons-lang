@@ -5425,7 +5425,6 @@ public class ArrayUtils {
      * @since 2.1
      * @throws IllegalArgumentException if both arguments are null
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static <T> T[] add(final T[] array, final T element) {
         Class<?> type;
         if (array != null) {
@@ -5436,7 +5435,7 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Arguments cannot both be null");
         }
         @SuppressWarnings("unchecked") // type must be T
-        final T[] newArray = (T[]) copyArrayGrow1(array, type);
+        final T[] newArray = (T @MinLen(1) []) copyArrayGrow1(array, type);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5462,9 +5461,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static boolean[] add(final boolean[] array, final boolean element) {
-        final boolean[] newArray = (boolean[]) copyArrayGrow1(array, Boolean.TYPE);
+        final boolean[] newArray = (boolean @MinLen(1) []) copyArrayGrow1(array, Boolean.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5490,9 +5488,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static byte[] add(final byte[] array, final byte element) {
-        final byte[] newArray = (byte[]) copyArrayGrow1(array, Byte.TYPE);
+        final byte[] newArray = (byte @MinLen(1) []) copyArrayGrow1(array, Byte.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5518,9 +5515,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static char[] add(final char[] array, final char element) {
-        final char[] newArray = (char[]) copyArrayGrow1(array, Character.TYPE);
+        final char[] newArray = (char @MinLen(1) []) copyArrayGrow1(array, Character.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5546,9 +5542,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static double[] add(final double[] array, final double element) {
-        final double[] newArray = (double[]) copyArrayGrow1(array, Double.TYPE);
+        final double[] newArray = (double @MinLen(1) []) copyArrayGrow1(array, Double.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5574,9 +5569,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static float[] add(final float[] array, final float element) {
-        final float[] newArray = (float[]) copyArrayGrow1(array, Float.TYPE);
+        final float[] newArray = (float @MinLen(1) []) copyArrayGrow1(array, Float.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5602,9 +5596,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static int[] add(final int[] array, final int element) {
-        final int[] newArray = (int[]) copyArrayGrow1(array, Integer.TYPE);
+        final int[] newArray = (int @MinLen(1) []) copyArrayGrow1(array, Integer.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5630,9 +5623,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static long[] add(final long[] array, final long element) {
-        final long[] newArray = (long[]) copyArrayGrow1(array, Long.TYPE);
+        final long[] newArray = (long @MinLen(1) []) copyArrayGrow1(array, Long.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
@@ -5658,9 +5650,8 @@ public class ArrayUtils {
      * @return A new array containing the existing elements plus the new element
      * @since 2.1
      */
-    @SuppressWarnings("index:array.access.unsafe.low") // #1: copyArrayGrow1() is @MinLen(1) as annotated
     public static short[] add(final short[] array, final short element) {
-        final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
+        final short[] newArray = (short @MinLen(1) []) copyArrayGrow1(array, Short.TYPE);
         newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
