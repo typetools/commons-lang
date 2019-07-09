@@ -570,6 +570,8 @@
   </distributionManagement>
 
   <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <argLine>-Xmx512m</argLine>
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -930,6 +932,7 @@
               <compilerArgs>
                 <!-- location of the annotated JDK, which comes from a Maven dependency -->
                 <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
+                <arg>-AskipDefs=^org\.apache\.commons\.lang3\.
                 <arg>-Astubs=/Stubs/</arg>
               </compilerArgs>
             </configuration>
@@ -991,49 +994,6 @@
         </plugins>
       </build>
     </profile>
-      <profile>
-    <id>checker</id>
-    <dependencies>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>jdk8</artifactId>
-        <version>1.9.13</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>properties</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.3</version>
-          <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-            <annotationProcessors>
-              <annotationProcessor>org.checkerframework.checker.index.IndexChecker</annotationProcessor>
-            </annotationProcessors>
-            <compilerArgs>
-              <arg>-Xbootclasspath/p:${org.checkerframework:jdk8:jar}</arg>
-              <arg>-AskipDefs=^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.|^org\.apache\.commons\.lang3\.time\.</arg>
-            </compilerArgs>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-</profile>
 
 </profiles>
 </project>
