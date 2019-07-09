@@ -121,7 +121,7 @@ public class RandomUtils {
      * @see #nextInt(int, int)
      * @since 3.5
      */
-    @SuppressWarnings("index:argument.type.incompatible") // 0 < Integer.MAX_VALUE
+    @SuppressWarnings("index:argument.type.incompatible") // 0 < Integer.MAX_VALUE. https://github.com/typetools/checker-framework/issues/2613
     public static int nextInt() {
         return nextInt(0, Integer.MAX_VALUE);
     }

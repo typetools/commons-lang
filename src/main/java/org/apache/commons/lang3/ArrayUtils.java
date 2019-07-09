@@ -350,7 +350,6 @@ public class ArrayUtils {
      * @param array  the array to shallow clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
     public static <T> T @SameLen("#1") [] clone(final T[] array) {
         if (array == null) {
             return null;
@@ -6075,8 +6074,9 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings({"unchecked","index:argument.type.incompatible"}) /* remove() always creates an array of the same type as its input
+    @SuppressWarnings({"unchecked", "index:argument.type.incompatible"}) /* remove() always creates an array of the same type as its input
     index < length of (Object) array
+    https://github.com/typetools/checker-framework/issues/2603
     */
     public static <T> T[] remove(final T[] array, final @IndexFor("#1") int index) {
         return (T[]) remove((Object) array, index);
@@ -6144,7 +6144,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static boolean[] remove(final boolean[] array, final @IndexFor("#1") int index) {
         return (boolean[]) remove((Object) array, index);
     }
@@ -6210,7 +6210,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static byte[] remove(final byte[] array, final @IndexFor("#1") int index) {
         return (byte[]) remove((Object) array, index);
     }
@@ -6276,7 +6276,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static char[] remove(final char[] array, final @IndexFor("#1") int index) {
         return (char[]) remove((Object) array, index);
     }
@@ -6342,7 +6342,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static double[] remove(final double[] array, final @IndexFor("#1") int index) {
         return (double[]) remove((Object) array, index);
     }
@@ -6408,7 +6408,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static float[] remove(final float[] array, final @IndexFor("#1") int index) {
         return (float[]) remove((Object) array, index);
     }
@@ -6474,7 +6474,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static int[] remove(final int[] array, final @IndexFor("#1") int index) {
         return (int[]) remove((Object) array, index);
     }
@@ -6540,7 +6540,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static long[] remove(final long[] array, final @IndexFor("#1") int index) {
         return (long[]) remove((Object) array, index);
     }
@@ -6606,7 +6606,7 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
     public static short[] remove(final short[] array, final @IndexFor("#1") int index) {
         return (short[]) remove((Object) array, index);
     }
@@ -7597,9 +7597,8 @@ public class ArrayUtils {
      */
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
-            @SuppressWarnings("index:override.param.invalid") // can't find compare() in java.lang.Comparable
             @Override
-            public int compare(final @PolySameLen @PolyUpperBound @PolyLowerBound T o1, final @PolySameLen @PolyUpperBound @PolyLowerBound T o2) {
+            public int compare(final T o1, final T o2) {
                 return o1.compareTo(o2);
             }
         });
