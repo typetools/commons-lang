@@ -6,9 +6,7 @@
  The ASF licenses this file to You under the Apache License, Version 2.0
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
-
       http://www.apache.org/licenses/LICENSE-2.0
-
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -517,11 +515,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.8.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
       <version>0.3.0</version>
@@ -555,44 +548,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker-qual</artifactId>
-      <version>2.6.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>jdk8</artifactId>
-      <version>2.6.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.8.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker-qual</artifactId>
-      <version>2.6.0</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker</artifactId>
-      <version>2.6.0</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>jdk8</artifactId>
-      <version>2.6.0</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>
-    </dependency>
-
   </dependencies>
 
   <distributionManagement>
@@ -609,16 +564,12 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
     <!--
        This is also  used to generate download_xxx file name.
        To override this when generating the download page:
-
        mvn commons:download-page -Dcommons.componentid=lang
-
        The above seems to change the download page name but not any other
        properties that depend on the componentid.
-
        N.B. The componentid is also used by the parent pom as part of the OSGI symbolic name.
     -->
     <commons.componentid>lang</commons.componentid>
@@ -932,48 +883,6 @@
               </execution>
             </executions>
           </plugin>
-           <plugin>
-    <!-- This plugin will set properties values using dependency information -->
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-dependency-plugin</artifactId>
-    <executions>
-      <execution>
-        <goals>
-          <goal>properties</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
-<plugin>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.6.1</version>
-    <configuration>
-      <source>1.8</source>
-      <target>1.8</target>
-      <compilerArguments>
-        <Xmaxerrs>10000</Xmaxerrs>
-        <Xmaxwarns>10000</Xmaxwarns>
-      </compilerArguments>
-      <annotationProcessorPaths>
-        <path>
-          <groupId>org.checkerframework</groupId>
-          <artifactId>checker</artifactId>
-          <version>2.6.0</version>
-        </path>
-      </annotationProcessorPaths>
-      <annotationProcessors>
-        <!-- Add all the checkers you want to enable here -->
-        <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-      </annotationProcessors>
-      <compilerArgs>
-        <!-- location of the annotated JDK, which comes from a Maven dependency -->
-        <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-        <!-- -Awarns turns type-checking warnings into errors. -->
-        <!-- <arg>-Awarns</arg> -->
-      </compilerArgs>
-    </configuration>
-  </plugin>
-
         </plugins>
       </build>
     </profile>
@@ -1030,54 +939,5 @@
         </plugins>
       </build>
     </profile>
-      <profile>
-    <id>checker</id>
-    <dependencies>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>checker</artifactId>
-        <version>1.9.13</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>jdk8</artifactId>
-        <version>1.9.13</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>properties</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.3</version>
-          <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-            <annotationProcessors>
-              <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-            </annotationProcessors>
-            <compilerArgs>
-              <arg>-Xbootclasspath/p:${org.checkerframework:jdk8:jar}</arg>
-            </compilerArgs>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-
   </profiles>
 </project>
