@@ -972,7 +972,7 @@
     </profile>
     <profile>
     <activation>
-      <jdk>8</jdk>
+      <jdk>1.8</jdk>
     </activation>
     <id>checker</id>
     <dependencies>
