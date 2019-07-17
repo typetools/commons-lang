@@ -1619,7 +1619,6 @@ public class NumberUtils {
         if (StringUtils.isEmpty(str)) {
             return false;
         }
-        @SuppressWarnings("value:assignment.type.incompatible") // !StringUtils.isEmpty(str) => @MinLen(1)
         final char @MinLen(1) [] chars = str.toCharArray();
         int sz = chars.length;
         boolean hasExp = false;
@@ -1747,23 +1746,22 @@ public class NumberUtils {
      * @since 3.4
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
-    #6, #7, #9: !StringUtils.isEmpty(str) => @MinLen(1)
     #8: str.length() != 1 && !StringUtils.isEmpty(str) => str.length > 1
     */
     public static boolean isParsable(final String str) {
         if (StringUtils.isEmpty(str)) {
             return false;
         }
-        if (str.charAt(str.length() - 1) == '.') { // #6
+        if (str.charAt(str.length() - 1) == '.') {
             return false;
         }
-        if (str.charAt(0) == '-') { // #7
+        if (str.charAt(0) == '-') {
             if (str.length() == 1) {
                 return false;
             }
             return withDecimalsParsing(str, 1); // #8
         }
-        return withDecimalsParsing(str, 0); // #9
+        return withDecimalsParsing(str, 0);
     }
 
     private static boolean withDecimalsParsing(final String str, final @IndexFor("#1") int beginIdx) {
