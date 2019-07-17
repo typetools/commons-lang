@@ -6113,7 +6113,7 @@ public class ArrayUtils {
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
-        return remove(array, index); // #1
+        return remove(array, index);
     }
 
     /**
