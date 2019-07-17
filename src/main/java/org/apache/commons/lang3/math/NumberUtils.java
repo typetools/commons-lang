@@ -686,7 +686,7 @@ public class NumberUtils {
             }
             return createInteger(str);
         }
-        final char lastChar = str.charAt(str.length() - 1); // #1
+        final char lastChar = str.charAt(str.length() - 1);
         String mant;
         String dec;
         String exp;
@@ -718,12 +718,12 @@ public class NumberUtils {
         }
         if (!Character.isDigit(lastChar) && lastChar != '.') {
             if (expPos > -1 && expPos < str.length() - 1) {
-                exp = str.substring(expPos + 1, str.length() - 1); // #2
+                exp = str.substring(expPos + 1, str.length() - 1);
             } else {
                 exp = null;
             }
             //Requesting a specific type..
-            final String numeric = str.substring(0, str.length() - 1); // #3
+            final String numeric = str.substring(0, str.length() - 1);
             final boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
             switch (lastChar) {
                 case 'l' :
