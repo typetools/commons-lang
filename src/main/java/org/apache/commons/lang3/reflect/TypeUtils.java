@@ -1826,10 +1826,10 @@ public class TypeUtils {
             buf.append('.').append(raw.getSimpleName());
         }
 
-        final int @LTEqLengthOf("p.getActualTypeArguments()") [] recursiveTypeIndexes = findRecursiveTypes(p);
+        final int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
 
         if (recursiveTypeIndexes.length > 0) {
-            appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments());
+            appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments()); // #0.1
         } else {
             appendAllTo(buf.append('<'), ", ", p.getActualTypeArguments()).append('>');
         }
@@ -1837,10 +1837,14 @@ public class TypeUtils {
         return buf.toString();
     }
 
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #1: recursiveTypeIndexes.length <= argumentTypes.length => i++ from 0 to recursiveTypeIndexes.length has i @IndexOrHigh("argumentTypes")
-    private static void appendRecursiveTypes(final StringBuilder buf, final int @LTLengthOf(value = {"#3"}, offset = {"-1"}) [] recursiveTypeIndexes, final Type[] argumentTypes) {
-        for (@IndexOrHigh("argumentTypes") int i = 0; i < recursiveTypeIndexes.length; i++) { // #1
-            appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>');
+    @SuppressWarnings("index:array.access.unsafe.high") /*
+    recursiveTypeIndexes.length <= argumentTypes.length. This function is called only by parameterizedTypeToString() in #0.1 and revursiveTypeIndexes is defined in #0.2
+    findRecursiveTypes(p) returns an array with length <= p.getActualTypeArguments().length as can be seen in the loop which adds an element to the array,
+    it runs from 0 to p.getActualTypeArguments().length - 1
+    */
+    private static void appendRecursiveTypes(final StringBuilder buf, final int[] recursiveTypeIndexes, final Type[] argumentTypes) {
+        for (int i = 0; i < recursiveTypeIndexes.length; i++) {
+            appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>'); // #1
         }
 
         final Type[] argumentsFiltered = ArrayUtils.removeAll(argumentTypes, recursiveTypeIndexes);

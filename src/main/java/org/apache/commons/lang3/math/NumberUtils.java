@@ -686,7 +686,7 @@ public class NumberUtils {
             }
             return createInteger(str);
         }
-        final char lastChar = str.charAt(str.length() - 1);
+        final char lastChar = str.charAt(str.length() - 1); // #1
         String mant;
         String dec;
         String exp;
@@ -718,12 +718,12 @@ public class NumberUtils {
         }
         if (!Character.isDigit(lastChar) && lastChar != '.') {
             if (expPos > -1 && expPos < str.length() - 1) {
-                exp = str.substring(expPos + 1, str.length() - 1);
+                exp = str.substring(expPos + 1, str.length() - 1); // #2
             } else {
                 exp = null;
             }
             //Requesting a specific type..
-            final String numeric = str.substring(0, str.length() - 1);
+            final String numeric = str.substring(0, str.length() - 1); // #3
             final boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
             switch (lastChar) {
                 case 'l' :
@@ -1021,6 +1021,7 @@ public class NumberUtils {
         validateArray(array);
 
         // Finds and returns min
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] < min) {
