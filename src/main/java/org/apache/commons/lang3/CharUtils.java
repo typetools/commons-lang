@@ -332,7 +332,7 @@ public class CharUtils {
      * @param ch  the character to convert
      * @return a String containing the one specified character
      */
-    //@SuppressWarnings("index:argument.type.incompatible") // #1: @NonNegative argument as defined in parameter to the function
+    @SuppressWarnings("index:argument.type.incompatible") // #1: @NonNegative argument as defined in parameter to the function
     public static String toString(final @NonNegative Character ch) {
         if (ch == null) {
             return null;
