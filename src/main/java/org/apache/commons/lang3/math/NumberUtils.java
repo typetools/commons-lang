@@ -1016,12 +1016,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(long[]) to min(long...)
      */
-    public static long min(final long... array) {
+    public static long min(final long @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] < min) {

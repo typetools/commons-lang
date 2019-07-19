@@ -111,7 +111,7 @@ public class JavaUnicodeEscaper extends UnicodeEscaper {
      *            a Unicode code point
      * @return the hex string for the given codepoint
      */
-    @SuppressWarnings("override.param.invalid") // the function it is overriding may take any codepoint value
+    @SuppressWarnings("override.param.invalid") // If the superclass can take any codepoint, then this function can take any codepoint, as well.
     @Override
     protected String toUtf16Escape(final @IntRange(from = 65535, to = Integer.MAX_VALUE) int codepoint) {
         @SuppressWarnings("value:assignment.type.incompatible") // array has @MinLen(2) if codepoint > 0xffff, which is checked when this function is called
