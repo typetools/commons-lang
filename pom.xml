@@ -994,9 +994,9 @@
           <artifactId>jdk8</artifactId>
           <version>2.9.0</version>
           <scope>provided</scope>
-      </dependency>
-    </dependencies>
-    <build>
+        </dependency>
+      </dependencies>
+      <build>
       <plugins>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -1029,21 +1029,21 @@
               </compilerArgs>
             </configuration>
           </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>properties</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.10</version>
+            <executions>
+             <execution>
+                <goals>
+                  <goal>properties</goal>
+                </goals>
+              </execution>
+           </executions>
+          </plugin>
+       </plugins>
+      </build>
+   </profile>
 
   </profiles>
 </project>
