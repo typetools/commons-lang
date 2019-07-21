@@ -37,6 +37,10 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.ClassUtils.Interfaces;
 import org.apache.commons.lang3.Validate;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.LTEqLengthOf;
+import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.common.value.qual.MinLen;
 
@@ -484,7 +488,7 @@ public class MethodUtils {
 
         // Construct a new array for the variadic parameters
         final Class<?> varArgComponentType = methodParameterTypes[methodParameterTypes.length - 1].getComponentType();
-        final int varArgLength = args.length - methodParameterTypes.length + 1;
+        final @LTLengthOf(value={"args"}, offset={"methodParameterTypes.length - 1"}) @Positive int varArgLength = args.length - methodParameterTypes.length + 1;  // #1
 
         Object varArgsArray = Array.newInstance(ClassUtils.primitiveToWrapper(varArgComponentType), varArgLength); // #2
         // Copy the variadic arguments into the varargs array.
@@ -804,7 +808,10 @@ public class MethodUtils {
      * @throws NullPointerException if the specified method is {@code null}
      * @since 3.2
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #4: getGenericParameterTypes() returns an array of Types that represent the formal parameter types of the method object, hence all instances of a class will have the same length of the array returned, hence,  method.getGenericParameterTypes().length =  m.getGenericParameterTypes().length = parameterTypes.length and i < parameterTypes.length inside the loop
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /*
+    #4: getGenericParameterTypes() returns an array of Types that represent the formal parameter types of the method object, hence all instances of a class will have the same length of the array returned,
+    hence,  method.getGenericParameterTypes().length =  m.getGenericParameterTypes().length = parameterTypes.length and i < parameterTypes.length inside the loop
+    */
     public static Set<Method> getOverrideHierarchy(final Method method, final Interfaces interfacesBehavior) {
         Validate.notNull(method);
         final Set<Method> result = new LinkedHashSet<>();
