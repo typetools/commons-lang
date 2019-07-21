@@ -412,7 +412,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the next sequential token, or null when no more tokens are found
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
     public String nextToken() {
         if (hasNext()) {
             return tokens[tokenPos++];
@@ -425,7 +425,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous sequential token, or null when no more tokens are found
      */
-    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:unary.decrement.type.incompatible"}) // hasPrevious() => tokenPos > 0
     public String previousToken() {
         if (hasPrevious()) {
             return tokens[--tokenPos];
@@ -519,7 +519,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @return the next String token
      * @throws NoSuchElementException if there are no more elements
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
     @Override
     public String next() {
         if (hasNext()) {
@@ -554,7 +554,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous token
      */
-    @SuppressWarnings({"index:array.access.unsafe.low", "index:compound.assignment.type.incompatible"}) // hasPrevious() => tokenPos > 0
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:unary.decrement.type.incompatible"}) // hasPrevious() => tokenPos > 0
     @Override
     public String previous() {
         if (hasPrevious()) {

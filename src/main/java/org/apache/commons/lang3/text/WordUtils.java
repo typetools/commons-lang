@@ -663,7 +663,7 @@ public class WordUtils {
      * @see #initials(String)
      * @since 2.2
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible"}) // count can reach the maximum value of strLen/2 by this assignment, and the maximum value to be used in the index can be (strLen-1)/2, because when count++ happens, lastWasGap is set to false, and it will require at least one more run to set lastWasGapto true and then count++ can happen in the next iteration
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // count can reach the maximum value of strLen/2 by this assignment, and the maximum value to be used in the index can be (strLen-1)/2, because when count++ happens, lastWasGap is set to false, and it will require at least one more run to set lastWasGapto true and then count++ can happen in the next iteration
     public static String initials(final String str, final char... delimiters) {
         if (StringUtils.isEmpty(str)) {
             return str;
