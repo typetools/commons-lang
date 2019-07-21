@@ -948,7 +948,7 @@ public class NumberUtils {
      * @return converted <code>BigInteger</code> (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
      */
-    @SuppressWarnings("index:compound.assignment.type.incompatible")/*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:unary.increment.type.incompatible"})/*
     #4: str.startsWith("0x", pos)=> pos + 2 is a valid index of str
     #5: str.startsWith("#", pos) => pos + 1 is a valid index of str
     */
