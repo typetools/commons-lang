@@ -553,12 +553,12 @@
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>2.8.2</version>
+      <version>2.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
-      <version>2.8.2</version>
+      <version>2.9.0</version>
     </dependency>
 
   </dependencies>
@@ -932,6 +932,19 @@
     </profile>
 
     <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <properties>
+        <!-- workaround for https://bugs.openjdk.java.net/browse/JDK-8212233
+             which causes javadoc to fail with "Exit code: 1 - javadoc: error - The code being documented uses modules
+             but the packages defined in https://docs.oracle.com/javase/7/docs/api/ are in the unnamed module."  -->
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+      </properties>
+    </profile>
+
+    <profile>
       <id>benchmark</id>
       <properties>
         <skipTests>true</skipTests>
@@ -971,19 +984,19 @@
       </build>
     </profile>
     <profile>
-    <activation>
-      <jdk>1.8</jdk>
-    </activation>
-    <id>checker</id>
-    <dependencies>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>jdk8</artifactId>
-        <version>2.8.2</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-    <build>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <id>checker</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>jdk8</artifactId>
+          <version>2.9.0</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
       <plugins>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -999,7 +1012,7 @@
                 <path>
                   <groupId>org.checkerframework</groupId>
                   <artifactId>checker</artifactId>
-                  <version>2.8.2</version>
+                  <version>2.9.0</version>
                 </path>
               </annotationProcessorPaths>
               <annotationProcessors>
@@ -1009,26 +1022,28 @@
               <compilerArgs>
                 <!-- location of the annotated JDK, which comes from a Maven dependency -->
                 <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                <arg>-AskipDefs=/src/test/java/org/apache/commons/lang3/builder/|/src/test/java/org/apache/commons/lang3/exception/|/src/test/java/org/apache/commons/lang3/math/|/src/test/java/org/apache/commons/lang3/reflect/|/src/test/java/org/apache/commons/lang3/text/|/src/test/java/org/apache/commons/lang3/time/|/src/test/java/org/apache/commons/lang3/|^org\.apache\.commons\.lang3\.|^org\.apache\.commons\.lang3\.text\.</arg>
+                <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.time\.|^org\.apache\.commons\.lang3\.exception\.</arg>
                 <arg>-Astubs=/Stubs/</arg>
+                <arg>-ArequirePrefixInWarningSuppressions</arg>
+                <arg>-AwarnUnneededSuppressions</arg>
               </compilerArgs>
             </configuration>
           </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>properties</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-</profile>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.10</version>
+            <executions>
+             <execution>
+                <goals>
+                  <goal>properties</goal>
+                </goals>
+              </execution>
+           </executions>
+          </plugin>
+       </plugins>
+      </build>
+   </profile>
 
-</profiles>
+  </profiles>
 </project>
