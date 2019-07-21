@@ -3527,6 +3527,7 @@ public class StringUtils {
      * @return {@code true} if the CharSequence is empty or null
      * @since 3.0 Changed signature from isEmpty(String) to isEmpty(CharSequence)
      */
+    @EnsuresMinLenIf(expression = "#1", result = false, targetValue = 1)
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
