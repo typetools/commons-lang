@@ -41,6 +41,7 @@ import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.LTEqLengthOf;
 import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.common.value.qual.MinLen;
 
 /**
@@ -449,7 +450,7 @@ public class MethodUtils {
         return method.invoke(null, args);
     }
 
-    @SuppressWarnings({"value:assignment.type.incompatible", "argument.type.incompatible"}) // isVarArgs() => args and methodParameterTypes have at lease 1 element
+    @SuppressWarnings({"value:assignment.type.incompatible"}) // isVarArgs() => args and methodParameterTypes have at lease 1 element
     private static Object[] toVarArgs(final Method method, Object[] args) {
         if (method.isVarArgs()) {
             final Class<?> @MinLen(1) [] methodParameterTypes = method.getParameterTypes();
@@ -469,10 +470,10 @@ public class MethodUtils {
      * @since 3.5
      */
     @SuppressWarnings({"index:assignment.type.incompatible", "index:argument.type.incompatible"})/*
-    #1: args.length > methodParameterTypes.length
-    #2: varArgLength -> no. of componenets to be copied, varArgLength <= args.length and varArgsArray.length, hence valid argument
+    #1: methodParameterTypes.length <= args.length + 1 as according to the definition, this method returns an array with the declared number of parameters with the last parameter an array of varargs type
+    #2: varArgLength = args.length -(methodParameterTypes.length - 1), by the relation in #1, varArgLength is @NonNegative
     */
-    static Object[] getVarArgs(final Object @MinLen(1) [] args, final Class<?> @LTEqLengthOf("#1") @MinLen(1) [] methodParameterTypes) {
+    static Object[] getVarArgs(final Object @MinLen(1) [] args, final Class<?> @MinLen(1) [] methodParameterTypes) {
         if (args.length == methodParameterTypes.length
                 && args[args.length - 1].getClass().equals(methodParameterTypes[methodParameterTypes.length - 1])) {
             // The args array is already in the canonical form for the method.
@@ -483,13 +484,13 @@ public class MethodUtils {
         final Object[] newArgs = new Object[methodParameterTypes.length];
 
         // Copy the normal (non-varargs) parameters
-        System.arraycopy(args, 0, newArgs, 0, methodParameterTypes.length - 1);
+        System.arraycopy(args, 0, newArgs, 0, methodParameterTypes.length - 1); // #1
 
         // Construct a new array for the variadic parameters
         final Class<?> varArgComponentType = methodParameterTypes[methodParameterTypes.length - 1].getComponentType();
         final @LTLengthOf(value={"args"}, offset={"methodParameterTypes.length - 1"}) @Positive int varArgLength = args.length - methodParameterTypes.length + 1;  // #1
 
-        Object varArgsArray = Array.newInstance(ClassUtils.primitiveToWrapper(varArgComponentType), varArgLength);
+        Object varArgsArray = Array.newInstance(ClassUtils.primitiveToWrapper(varArgComponentType), varArgLength); // #2
         // Copy the variadic arguments into the varargs array.
         System.arraycopy(args, methodParameterTypes.length - 1, varArgsArray, 0, varArgLength); // #2
 

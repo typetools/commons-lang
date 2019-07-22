@@ -19,6 +19,8 @@ package org.apache.commons.lang3.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.checkerframework.common.value.qual.IntRange;
+
 /**
  * Translates codepoints to their Unicode escaped value.
  *
@@ -137,7 +139,7 @@ public class UnicodeEscaper extends CodePointTranslator {
      *
      * @since 3.2
      */
-    protected String toUtf16Escape(final int codepoint) {
+    protected String toUtf16Escape(final @IntRange(from = 65535, to = Integer.MAX_VALUE) int codepoint) {
         return "\\u" + hex(codepoint);
     }
 }
