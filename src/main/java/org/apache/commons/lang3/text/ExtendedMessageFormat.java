@@ -147,7 +147,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      *
      * @param pattern String
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:compound.assignment.type.incompatible", "index:array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: readArgumentIndex(pattern, next(pos)) will throw an exception if next(pos) is not a valid index, hence the new pos_index is a valid index as well
     #2: formatDescription = parseFormatDescription(pattern, next(pos)); will throw an exception if next(pos) is not a valid index, hence the new pos_index is a valid index as well
     #3: If the path of #1 and/or #2 is followed, pos_index is valid due to the above argument, else it is valid due to the check pos_index < pattern.length()
@@ -381,7 +381,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param pos current parse position
      * @return Format description String
      */
-    @SuppressWarnings("argument.type.incompatible") // #1: pos.getIndex() < pattern.length() => text which was the inital pos.getIndex() is also < pattern.lengt
+    @SuppressWarnings("index:argument.type.incompatible") // #1: pos.getIndex() < pattern.length() => text which was the inital pos.getIndex() is also < pattern.lengt
     private String parseFormatDescription(final String pattern, final ParsePosition pos) {
         final int start = pos.getIndex();
         seekNonWs(pattern, pos);
@@ -417,7 +417,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param customPatterns The custom patterns to re-insert, if any
      * @return full pattern
      */
-    @SuppressWarnings("index:argument.type.incompatible") // #1: pos.getIndex() < pattern.length() as checked by the loop condition
+    @SuppressWarnings("index:argument.type.incompatible") // pos.getIndex() < pattern.length() is checked in the previous if statement
     private String insertFormats(final String pattern, final ArrayList<String> customPatterns) {
         if (!containsElements(customPatterns)) {
             return pattern;
@@ -461,7 +461,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param pattern String to read
      * @param pos current position
      */
-    @SuppressWarnings("argument.type.incompatible") // pos.getIndex() goes from initial parse position till pattern.length()
+    @SuppressWarnings("index:argument.type.incompatible") // pos.getIndex() goes from initial parse position till pattern.length()
     private void seekNonWs(final String pattern, final ParsePosition pos) {
         int len = 0;
         final char[] buffer = pattern.toCharArray();

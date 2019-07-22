@@ -52,17 +52,16 @@ public class LookupTranslator extends CharSequenceTranslator {
      *
      * @param lookup CharSequence[][] table of size [*][2]
      */
-    @SuppressWarnings({"value:enhancedfor.type.incompatible", "index:argument.type.incompatible"}) /*
-    #1: CharSequence is of the type [*][2] (according to the documentation), hence Charsequence has length 2
+    @SuppressWarnings("index:argument.type.incompatible") /*
     #2: Minimum 1 row ensures seq[0].charAt(0) to be valid
     */
-    public LookupTranslator(final CharSequence @MinLen(1) []... lookup) {
+    public LookupTranslator(final CharSequence [] @ArrayLen(2) ... lookup) {
         lookupMap = new HashMap<>();
         prefixSet = new HashSet<>();
         int _shortest = Integer.MAX_VALUE;
         int _longest = 0;
         if (lookup != null) {
-            for (final CharSequence @ArrayLen(2) [] seq : lookup) { // #1
+            for (final CharSequence @ArrayLen(2) [] seq : lookup) {
                 this.lookupMap.put(seq[0].toString(), seq[1].toString());
                 this.prefixSet.add(seq[0].charAt(0)); // #2
                 final int sz = seq[0].length();

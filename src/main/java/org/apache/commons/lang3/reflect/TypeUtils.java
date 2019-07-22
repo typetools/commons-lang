@@ -1825,7 +1825,7 @@ public class TypeUtils {
             buf.append('.').append(raw.getSimpleName());
         }
 
-        final @IndexFor("p.getActualTypeArguments()") int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
+        final int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
 
         if (recursiveTypeIndexes.length > 0) {
             appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments()); // #0.1
@@ -1837,11 +1837,11 @@ public class TypeUtils {
     }
 
     @SuppressWarnings("index:array.access.unsafe.high") /*
-    #1: recursiveTypeIndexes.length <= argumentTypes.length. This function is called only by parameterizedTypeToString() in #0.1 and revursiveTypeIndexes is defined in #0.2
+    recursiveTypeIndexes.length <= argumentTypes.length. This function is called only by parameterizedTypeToString() in #0.1 and revursiveTypeIndexes is defined in #0.2
     findRecursiveTypes(p) returns an array with length <= p.getActualTypeArguments().length as can be seen in the loop which adds an element to the array,
     it runs from 0 to p.getActualTypeArguments().length - 1
     */
-    private static void appendRecursiveTypes(final StringBuilder buf, final @IndexFor("#3") int[] recursiveTypeIndexes, final Type[] argumentTypes) {
+    private static void appendRecursiveTypes(final StringBuilder buf, final int[] recursiveTypeIndexes, final Type[] argumentTypes) {
         for (int i = 0; i < recursiveTypeIndexes.length; i++) {
             appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>'); // #1
         }

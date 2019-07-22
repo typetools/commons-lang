@@ -372,7 +372,7 @@ public abstract class StrMatcher {
          * @return the number of matching characters, zero for no match
          */
         @Override
-        @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:return.type.incompatible"}) /* pos + len < bufferEnd as checker by previous if statement, hence pos++ will increment pos till less than bufferEnd, hence, less than buffer.length
+        @SuppressWarnings({"index:unary.increment.type.incompatible", "index:return.type.incompatible"}) /* pos + len < bufferEnd as checker by previous if statement, hence pos++ will increment pos till less than bufferEnd, hence, less than buffer.length
         pos + len < bufferEnd => len < bufferEnd - pos => len is @LTLengthOf(value = "buffer", offset = "pos")
         */
         public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, @IndexFor("#1") int pos, final int bufferStart, final int bufferEnd) {
