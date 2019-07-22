@@ -6667,6 +6667,7 @@ public class ArrayUtils {
     @SuppressWarnings("index:argument.type.incompatible") /*
     #1: result.length = array.length - 1 by the previous line, hence index is @IndexOrHigh("result")
     #2: length - index - 1 = result.length - index as result.length = length - 1
+    https://github.com/typetools/checker-framework/issues/2603
     */
     private static Object remove(final Object array, final @IndexFor("#1") int index) {
         final int length = getLength(array);

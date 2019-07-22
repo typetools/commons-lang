@@ -1016,7 +1016,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(long[]) to min(long...)
      */
-    public static long min(final long @MinLen(1) ... array) {
+    public static long min(final long... array) {
         // Validates input
         validateArray(array);
 
