@@ -1021,7 +1021,6 @@ public class NumberUtils {
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] < min) {
@@ -1041,12 +1040,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(int[]) to min(int...)
      */
-    public static int min(final int... array) {
+    public static int min(final int @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         int min = array[0];
         for (int j = 1; j < array.length; j++) {
             if (array[j] < min) {
@@ -1066,12 +1064,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(short[]) to min(short...)
      */
-    public static short min(final short... array) {
+    public static short min(final short @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         short min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] < min) {
@@ -1091,12 +1088,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(byte[]) to min(byte...)
      */
-    public static byte min(final byte... array) {
+    public static byte min(final byte @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         byte min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] < min) {
@@ -1117,12 +1113,11 @@ public class NumberUtils {
      * @see IEEE754rUtils#min(double[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from min(double[]) to min(double...)
      */
-    public static double min(final double... array) {
+    public static double min(final double @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         double min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (Double.isNaN(array[i])) {
@@ -1146,12 +1141,11 @@ public class NumberUtils {
      * @see IEEE754rUtils#min(float[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from min(float[]) to min(float...)
      */
-    public static float min(final float... array) {
+    public static float min(final float @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns min
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         float min = array[0];
         for (int i = 1; i < array.length; i++) {
             if (Float.isNaN(array[i])) {
@@ -1176,12 +1170,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(long[]) to max(long...)
      */
-    public static long max(final long... array) {
+    public static long max(final long @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         long max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (array[j] > max) {
@@ -1201,12 +1194,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(int[]) to max(int...)
      */
-    public static int max(final int... array) {
+    public static int max(final int @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         int max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (array[j] > max) {
@@ -1226,12 +1218,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(short[]) to max(short...)
      */
-    public static short max(final short... array) {
+    public static short max(final short @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         short max = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] > max) {
@@ -1251,12 +1242,11 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(byte[]) to max(byte...)
      */
-    public static byte max(final byte... array) {
+    public static byte max(final byte @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         byte max = array[0];
         for (int i = 1; i < array.length; i++) {
             if (array[i] > max) {
@@ -1277,12 +1267,11 @@ public class NumberUtils {
      * @see IEEE754rUtils#max(double[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from max(double[]) to max(double...)
      */
-    public static double max(final double... array) {
+    public static double max(final double @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         double max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (Double.isNaN(array[j])) {
@@ -1306,12 +1295,11 @@ public class NumberUtils {
      * @see IEEE754rUtils#max(float[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from max(float[]) to max(float...)
      */
-    public static float max(final float... array) {
+    public static float max(final float @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
         // Finds and returns max
-        @SuppressWarnings("index:array.access.unsafe.high.constant") // validateArray(array) => array.length != 0
         float max = array[0];
         for (int j = 1; j < array.length; j++) {
             if (Float.isNaN(array[j])) {
