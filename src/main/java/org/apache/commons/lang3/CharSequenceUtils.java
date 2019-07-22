@@ -177,7 +177,7 @@ public class CharSequenceUtils {
      * @return the index where the search char was found, -1 if not found
      * @since 3.6 updated to behave more like <code>String</code>
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:array.access.unsafe.high.constant"}) /* #1: 0 <= start <= sz - 2 when this loop is reached as ensured by the previous if statements, 
+    @SuppressWarnings({"index:argument.type.incompatible","index:array.access.unsafe.high.constant"}) /* #1: 0 <= start <= sz - 2 when this loop is reached as ensured by the previous if statements,
     hence i + 1 has a max value of cs.length() - 1
     #2: minimum length of cz is 2 for this loop to be executed as i >= 0 i <= cz.length() - 2
     */
@@ -245,6 +245,7 @@ public class CharSequenceUtils {
      * @param cs the {@code CharSequence} to be processed
      * @return the resulting char array
      */
+    @SuppressWarnings("index:array.access.unsafe.high") // array.length = cs.length(), hence i < array.length
     static char[] toCharArray(final CharSequence cs) {
         if (cs instanceof String) {
             return ((String) cs).toCharArray();
@@ -252,7 +253,7 @@ public class CharSequenceUtils {
         final int sz = cs.length();
         final char[] array = new char[cs.length()];
         for (int i = 0; i < sz; i++) {
-            array[i] = cs.charAt(i);
+            array[i] = cs.charAt(i); // #1
         }
         return array;
     }

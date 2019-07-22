@@ -555,7 +555,7 @@ public class StringUtils {
      * @see #uncapitalize(String)
      * @since 2.0
      */
-    @SuppressWarnings({"index:argument.type.incompatible","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: str != NULL && str.length() != 0 as ensured by the previous if
     #2: inOffset is incremented either by 1 or by 2 due to the property of Character.charCount() till strLen = newCodePoints.length, hence outOffset when used as the index(as it is post-increment) is @LTLengthOf("newCodePoint")
     #3: outOffset can be a maximum strLen here as it can only reach strLen - 1 in #2 and it undergoes post-increment
@@ -3532,7 +3532,7 @@ public class StringUtils {
      * @since 2.0
      * @since 3.0 Changed signature from isBlank(String) to isBlank(CharSequence)
      */
-    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // if not all characters are whitespace, at least one non whitespace character
+    @SuppressWarnings("value:contracts.conditional.postcondition.not.satisfied") // if not all characters are whitespace, at least one non whitespace character
     @EnsuresMinLenIf(expression = "#1", result = false, targetValue = 1)
     public static boolean isBlank(final CharSequence cs) {
         int strLen;
@@ -3568,7 +3568,7 @@ public class StringUtils {
      * @return {@code true} if the CharSequence is empty or null
      * @since 3.0 Changed signature from isEmpty(String) to isEmpty(CharSequence)
      */
-    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // #1: if false, then cs is @MinLen(1)
+    @SuppressWarnings("value:contracts.conditional.postcondition.not.satisfied") // #1: if false, then cs is @MinLen(1)
     @EnsuresMinLenIf(expression = "#1", result = false, targetValue = 1)
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0; // #1
@@ -8918,7 +8918,7 @@ public class StringUtils {
      * @param str  the String to swap case, may be null
      * @return the changed String, {@code null} if null String input
      */
-    @SuppressWarnings({"index:argument.type.incompatible","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: outOffset can reach a maximum strLen getting incremented in the loop, as Character.charCount() returns either 1 or 2, but as it is post-increment, only till strLen - 1 is used as the index
     #2: outOffset can be a maximum strLen as explained in #1
     */
@@ -9236,7 +9236,7 @@ public class StringUtils {
      * @see #capitalize(String)
      * @since 2.0
      */
-    @SuppressWarnings({"index:argument.type.incompatible","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: str != NULL && str.length() != 0 as ensured by the previous if
     #2: inOffset is incremented either by 1 or by 2 due to the property of Character.charCount() till strLen = newCodePoints.length, hence outOffset when used as the index(as it is post-increment) is @LTLengthOf("newCodePoint")
     #3: outOffset can be a maximum strLen here as it can only reach strLen - 1 in #2 and it undergoes post-increment

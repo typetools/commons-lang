@@ -36,7 +36,7 @@ public class EntityArrays {
      * characters to their named HTML 3.x equivalents.
      * @return the mapping table
      */
-    public static String @ArrayLen(96) [][] ISO8859_1_ESCAPE() {
+    public static String @ArrayLen(96) [] @ArrayLen(2) [] ISO8859_1_ESCAPE() {
         return ISO8859_1_ESCAPE.clone();
     }
 
@@ -144,7 +144,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(96) [][] ISO8859_1_UNESCAPE() {
+    public static String @ArrayLen(96) [] @ArrayLen(2) [] ISO8859_1_UNESCAPE() {
         return ISO8859_1_UNESCAPE.clone();
     }
 
@@ -157,7 +157,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(153) [][] HTML40_EXTENDED_ESCAPE() {
+    public static String @ArrayLen(153) [] @ArrayLen(2) [] HTML40_EXTENDED_ESCAPE() {
         return HTML40_EXTENDED_ESCAPE.clone();
     }
 
@@ -363,7 +363,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(153) [][] HTML40_EXTENDED_UNESCAPE() {
+    public static String @ArrayLen(153) [] @ArrayLen(2) [] HTML40_EXTENDED_UNESCAPE() {
         return HTML40_EXTENDED_UNESCAPE.clone();
     }
 
@@ -376,7 +376,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(4) [][] BASIC_ESCAPE() {
+    public static String @ArrayLen(4) [] @ArrayLen(2) [] BASIC_ESCAPE() {
         return BASIC_ESCAPE.clone();
     }
 
@@ -392,7 +392,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(4) [][] BASIC_UNESCAPE() {
+    public static String @ArrayLen(4) [] @ArrayLen(2) [] BASIC_UNESCAPE() {
         return BASIC_UNESCAPE.clone();
     }
 
@@ -403,11 +403,11 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(1) [][] APOS_ESCAPE() {
+    public static String @ArrayLen(1) [] @ArrayLen(2) [] APOS_ESCAPE() {
         return APOS_ESCAPE.clone();
     }
 
-    private static final String[][] APOS_ESCAPE = {
+    private static final String[] @ArrayLen(2) [] APOS_ESCAPE = {
         {"'", "&apos;"}, // XML apostrophe
     };
 
@@ -416,7 +416,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(1) [][] APOS_UNESCAPE() {
+    public static String @ArrayLen(1) [] @ArrayLen(2) [] APOS_UNESCAPE() {
         return APOS_UNESCAPE.clone();
     }
 
@@ -429,7 +429,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(5) [][] JAVA_CTRL_CHARS_ESCAPE() {
+    public static String @ArrayLen(5) [] @ArrayLen(2) [] JAVA_CTRL_CHARS_ESCAPE() {
         return JAVA_CTRL_CHARS_ESCAPE.clone();
     }
 
@@ -446,7 +446,7 @@ public class EntityArrays {
      * @return the mapping table
      */
     @SuppressWarnings("value:return.type.incompatible") // imprecision for double dimensional arrays
-    public static String @ArrayLen(5) [][] JAVA_CTRL_CHARS_UNESCAPE() {
+    public static String @ArrayLen(5) [] @ArrayLen(2) []  JAVA_CTRL_CHARS_UNESCAPE() {
         return JAVA_CTRL_CHARS_UNESCAPE.clone();
     }
 

@@ -35,9 +35,7 @@ import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.checker.index.qual.GTENegativeOne;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
-import org.checkerframework.checker.index.qual.PolySameLen;
-import org.checkerframework.checker.index.qual.PolyLowerBound;
-import org.checkerframework.checker.index.qual.PolyUpperBound;
+import org.checkerframework.framework.qual.PolyAll;
 import org.checkerframework.checker.index.qual.SameLen;
 import org.checkerframework.common.value.qual.MinLen;
 
@@ -350,6 +348,7 @@ public class ArrayUtils {
      * @param array  the array to shallow clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
+    @SuppressWarnings("samelen:return.type.incompatible") // clone() returns an array of the same length
     public static <T> T @SameLen("#1") [] clone(final T[] array) {
         if (array == null) {
             return null;
@@ -7595,10 +7594,11 @@ public class ArrayUtils {
      * @return whether the array is sorted
      * @since 3.4
      */
+    @SuppressWarnings({"value:override.param.invalid", "samelen:override.param.invalid", "lowerbound:override.param.invalid", "index:override.param.invalid"})
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
             @Override
-            public int compare(final @PolySameLen @PolyLowerBound @PolyUpperBound T o1, final @PolySameLen @PolyLowerBound @PolyUpperBound T o2) {
+            public int compare(final @PolyAll T o1, final @PolyAll T o2) {
                 return o1.compareTo(o2);
             }
         });
@@ -7852,7 +7852,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -7890,7 +7890,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -7928,7 +7928,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -7966,7 +7966,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -8004,7 +8004,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -8042,7 +8042,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -8080,7 +8080,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -8118,7 +8118,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
@@ -8157,7 +8157,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible","index:array.access.unsafe.high.constant","array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
