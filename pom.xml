@@ -757,7 +757,7 @@
           <configLocation>${basedir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
-          <excludes>org/apache/commons/lang3/math/NumberUtils.java</excludes>
+          <excludes>org/apache/commons/lang3/math/NumberUtils.java,org/apache/commons/lang3/math/IEEE754rUtils.java</excludes>
         </configuration>
         <dependencies>
           <dependency>
