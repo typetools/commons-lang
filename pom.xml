@@ -757,6 +757,7 @@
           <configLocation>${basedir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
+          <!-- Skipping checkstyle in these files as a error is issued of an unexpected token on the @MinLen annotation -->
           <excludes>org/apache/commons/lang3/math/NumberUtils.java,org/apache/commons/lang3/math/IEEE754rUtils.java</excludes>
         </configuration>
         <dependencies>
