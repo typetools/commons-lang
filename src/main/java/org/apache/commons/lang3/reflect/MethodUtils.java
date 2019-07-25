@@ -39,9 +39,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
-import org.checkerframework.checker.index.qual.LTEqLengthOf;
 import org.checkerframework.checker.index.qual.LTLengthOf;
-import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.common.value.qual.MinLen;
 
 /**
@@ -450,11 +448,11 @@ public class MethodUtils {
         return method.invoke(null, args);
     }
 
-    @SuppressWarnings({"value:assignment.type.incompatible"}) // isVarArgs() => args and methodParameterTypes have at lease 1 element
+    @SuppressWarnings({"value:argument.type.incompatible"}) // #1: isVarArgs() => args and methodParameterTypes have at lease 1 element
     private static Object[] toVarArgs(final Method method, Object[] args) {
         if (method.isVarArgs()) {
-            final Class<?> @MinLen(1) [] methodParameterTypes = method.getParameterTypes();
-            args = getVarArgs(args, methodParameterTypes);
+            final Class<?>[] methodParameterTypes = method.getParameterTypes();
+            args = getVarArgs(args, methodParameterTypes); // #1
         }
         return args;
     }
@@ -777,7 +775,7 @@ public class MethodUtils {
      * @param toClassArray
      * @return the aggregate number of inheritance hops between assignable argument class types.
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) // #3: ClassUtils.isAssignable() => toClassArray.length = classArray.length, hence offset is @IndexOrHigh("toClassArray") as well and offset < classArray.length and toClassArray.length inside the loop
+    @SuppressWarnings({"index:unary.increment.type.incompatible", "index:array.access.unsafe.high"}) // #3: ClassUtils.isAssignable() => toClassArray.length = classArray.length, hence offset is @IndexOrHigh("toClassArray") as well and offset < classArray.length and toClassArray.length inside the loop
     private static int distance(final Class<?>[] classArray, final Class<?>[] toClassArray) {
         int answer = 0;
 
@@ -808,7 +806,7 @@ public class MethodUtils {
      * @throws NullPointerException if the specified method is {@code null}
      * @since 3.2
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /*
+    @SuppressWarnings({"index:unary.increment.type.incompatible", "index:array.access.unsafe.high"}) /*
     #4: getGenericParameterTypes() returns an array of Types that represent the formal parameter types of the method object, hence all instances of a class will have the same length of the array returned,
     hence,  method.getGenericParameterTypes().length =  m.getGenericParameterTypes().length = parameterTypes.length and i < parameterTypes.length inside the loop
     */

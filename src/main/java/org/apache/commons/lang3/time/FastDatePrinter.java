@@ -699,7 +699,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * @param buffer the buffer to append to.
      * @param value the value to append digits from.
      */
-    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:array.access.unsafe.high"}) /*
+    @SuppressWarnings({"index:unary.increment.type.incompatible", "index:array.access.unsafe.high", "lowerbound:unary.decrement.type.incompatible"}) /*
     #2: value/10 in every iteration => loop can run a maximum of 10 times because log(Integer.MAX_VALUE) = 9.3, and work.length = 10, hence work[digit++] can have a maximum value of work[9]
     #3: digit exits the previous loop with a non negative value, hence --digit>=0 => minimum value of digit to be -1
     */
