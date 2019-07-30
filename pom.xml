@@ -1031,7 +1031,7 @@
                   <compilerArgs>
                     <!-- location of the annotated JDK, which comes from a Maven dependency -->
                     <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                    <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.|^org\.apache\.commons\.lang3\.text\.</arg>
+                    <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.</arg>
                     <arg>-Astubs=/Stubs/</arg>
                     <arg>-ArequirePrefixInWarningSuppressions</arg>
                     <arg>-AwarnUnneededSuppressions</arg>
