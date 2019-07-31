@@ -911,7 +911,7 @@
               <execution>
                 <goals>
                   <goal>properties</goal>
-                  </goals>
+                </goals>
               </execution>
             </executions>
           </plugin>
