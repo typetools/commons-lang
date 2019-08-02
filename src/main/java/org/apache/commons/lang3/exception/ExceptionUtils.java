@@ -31,6 +31,8 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>Provides utilities for manipulating and examining
  * <code>Throwable</code> objects.</p>
@@ -253,11 +255,14 @@ public class ExceptionUtils {
      * @return an array of stack trace frames, never null
      * @since 2.0
      */
+    @SuppressWarnings("value:assignment.type.incompatible")/*
+    #1: getThrowables(throwable) returns an array of minimum length 1 if throwable != null
+    */
     public static String[] getRootCauseStackTrace(final Throwable throwable) {
         if (throwable == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
-        final Throwable throwables[] = getThrowables(throwable);
+        final Throwable @MinLen(1) [] throwables = getThrowables(throwable); // #1
         final int count = throwables.length;
         final List<String> frames = new ArrayList<>();
         List<String> nextTrace = getStackFrameList(throwables[count - 1]);

@@ -20,6 +20,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * Faster methods to produce custom time zones.
  *
@@ -46,6 +48,7 @@ public class FastTimeZone {
      * @param pattern The GMT offset
      * @return A TimeZone with offset from GMT or null, if pattern does not match.
      */
+    @SuppressWarnings("value:argument.type.incompatible") // #1: m.matches() => the entire region sequence matches the pattern => m.group(1) will not return null and will return a @MinLen(1) String
     public static TimeZone getGmtTimeZone(final String pattern) {
         if ("Z".equals(pattern) || "UTC".equals(pattern)) {
             return GREENWICH;
@@ -58,7 +61,7 @@ public class FastTimeZone {
             if (hours == 0 && minutes == 0) {
                 return GREENWICH;
             }
-            return new GmtTimeZone(parseSign(m.group(1)), hours, minutes);
+            return new GmtTimeZone(parseSign(m.group(1)), hours, minutes); // #1
         }
         return null;
     }
@@ -84,8 +87,8 @@ public class FastTimeZone {
         return group != null ? Integer.parseInt(group) : 0;
     }
 
-    private static boolean parseSign(final String group) {
-        return group != null && group.charAt(0) == '-';
+    private static boolean parseSign(final @MinLen(1) String group) {
+        return group != null && group.charAt(0) == '-'; // if group == null, group.charAt(0) is not evaluated
     }
 
     // do not instantiate

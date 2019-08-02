@@ -39,6 +39,11 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>FastDateParser is a fast and thread-safe version of
  * {@link java.text.SimpleDateFormat}.</p>
@@ -200,7 +205,7 @@ public class FastDateParser implements DateParser, Serializable {
      */
     private class StrategyParser {
         private final Calendar definingCalendar;
-        private int currentIdx;
+        private @NonNegative int currentIdx;
 
         StrategyParser(final Calendar definingCalendar) {
             this.definingCalendar = definingCalendar;
@@ -218,10 +223,11 @@ public class FastDateParser implements DateParser, Serializable {
             return literal();
         }
 
+        @SuppressWarnings("index:argument.type.incompatible") // #1: ++currentIdx < pattern.length() is checked
         private StrategyAndWidth letterPattern(final char c) {
             final int begin = currentIdx;
             while (++currentIdx < pattern.length()) {
-                if (pattern.charAt(currentIdx) != c) {
+                if (pattern.charAt(currentIdx) != c) { // #1
                     break;
                 }
             }
@@ -230,6 +236,7 @@ public class FastDateParser implements DateParser, Serializable {
             return new StrategyAndWidth(getStrategy(c, width, definingCalendar), width);
         }
 
+        @SuppressWarnings("index:argument.type.incompatible") // #1: currentIdx < pattern.length() as checked by the condition inside the while loop
         private StrategyAndWidth literal() {
             boolean activeQuote = false;
 
@@ -238,7 +245,7 @@ public class FastDateParser implements DateParser, Serializable {
                 final char c = pattern.charAt(currentIdx);
                 if (!activeQuote && isFormatLetter(c)) {
                     break;
-                } else if (c == '\'' && (++currentIdx == pattern.length() || pattern.charAt(currentIdx) != '\'')) {
+                } else if (c == '\'' && (++currentIdx == pattern.length() || pattern.charAt(currentIdx) != '\'')) { // #1
                     activeQuote = !activeQuote;
                     continue;
                 }
@@ -427,6 +434,7 @@ public class FastDateParser implements DateParser, Serializable {
     // Support for strategies
     //-----------------------------------------------------------------------
 
+    @SuppressWarnings("index:argument.type.incompatible") // #2: sb.append() => sb.length != 0
     private static StringBuilder simpleQuote(final StringBuilder sb, final String value) {
         for (int i = 0; i < value.length(); ++i) {
             final char c = value.charAt(i);
@@ -448,7 +456,7 @@ public class FastDateParser implements DateParser, Serializable {
                 sb.append(c);
             }
         }
-        if (sb.charAt(sb.length() - 1) == '.') {
+        if (sb.charAt(sb.length() - 1) == '.') { // #2
             // trailing '.' is optional
             sb.append('?');
         }
@@ -463,7 +471,7 @@ public class FastDateParser implements DateParser, Serializable {
      * @param regex The regular expression to build
      * @return The map of string display names to field values
      */
-    private static Map<String, Integer> appendDisplayNames(final Calendar cal, final Locale locale, final int field, final StringBuilder regex) {
+    private static Map<String, Integer> appendDisplayNames(final Calendar cal, final Locale locale, final @NonNegative int field, final StringBuilder regex) {
         final Map<String, Integer> values = new HashMap<>();
 
         final Map<String, Integer> displayNames = cal.getDisplayNames(field, Calendar.ALL_STYLES, locale);
@@ -535,6 +543,7 @@ public class FastDateParser implements DateParser, Serializable {
 
         @Override
         boolean parse(final FastDateParser parser, final Calendar calendar, final String source, final ParsePosition pos, final int maxWidth) {
+            @SuppressWarnings("index:argument.type.incompatible") // cannot annotate pos.getIndex() as @LTEqLengthOf("source"), but pos.getIndex() return the current parse position, which has to be @LTEqLengthOf("source")
             final Matcher matcher = pattern.matcher(source.substring(pos.getIndex()));
             if (!matcher.lookingAt()) {
                 pos.setErrorIndex(pos.getIndex());
@@ -615,7 +624,7 @@ public class FastDateParser implements DateParser, Serializable {
      * @param field The Calendar field
      * @return a cache of Locale to Strategy
      */
-    private static ConcurrentMap<Locale, Strategy> getCache(final int field) {
+    private static ConcurrentMap<Locale, Strategy> getCache(final @IndexFor("this.caches") int field) {
         synchronized (caches) {
             if (caches[field] == null) {
                 caches[field] = new ConcurrentHashMap<>(3);
@@ -630,7 +639,7 @@ public class FastDateParser implements DateParser, Serializable {
      * @param definingCalendar The calendar to obtain the short and long values
      * @return a TextStrategy for the field and Locale
      */
-    private Strategy getLocaleSpecificStrategy(final int field, final Calendar definingCalendar) {
+    private Strategy getLocaleSpecificStrategy(final @IndexFor("this.caches") int field, final Calendar definingCalendar) {
         final ConcurrentMap<Locale, Strategy> cache = getCache(field);
         Strategy strategy = cache.get(locale);
         if (strategy == null) {
@@ -670,8 +679,9 @@ public class FastDateParser implements DateParser, Serializable {
 
         @Override
         boolean parse(final FastDateParser parser, final Calendar calendar, final String source, final ParsePosition pos, final int maxWidth) {
-            for (int idx = 0; idx < formatField.length(); ++idx) {
-                final int sIdx = idx + pos.getIndex();
+            for (@IndexOrHigh("formatField") int idx = 0; idx < formatField.length(); ++idx) {
+                @SuppressWarnings("index:assignment.type.incompatible") //when idx + pos.getIndex() reaches source.length() the loop terminates, hence @IndexOrHigh
+                final @IndexOrHigh("source") int sIdx = idx + pos.getIndex();
                 if (sIdx == source.length()) {
                     pos.setErrorIndex(sIdx);
                     return false;
@@ -690,7 +700,7 @@ public class FastDateParser implements DateParser, Serializable {
      * A strategy that handles a text field in the parsing pattern
      */
      private static class CaseInsensitiveTextStrategy extends PatternStrategy {
-        private final int field;
+        private final @NonNegative int field;
         final Locale locale;
         private final Map<String, Integer> lKeyValues;
 
@@ -700,14 +710,15 @@ public class FastDateParser implements DateParser, Serializable {
          * @param definingCalendar  The Calendar to use
          * @param locale  The Locale to use
          */
-        CaseInsensitiveTextStrategy(final int field, final Calendar definingCalendar, final Locale locale) {
+        @SuppressWarnings("index:argument.type.incompatible") // #1: regex.append("((?iu)") => regex.length() != 0
+        CaseInsensitiveTextStrategy(final @NonNegative int field, final Calendar definingCalendar, final Locale locale) {
             this.field = field;
             this.locale = locale;
 
             final StringBuilder regex = new StringBuilder();
             regex.append("((?iu)");
             lKeyValues = appendDisplayNames(definingCalendar, locale, field, regex);
-            regex.setLength(regex.length()-1);
+            regex.setLength(regex.length()-1); // #1
             regex.append(")");
             createPattern(regex);
         }
@@ -732,13 +743,13 @@ public class FastDateParser implements DateParser, Serializable {
      * A strategy that handles a number field in the parsing pattern
      */
     private static class NumberStrategy extends Strategy {
-        private final int field;
+        private final @NonNegative int field;
 
         /**
          * Construct a Strategy that parses a Number field
          * @param field The Calendar field
          */
-        NumberStrategy(final int field) {
+        NumberStrategy(final @NonNegative int field) {
              this.field= field;
         }
 
@@ -752,7 +763,8 @@ public class FastDateParser implements DateParser, Serializable {
 
         @Override
         boolean parse(final FastDateParser parser, final Calendar calendar, final String source, final ParsePosition pos, final int maxWidth) {
-            int idx = pos.getIndex();
+            @SuppressWarnings("index:assignment.type.incompatible")
+            @IndexOrHigh("source") int idx = pos.getIndex(); // cannot annotate pos.getIndex() as @LTEqLengthOf("source"), but pos.getIndex() return the current parse position, which has to be @LTEqLengthOf("source")
             int last = source.length();
 
             if (maxWidth == 0) {
@@ -783,6 +795,7 @@ public class FastDateParser implements DateParser, Serializable {
                 return false;
             }
 
+            @SuppressWarnings("index:argument.type.incompatible") // pos.getIndex() return the current parse position, which has to be @LTEqLengthOf("source"), also, pos.getIndex() <= idx, as idx is set to pos.getIndex() and then incremented
             final int value = Integer.parseInt(source.substring(pos.getIndex(), idx));
             pos.setIndex(idx);
 
@@ -849,8 +862,8 @@ public class FastDateParser implements DateParser, Serializable {
 
             final Set<String> sorted = new TreeSet<>(LONGER_FIRST_LOWERCASE);
 
-            final String[][] zones = DateFormatSymbols.getInstance(locale).getZoneStrings();
-            for (final String[] zoneNames : zones) {
+            final String[] @MinLen(5) [] zones = DateFormatSymbols.getInstance(locale).getZoneStrings();
+            for (final String @MinLen(5) [] zoneNames : zones) {
                 // offset 0 is the time zone ID and is not localized
                 final String tzId = zoneNames[ID];
                 if (tzId.equalsIgnoreCase(TimeZones.GMT_ID)) {

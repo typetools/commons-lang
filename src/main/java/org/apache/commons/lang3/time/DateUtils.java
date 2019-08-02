@@ -28,6 +28,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>A suite of utilities surrounding the use of the
  * {@link java.util.Calendar} and {@link java.util.Date} object.</p>
@@ -80,7 +83,8 @@ public class DateUtils {
      */
     public static final int SEMI_MONTH = 1001;
 
-    private static final int[][] fields = {
+    @SuppressWarnings("index:assignment.type.incompatible")
+    private static final @NonNegative int @MinLen(8) [] @MinLen(1) [] fields = { // imprecision in checker for double dimensional array
             {Calendar.MILLISECOND},
             {Calendar.SECOND},
             {Calendar.MINUTE},
@@ -638,7 +642,7 @@ public class DateUtils {
      * @throws IllegalArgumentException if the date is null
      * @since 2.4
      */
-    private static Date set(final Date date, final int calendarField, final int amount) {
+    private static Date set(final Date date, final @NonNegative int calendarField, final int amount) {
         validateDateNotNull(date);
         // getInstance() returns a new object, so this method is thread safe.
         final Calendar c = Calendar.getInstance();
@@ -1006,7 +1010,7 @@ public class DateUtils {
         // ----------------- Fix for LANG-59 ----------------------- END ----------------
 
         boolean roundUp = false;
-        for (final int[] aField : fields) {
+        for (final @NonNegative int @MinLen(1) [] aField : fields) {
             for (final int element : aField) {
                 if (element == field) {
                     //This is our field... we stop looping

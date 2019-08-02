@@ -33,6 +33,12 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LTEqLengthOf;
+import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>FastDatePrinter is a fast and thread-safe version of
  * {@link java.text.SimpleDateFormat}.</p>
@@ -133,7 +139,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     /**
      * The estimated maximum length.
      */
-    private transient int mMaxLengthEstimate;
+    private transient @NonNegative int mMaxLengthEstimate;
 
     // Constructor
     //-----------------------------------------------------------------------
@@ -190,7 +196,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         final String[] AmPmStrings = symbols.getAmPmStrings();
 
         final int length = mPattern.length();
-        final int[] indexRef = new int[1];
+        final @NonNegative @LTLengthOf("mPattern") int[] indexRef = new int[1];
 
         for (int i = 0; i < length; i++) {
             indexRef[0] = i;
@@ -203,6 +209,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             }
 
             Rule rule;
+            @SuppressWarnings("index:argument.type.incompatible") // tokenLen != 0 as checked by the previous if statement
             final char c = token.charAt(0);
 
             switch (c) {
@@ -296,6 +303,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                 }
                 break;
             case '\'': // literal text
+                @SuppressWarnings("index:argument.type.incompatible") // token has a minimum length 1
                 final String sub = token.substring(1);
                 if (sub.length() == 1) {
                     rule = new CharacterLiteral(sub.charAt(0));
@@ -320,10 +328,11 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * @param indexRef  index references
      * @return parsed token
      */
-    protected String parseToken(final String pattern, final int[] indexRef) {
+    @SuppressWarnings("index:assignment.type.incompatible") // #1: checker suspects i to be negative due to the i-- inside the loop, but the loop does an i++ after every iteration, hence i cannot be negative in this statement
+    protected String parseToken(final String pattern, final @NonNegative @LTLengthOf("#1") int @MinLen(1) [] indexRef) { // index references are valid indices for pattern
         final StringBuilder buf = new StringBuilder();
 
-        int i = indexRef[0];
+        @GTENegativeOne @LTEqLengthOf("pattern") int i = indexRef[0];
         final int length = pattern.length();
 
         char c = pattern.charAt(i);
@@ -368,7 +377,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             }
         }
 
-        indexRef[0] = i;
+        indexRef[0] = i; // #1
         return buf.toString();
     }
 
@@ -379,7 +388,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * @param padding  the padding required
      * @return a new rule with the correct padding
      */
-    protected NumberRule selectNumberRule(final int field, final int padding) {
+    protected NumberRule selectNumberRule(final @NonNegative int field, final int padding) {
         switch (padding) {
         case 1:
             return new UnpaddedNumberField(field);
@@ -613,7 +622,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      *
      * @return the maximum formatted length
      */
-    public int getMaxLengthEstimate() {
+    public @NonNegative int getMaxLengthEstimate() {
         return mMaxLengthEstimate;
     }
 
@@ -690,6 +699,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * @param buffer the buffer to append to.
      * @param value the value to append digits from.
      */
+    @SuppressWarnings({"index:unary.increment.type.incompatible", "index:array.access.unsafe.high", "lowerbound:unary.decrement.type.incompatible"}) /*
+    #2: value/10 in every iteration => loop can run a maximum of 10 times because log(Integer.MAX_VALUE) = 9.3, and work.length = 10, hence work[digit++] can have a maximum value of work[9]
+    #3: digit exits the previous loop with a non negative value, hence --digit>=0 => minimum value of digit to be -1
+    */
     private static void appendFullDigits(final Appendable buffer, int value, int minFieldWidth) throws IOException {
         // specialized paths for 1 to 4 digits -> avoid the memory allocation from the temporary work array
         // see LANG-1248
@@ -737,9 +750,9 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
             // build up decimal representation in reverse
             final char[] work = new char[MAX_DIGITS];
-            int digit = 0;
+            @GTENegativeOne @LTEqLengthOf("work") int digit = 0;
             while (value != 0) {
-                work[digit++] = (char) (value % 10 + '0');
+                work[digit++] = (char) (value % 10 + '0'); // #2
                 value = value / 10;
             }
 
@@ -750,7 +763,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             }
 
             // reverse
-            while (--digit >= 0) {
+            while (--digit >= 0) { // #3
                 buffer.append(work[digit]);
             }
         }
@@ -767,7 +780,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          *
          * @return the estimated length
          */
-        int estimateLength();
+        @NonNegative int estimateLength();
 
         /**
          * Appends the value of the specified calendar to the output buffer based on the rule implementation.
@@ -813,7 +826,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 1;
         }
 
@@ -846,7 +859,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mValue.length();
         }
 
@@ -863,7 +876,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * <p>Inner class to output one of a set of values.</p>
      */
     private static class TextField implements Rule {
-        private final int mField;
+        private final @NonNegative int mField;
         private final String[] mValues;
 
         /**
@@ -873,7 +886,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param field the field
          * @param values the field values
          */
-        TextField(final int field, final String[] values) {
+        TextField(final @NonNegative int field, final String[] values) {
             mField = field;
             mValues = values;
         }
@@ -882,8 +895,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
-            int max = 0;
+        public @NonNegative int estimateLength() {
+            @NonNegative int max = 0;
             for (int i=mValues.length; --i >= 0; ) {
                 final int len = mValues[i].length();
                 if (len > max) {
@@ -896,6 +909,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         /**
          * {@inheritDoc}
          */
+        @SuppressWarnings("index:array.access.unsafe.high") // mValues has same number of elements as number of possible elements by calendar.get(mField), calendar.get(mField) starts from 0, hence a valid index
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
             buffer.append(mValues[calendar.get(mField)]);
@@ -906,14 +920,14 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * <p>Inner class to output an unpadded number.</p>
      */
     private static class UnpaddedNumberField implements NumberRule {
-        private final int mField;
+        private final @NonNegative int mField;
 
         /**
          * Constructs an instance of {@code UnpadedNumberField} with the specified field.
          *
          * @param field the field
          */
-        UnpaddedNumberField(final int field) {
+        UnpaddedNumberField(final @NonNegative int field) {
             mField = field;
         }
 
@@ -921,7 +935,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 4;
         }
 
@@ -966,7 +980,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 2;
         }
 
@@ -995,8 +1009,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * <p>Inner class to output a padded number.</p>
      */
     private static class PaddedNumberField implements NumberRule {
-        private final int mField;
-        private final int mSize;
+        private final @NonNegative int mField;
+        private final @NonNegative int mSize;
 
         /**
          * Constructs an instance of {@code PaddedNumberField}.
@@ -1004,7 +1018,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param field the field
          * @param size size of the output field
          */
-        PaddedNumberField(final int field, final int size) {
+        PaddedNumberField(final @NonNegative int field, final int size) {
             if (size < 3) {
                 // Should use UnpaddedNumberField or TwoDigitNumberField.
                 throw new IllegalArgumentException();
@@ -1017,7 +1031,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mSize;
         }
 
@@ -1042,14 +1056,14 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      * <p>Inner class to output a two digit number.</p>
      */
     private static class TwoDigitNumberField implements NumberRule {
-        private final int mField;
+        private final @NonNegative int mField;
 
         /**
          * Constructs an instance of {@code TwoDigitNumberField} with the specified field.
          *
          * @param field the field
          */
-        TwoDigitNumberField(final int field) {
+        TwoDigitNumberField(final @NonNegative int field) {
             mField = field;
         }
 
@@ -1057,7 +1071,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 2;
         }
 
@@ -1099,7 +1113,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 2;
         }
 
@@ -1137,7 +1151,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 2;
         }
 
@@ -1178,7 +1192,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mRule.estimateLength();
         }
 
@@ -1223,7 +1237,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mRule.estimateLength();
         }
 
@@ -1259,7 +1273,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         }
 
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mRule.estimateLength();
         }
 
@@ -1286,7 +1300,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         }
 
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return mRule.estimateLength();
         }
 
@@ -1356,7 +1370,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             // We have no access to the Calendar object that will be passed to
             // appendTo so base estimate on the TimeZone passed to the
             // constructor
@@ -1400,7 +1414,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return 5;
         }
 
@@ -1464,14 +1478,14 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             }
         }
 
-        final int length;
+        final @NonNegative int length;
 
         /**
          * Constructs an instance of {@code Iso8601_Rule} with the specified properties.
          *
          * @param length The number of characters in output (unless Z is output)
          */
-        Iso8601_Rule(final int length) {
+        Iso8601_Rule(final @NonNegative int length) {
             this.length = length;
         }
 
@@ -1479,7 +1493,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * {@inheritDoc}
          */
         @Override
-        public int estimateLength() {
+        public @NonNegative int estimateLength() {
             return length;
         }
 

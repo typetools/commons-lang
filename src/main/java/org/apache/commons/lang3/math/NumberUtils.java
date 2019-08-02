@@ -24,6 +24,10 @@ import java.math.RoundingMode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>Provides extra functionality for Java Number classes.</p>
  *
@@ -682,7 +686,7 @@ public class NumberUtils {
             }
             return createInteger(str);
         }
-        final char lastChar = str.charAt(str.length() - 1);
+        final char lastChar = str.charAt(str.length() - 1); // #1
         String mant;
         String dec;
         String exp;
@@ -714,12 +718,12 @@ public class NumberUtils {
         }
         if (!Character.isDigit(lastChar) && lastChar != '.') {
             if (expPos > -1 && expPos < str.length() - 1) {
-                exp = str.substring(expPos + 1, str.length() - 1);
+                exp = str.substring(expPos + 1, str.length() - 1); // #2
             } else {
                 exp = null;
             }
             //Requesting a specific type..
-            final String numeric = str.substring(0, str.length() - 1);
+            final String numeric = str.substring(0, str.length() - 1); // #3
             final boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
             switch (lastChar) {
                 case 'l' :
@@ -824,7 +828,7 @@ public class NumberUtils {
      * @param str the string representation of the number
      * @return mantissa of the given number
      */
-    private static String getMantissa(final String str) {
+    private static String getMantissa(final @MinLen(1) String str) {
         return getMantissa(str, str.length());
     }
 
@@ -837,7 +841,7 @@ public class NumberUtils {
      * @param stopPos the position of the exponent or decimal point
      * @return mantissa of the given number
      */
-    private static String getMantissa(final String str, final int stopPos) {
+    private static String getMantissa(final @MinLen(1) String str, final @IndexOrHigh("#1") int stopPos) {
         final char firstChar = str.charAt(0);
         final boolean hasSign = firstChar == '-' || firstChar == '+';
 
@@ -944,11 +948,15 @@ public class NumberUtils {
      * @return converted <code>BigInteger</code> (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
      */
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:unary.increment.type.incompatible"})/*
+    #4: str.startsWith("0x", pos)=> pos + 2 is a valid index of str
+    #5: str.startsWith("#", pos) => pos + 1 is a valid index of str
+    */
     public static BigInteger createBigInteger(final String str) {
         if (str == null) {
             return null;
         }
-        int pos = 0; // offset within string
+        @IndexOrHigh("str") int pos = 0; // offset within string
         int radix = 10;
         boolean negate = false; // need to negate later?
         if (str.startsWith("-")) {
@@ -957,10 +965,10 @@ public class NumberUtils {
         }
         if (str.startsWith("0x", pos) || str.startsWith("0X", pos)) { // hex
             radix = 16;
-            pos += 2;
+            pos += 2; // #4
         } else if (str.startsWith("#", pos)) { // alternative hex (allowed by Long/Integer)
             radix = 16;
-            pos++;
+            pos++; // #5
         } else if (str.startsWith("0", pos) && str.length() > pos + 1) { // octal; so long as there are additional digits
             radix = 8;
             pos++;
@@ -1008,7 +1016,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(long[]) to min(long...)
      */
-    public static long min(final long... array) {
+    public static long min(final long @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1032,7 +1040,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(int[]) to min(int...)
      */
-    public static int min(final int... array) {
+    public static int min(final int @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1056,7 +1064,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(short[]) to min(short...)
      */
-    public static short min(final short... array) {
+    public static short min(final short @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1080,7 +1088,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(byte[]) to min(byte...)
      */
-    public static byte min(final byte... array) {
+    public static byte min(final byte @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1105,7 +1113,7 @@ public class NumberUtils {
      * @see IEEE754rUtils#min(double[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from min(double[]) to min(double...)
      */
-    public static double min(final double... array) {
+    public static double min(final double @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1133,7 +1141,7 @@ public class NumberUtils {
      * @see IEEE754rUtils#min(float[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from min(float[]) to min(float...)
      */
-    public static float min(final float... array) {
+    public static float min(final float @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1162,7 +1170,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(long[]) to max(long...)
      */
-    public static long max(final long... array) {
+    public static long max(final long @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1186,7 +1194,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(int[]) to max(int...)
      */
-    public static int max(final int... array) {
+    public static int max(final int @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1210,7 +1218,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(short[]) to max(short...)
      */
-    public static short max(final short... array) {
+    public static short max(final short @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1234,7 +1242,7 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(byte[]) to max(byte...)
      */
-    public static byte max(final byte... array) {
+    public static byte max(final byte @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1259,7 +1267,7 @@ public class NumberUtils {
      * @see IEEE754rUtils#max(double[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from max(double[]) to max(double...)
      */
-    public static double max(final double... array) {
+    public static double max(final double @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1287,7 +1295,7 @@ public class NumberUtils {
      * @see IEEE754rUtils#max(float[]) IEEE754rUtils for a version of this method that handles NaN differently
      * @since 3.4 Changed signature from max(float[]) to max(float...)
      */
-    public static float max(final float... array) {
+    public static float max(final float @MinLen(1) ... array) {
         // Validates input
         validateArray(array);
 
@@ -1599,7 +1607,7 @@ public class NumberUtils {
         if (StringUtils.isEmpty(str)) {
             return false;
         }
-        final char[] chars = str.toCharArray();
+        final char @MinLen(1) [] chars = str.toCharArray();
         int sz = chars.length;
         boolean hasExp = false;
         boolean hasDecPoint = false;
@@ -1725,6 +1733,9 @@ public class NumberUtils {
      * @return {@code true} if the string is a parsable number.
      * @since 3.4
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #8: str.length() != 1 && !StringUtils.isEmpty(str) => str.length > 1
+    */
     public static boolean isParsable(final String str) {
         if (StringUtils.isEmpty(str)) {
             return false;
@@ -1736,12 +1747,12 @@ public class NumberUtils {
             if (str.length() == 1) {
                 return false;
             }
-            return withDecimalsParsing(str, 1);
+            return withDecimalsParsing(str, 1); // #8
         }
         return withDecimalsParsing(str, 0);
     }
 
-    private static boolean withDecimalsParsing(final String str, final int beginIdx) {
+    private static boolean withDecimalsParsing(final String str, final @IndexFor("#1") int beginIdx) {
         int decimalPoints = 0;
         for (int i = beginIdx; i < str.length(); i++) {
             final boolean isDecimalPoint = str.charAt(i) == '.';

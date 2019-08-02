@@ -18,6 +18,9 @@ package org.apache.commons.lang3.math;
 
 import org.apache.commons.lang3.Validate;
 
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.checker.index.qual.NonNegative;
+
 /**
  * <p>Provides IEEE-754r variants of NumberUtils methods. </p>
  *
@@ -36,11 +39,12 @@ public class IEEE754rUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
       * @since 3.4 Changed signature from min(double[]) to min(double...)
      */
-    public static double min(final double... array) {
+    public static double min(final double @MinLen(1) ... array) {
         Validate.isTrue(array != null, "The Array must not be null");
         Validate.isTrue(array.length != 0, "Array cannot be empty.");
 
         // Finds and returns min
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // Validate.isTrue(array.length != 0, "Array cannot be empty.") => array has a non zero length
         double min = array[0];
         for (int i = 1; i < array.length; i++) {
             min = min(array[i], min);
@@ -58,11 +62,12 @@ public class IEEE754rUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from min(float[]) to min(float...)
      */
-    public static float min(final float... array) {
+    public static float min(final float @MinLen(1)  ... array) {
         Validate.isTrue(array != null, "The Array must not be null");
         Validate.isTrue(array.length != 0, "Array cannot be empty.");
 
         // Finds and returns min
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // Validate.isTrue(array.length != 0, "Array cannot be empty."); => array has a non zero length
         float min = array[0];
         for (int i = 1; i < array.length; i++) {
             min = min(array[i], min);
@@ -148,11 +153,12 @@ public class IEEE754rUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(double[]) to max(double...)
      */
-    public static double max(final double... array) {
+    public static double max(final double @MinLen(1) ... array) {
         Validate.isTrue(array != null, "The Array must not be null");
         Validate.isTrue(array.length != 0, "Array cannot be empty.");
 
         // Finds and returns max
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // Validate.isTrue(array.length != 0, "Array cannot be empty."); => array has a non zero length
         double max = array[0];
         for (int j = 1; j < array.length; j++) {
             max = max(array[j], max);
@@ -170,11 +176,12 @@ public class IEEE754rUtils {
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @since 3.4 Changed signature from max(float[]) to max(float...)
      */
-    public static float max(final float... array) {
+    public static float max(final float @MinLen(1) ... array) {
         Validate.isTrue(array != null, "The Array must not be null");
         Validate.isTrue(array.length != 0, "Array cannot be empty.");
 
         // Finds and returns max
+        @SuppressWarnings("index:array.access.unsafe.high.constant") // Validate.isTrue(array.length != 0, "Array cannot be empty."); => array has a non zero length
         float max = array[0];
         for (int j = 1; j < array.length; j++) {
             max = max(array[j], max);

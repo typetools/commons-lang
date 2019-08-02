@@ -27,6 +27,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LTEqLengthOf;
+
 /**
  * <p>Controls <code>String</code> formatting for {@link ToStringBuilder}.
  * The main public interface is always via <code>ToStringBuilder</code>.</p>
@@ -386,7 +389,8 @@ public abstract class ToStringStyle implements Serializable {
      */
     public void appendToString(final StringBuffer buffer, final String toString) {
         if (toString != null) {
-            final int pos1 = toString.indexOf(contentStart) + contentStart.length();
+            @SuppressWarnings("index:assignment.type.incompatible") // maximum value of toString.indexOf(String str) + str.length() can be toString.length()
+            final @LTEqLengthOf("toString") int pos1 = toString.indexOf(contentStart) + contentStart.length();
             final int pos2 = toString.lastIndexOf(contentEnd);
             if (pos1 != pos2 && pos1 >= 0 && pos2 >= 0) {
                 if (fieldSeparatorAtStart) {
@@ -436,13 +440,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param buffer  the <code>StringBuffer</code> to populate
      * @since 2.0
      */
+    @SuppressWarnings("index") /* #1: len is the length of buffer and sepLen is the length of fieldSeparator, and len >= sepLen is checked above
+    #2: i < sepLen && i < len inside the loop, hence len - 1 - i and sepLen - 1 - i are non negative, i.e. len >= sepLen makes this code safe, but SameLen checker cannot handle non-equal array sizes
+    */
     protected void removeLastFieldSeparator(final StringBuffer buffer) {
         final int len = buffer.length();
         final int sepLen = fieldSeparator.length();
         if (len > 0 && sepLen > 0 && len >= sepLen) {
             boolean match = true;
-            for (int i = 0; i < sepLen; i++) {
-                if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) {
+            for (@NonNegative @LTEqLengthOf({"buffer", "fieldSeparator"}) int i = 0; i < sepLen; i++) { // #1
+                if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) { // #2
                     match = false;
                     break;
                 }
