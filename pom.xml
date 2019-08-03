@@ -757,6 +757,8 @@
           <configLocation>${basedir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
+          <!-- Skipping checkstyle in these files as a error is issued of an unexpected token on the @MinLen annotation -->
+          <excludes>org/apache/commons/lang3/math/NumberUtils.java,org/apache/commons/lang3/math/IEEE754rUtils.java</excludes>
         </configuration>
         <dependencies>
           <dependency>
@@ -1027,7 +1029,7 @@
               <compilerArgs>
                 <!-- location of the annotated JDK, which comes from a Maven dependency -->
                 <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                <arg>-AskipDefs=^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.text\.|^org\.apache\.commons\.lang3\.time\.</arg>
+                <arg>-AskipDefs=/src/test/java/org/apache/commons/lang3/builder/|/src/test/java/org/apache/commons/lang3/exception/|/src/test/java/org/apache/commons/lang3/math/|/src/test/java/org/apache/commons/lang3/reflect/|/src/test/java/org/apache/commons/lang3/time/|/src/test/java/org/apache/commons/lang3/|^org\.apache\.commons\.lang3\.</arg>
                 <arg>-Astubs=/Stubs/</arg>
                 <arg>-ArequirePrefixInWarningSuppressions</arg>
                 <arg>-AwarnUnneededSuppressions</arg>
