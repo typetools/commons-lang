@@ -2515,7 +2515,7 @@ public class ArrayUtils {
     * @param len the number of elements to swap starting with the given indices
     * @since 3.5
     */
-   @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
     #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
     hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
     */

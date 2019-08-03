@@ -312,7 +312,7 @@ public class Conversion {
      * @throws IllegalArgumentException if {@code src} is empty
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    public static char binaryToHexDigit(final boolean[] src, final @IndexFor("#1") int srcPos) {
+    public static char binaryToHexDigit(final boolean @MinLen(1) [] src, final @IndexFor("#1") int srcPos) {
         if (src.length == 0) {
             throw new IllegalArgumentException("Cannot convert an empty array.");
         }
@@ -376,7 +376,7 @@ public class Conversion {
      *             {@code src.length - srcPos < 4}
      * @throws NullPointerException if {@code src} is {@code null}
      */
-    public static char binaryToHexDigitMsb0_4bits(final boolean[] src, final @IndexFor("#1") int srcPos) {
+    public static char binaryToHexDigitMsb0_4bits(final boolean @MinLen(1) [] src, final @IndexFor("#1") int srcPos) {
         if (src.length > 8) {
             throw new IllegalArgumentException("src.length>8: src.length=" + src.length);
         }
