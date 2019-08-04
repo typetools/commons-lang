@@ -424,7 +424,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final String source, final @IndexFor("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
+    public String replace(final String source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return null;
         }
@@ -466,7 +466,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final char[] source, final int offset, final @NonNegative int length) {
+    public String replace(final char[] source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }

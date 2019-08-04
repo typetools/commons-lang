@@ -713,7 +713,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
         // handle reaching end
         if (start >= len) { // #0
             addToken(tokenList, StringUtils.EMPTY);
-            return -1;
+            return -1;1
         }
 
         // handle empty token
@@ -846,8 +846,8 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @param quoteLen  the length of the matched quote, 0 if no quoting
      * @return true if a quote is matched
      */
-    @SuppressWarnings({"index:array.access.unsafe.low", "index:array.access.unsafe.high"}) // #1: If pos + i >= len, srcChars[pos + i] and srcChars[quoteStart + i] does not happen. Also, pos >= quoteStart as is checked when it is called. This function is called only in readWithQuotes() which is called only by readNextTokens(), which declares pos and quotestart to either be start + quoteLen and start respectively or start and 0 respectively, where start and quoteLen both are @NonNegative.
-    private boolean isQuote(final char[] srcChars, final int pos, final int len, final int quoteStart, final int quoteLen) {
+    //@SuppressWarnings({"index:array.access.unsafe.low", "index:array.access.unsafe.high"}) // #1: If pos + i >= len, srcChars[pos + i] and srcChars[quoteStart + i] does not happen. Also, pos >= quoteStart as is checked when it is called. This function is called only in readWithQuotes() which is called only by readNextTokens(), which declares pos and quotestart to either be start + quoteLen and start respectively or start and 0 respectively, where start and quoteLen both are @NonNegative.
+    private boolean isQuote(final char[] srcChars, final @NonNegative int pos, final @NonNegative int len, final int quoteStart, final int quoteLen) {
         for (int i = 0; i < quoteLen; i++) {
             if (pos + i >= len || srcChars[pos + i] != srcChars[quoteStart + i]) { // #1
                 return false;
