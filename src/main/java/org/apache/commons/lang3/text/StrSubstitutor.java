@@ -506,7 +506,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final StringBuffer source, final int offset, final @NonNegative int length) {
+    public String replace(final StringBuffer source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -545,7 +545,7 @@ public class StrSubstitutor {
      * @return the result of the replace operation
      * @since 3.2
      */
-    public String replace(final CharSequence source, final int offset, final @NonNegative int length) {
+    public String replace(final CharSequence source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -585,7 +585,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final StrBuilder source, final int offset, final @NonNegative int length) {
+    public String replace(final StrBuilder source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -686,7 +686,7 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
-    public boolean replaceIn(final StringBuilder source, final @NonNegative int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
+    public boolean replaceIn(final StringBuilder source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return false;
         }

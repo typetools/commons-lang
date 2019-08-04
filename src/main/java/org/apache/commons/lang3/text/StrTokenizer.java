@@ -30,6 +30,7 @@ import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.EnsuresLTLengthOfIf;
 
 /**
  * Tokenizes a string based on delimiters (separators)
@@ -412,7 +413,6 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the next sequential token, or null when no more tokens are found
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
     public String nextToken() {
         if (hasNext()) {
             return tokens[tokenPos++];
@@ -507,6 +507,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return true if there are more tokens
      */
+    @EnsuresLTLengthOfIf(expression = "this.tokenPos", result = true, targetValue = "this.tokens")
     @Override
     public boolean hasNext() {
         checkTokenized();
@@ -519,7 +520,6 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @return the next String token
      * @throws NoSuchElementException if there are no more elements
      */
-    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // hasNext() => tokenPos < tokens.length
     @Override
     public String next() {
         if (hasNext()) {
@@ -713,7 +713,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
         // handle reaching end
         if (start >= len) { // #0
             addToken(tokenList, StringUtils.EMPTY);
-            return -1;1
+            return -1;
         }
 
         // handle empty token
@@ -846,7 +846,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @param quoteLen  the length of the matched quote, 0 if no quoting
      * @return true if a quote is matched
      */
-    //@SuppressWarnings({"index:array.access.unsafe.low", "index:array.access.unsafe.high"}) // #1: If pos + i >= len, srcChars[pos + i] and srcChars[quoteStart + i] does not happen. Also, pos >= quoteStart as is checked when it is called. This function is called only in readWithQuotes() which is called only by readNextTokens(), which declares pos and quotestart to either be start + quoteLen and start respectively or start and 0 respectively, where start and quoteLen both are @NonNegative.
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:array.access.unsafe.high"}) // #1: If pos + i >= len, srcChars[pos + i] and srcChars[quoteStart + i] does not happen.
     private boolean isQuote(final char[] srcChars, final @NonNegative int pos, final @NonNegative int len, final int quoteStart, final int quoteLen) {
         for (int i = 0; i < quoteLen; i++) {
             if (pos + i >= len || srcChars[pos + i] != srcChars[quoteStart + i]) { // #1
