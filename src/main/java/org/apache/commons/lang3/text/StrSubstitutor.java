@@ -642,7 +642,7 @@ public class StrSubstitutor {
      * @param length  the length within the buffer to be processed, must be valid
      * @return true if altered
      */
-    public boolean replaceIn(final StringBuffer source, final @IndexFor("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
+    public boolean replaceIn(final StringBuffer source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return false;
         }
