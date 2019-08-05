@@ -782,7 +782,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      * @since 3.2
      */
-@SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) // #1, #2: ensureCapacity(len + length) => len + length is @NonNegative @LTEqLengthOf("this.buffer"), and len is @IndexOrHigh("this.buffer") as well
     public StrBuilder append(final StringBuilder str) {
         if (str == null) {
             return appendNull();
@@ -891,7 +891,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param chars  the char array to append
      * @return this, to enable chaining
      */
-     @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:compound.assignment.type.incompatible", "index:argument.type.incompatible"}) /*
     #1: ensureCapacity(len + length) => strLen <= str.buffer.length - len
     #2: ensureCapacity(len + strLen) => size + strLen to be @LTEqLengthOf("this.buffer")
     */
@@ -1763,7 +1763,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     #2: offset >= 0, and offset + length <= chars.length, but length > 0, hence offset < chars.length
     #3: ensureCapacity(size + length) => size + length is @LTEqLengthOf("this.buffer")
     */
-    public StrBuilder insert(final int index, final char chars[], final int offset, final int length) {
+    public StrBuilder insert(final int index, final char chars[], final @IndexOrHigh("#2") int offset, final int length) {
         validateIndex(index);
         if (chars == null) {
             return insert(index, nullText);
