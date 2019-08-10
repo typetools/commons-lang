@@ -16,6 +16,9 @@
  */
 package org.apache.commons.lang3;
 
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.checker.index.qual.NonNegative;
+
 /**
  * <p>Operations on char primitives and Character objects.</p>
  *
@@ -174,7 +177,7 @@ public class CharUtils {
      * @return the char value of the first letter of the String
      * @throws IllegalArgumentException if the String is empty
      */
-    public static char toChar(final String str) {
+    public static char toChar(final @MinLen(1) String str) {
         Validate.isTrue(StringUtils.isNotEmpty(str), "The String must not be empty");
         return str.charAt(0);
     }
@@ -305,7 +308,7 @@ public class CharUtils {
      * @param ch  the character to convert
      * @return a String containing the one specified character
      */
-    public static String toString(final char ch) {
+    public static String toString(final @NonNegative char ch) {
         if (ch < 128) {
             return CHAR_STRING_ARRAY[ch];
         }
@@ -329,11 +332,12 @@ public class CharUtils {
      * @param ch  the character to convert
      * @return a String containing the one specified character
      */
-    public static String toString(final Character ch) {
+    @SuppressWarnings("index:argument.type.incompatible") // #1: @NonNegative argument as defined in parameter to the function
+    public static String toString(final @NonNegative Character ch) {
         if (ch == null) {
             return null;
         }
-        return toString(ch.charValue());
+        return toString(ch.charValue()); // #1
     }
 
     //--------------------------------------------------------------------------

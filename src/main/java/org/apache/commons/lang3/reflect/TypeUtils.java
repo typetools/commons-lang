@@ -39,9 +39,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
 
 import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.SameLen;
 import org.checkerframework.common.value.qual.MinLen;
-import org.checkerframework.checker.index.qual.LTLengthOf;
 
 /**
  * <p> Utility methods focusing on type inspection, particularly with regard to
@@ -1852,17 +1852,15 @@ public class TypeUtils {
             appendAllTo(buf.append('<'), ", ", argumentsFiltered).append('>');
         }
     }
-    @SuppressWarnings("index:assignment.type.incompatible")/*
-    #3: Array.copyOf(array, n) returns an array of length n
-    #4: Keeps on adding an element every time this statement is carried out, hence no. of elements <= no. of times loop runs, hence @LTEqLengthOf("p.getActualTypeArguments()")
-    */
-    private static int @LTLengthOf(value = {"#1.getActualTypeArguments()"}, offset = {"-1"}) [] findRecursiveTypes(final ParameterizedType p) {
-        final Type @SameLen("p.getActualTypeArguments()") [] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length); // #3
-        int @LTLengthOf(value = {"p.getActualTypeArguments()"}, offset = {"-1"}) [] indexesToRemove = {};
+
+    @SuppressWarnings("index:return.type.incompatible") // only the indices of filteredArgumentTypes is added, which is a copy of p.getActualTypeArguments()
+    private static @IndexFor("#1.getActualTypeArguments()") int[] findRecursiveTypes(final ParameterizedType p) {
+        final Type[] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length);
+        int[] indexesToRemove = {};
         for (int i = 0; i < filteredArgumentTypes.length; i++) {
             if (filteredArgumentTypes[i] instanceof TypeVariable<?>) {
                 if (containsVariableTypeSameParametrizedTypeBound(((TypeVariable<?>) filteredArgumentTypes[i]), p)) {
-                    indexesToRemove = ArrayUtils.add(indexesToRemove, i); // #4
+                    indexesToRemove = ArrayUtils.add(indexesToRemove, i);
                 }
             }
         }

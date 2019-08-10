@@ -52,7 +52,7 @@ public abstract class CharSequenceTranslator {
      * @return int count of codepoints consumed
      * @throws IOException if and only if the Writer produces an IOException
      */
-    public abstract int translate(CharSequence input, @IndexFor("#1") int index, Writer out) throws IOException;
+    public abstract int translate(@MinLen(1) CharSequence input, @IndexFor("#1") int index, Writer out) throws IOException;
 
     /**
      * Helper for non-Writer usage.
@@ -81,9 +81,10 @@ public abstract class CharSequenceTranslator {
      * @param out Writer to translate the text to
      * @throws IOException if and only if the Writer produces an IOException
      */
-    @SuppressWarnings("index:argument.type.incompatible") /*
+    @SuppressWarnings({"index:argument.type.incompatible","value:argument.type.incompatible"}) /*
     #1, #2: argument to write() need not be @NonNegative
     #3: consumed is the number of codepoints used to represent the character, hence, the value of pos remains a valid index for input throughout the loop
+    #4: pos is 0 initially and pos < len as the loop condition ensures that if the code reached #4, len is min 1
     */
     public final void translate(final CharSequence input, final Writer out) throws IOException {
         if (out == null) {
@@ -95,7 +96,7 @@ public abstract class CharSequenceTranslator {
         int pos = 0;
         final int len = input.length();
         while (pos < len) {
-            final int consumed = translate(input, pos, out);
+            final int consumed = translate(input, pos, out); // #4
             if (consumed == 0) {
                 // inlined implementation of Character.toChars(Character.codePointAt(input, pos))
                 // avoids allocating temp char arrays and duplicate checks

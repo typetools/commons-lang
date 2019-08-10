@@ -30,6 +30,8 @@ import org.apache.commons.lang3.text.translate.OctalUnescaper;
 import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
 import org.apache.commons.lang3.text.translate.UnicodeUnpairedSurrogateRemover;
 
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>Escapes and unescapes {@code String}s for
  * Java, Java Script, HTML and XML.</p>
@@ -390,20 +392,21 @@ public class StringEscapeUtils {
         private static final String CSV_QUOTE_STR = String.valueOf(CSV_QUOTE);
         private static final char[] CSV_SEARCH_CHARS = {CSV_DELIMITER, CSV_QUOTE, CharUtils.CR, CharUtils.LF};
 
+        @SuppressWarnings("index:argument.type.incompatible") // #1: input is @MinLen(1), hence input.length() - 1 is @NonNegative
         @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+        public int translate(final @MinLen(1) CharSequence input, final int index, final Writer out) throws IOException {
 
             if (index != 0) {
                 throw new IllegalStateException("CsvUnescaper should never reach the [1] index");
             }
 
-            if ( input.charAt(0) != CSV_QUOTE || input.charAt(input.length() - 1) != CSV_QUOTE ) {
+            if ( input.charAt(0) != CSV_QUOTE || input.charAt(input.length() - 1) != CSV_QUOTE ) { // #1
                 out.write(input.toString());
                 return Character.codePointCount(input, 0, input.length());
             }
 
             // strip quotes
-            final String quoteless = input.subSequence(1, input.length() - 1).toString();
+            final String quoteless = input.subSequence(1, input.length() - 1).toString(); // #1
 
             if ( StringUtils.containsAny(quoteless, CSV_SEARCH_CHARS) ) {
                 // deal with escaped quotes; ie) ""

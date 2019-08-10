@@ -198,6 +198,9 @@ public class EnumUtils {
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1, 
+    hence an enum position / Long.SIZE is @IndexFor("result")
+    */
     public static <E extends Enum<E>> long[] generateBitVectors(final Class<E> enumClass, final Iterable<? extends E> values) {
         asEnum(enumClass);
         Validate.notNull(values);
@@ -208,7 +211,7 @@ public class EnumUtils {
         }
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
-            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
+            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE); // #1
         }
         ArrayUtils.reverse(result);
         return result;
@@ -253,6 +256,9 @@ public class EnumUtils {
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1, 
+    hence an enum position / Long.SIZE is @IndexFor("result")
+    */
     @SafeVarargs
     public static <E extends Enum<E>> long[] generateBitVectors(final Class<E> enumClass, final E... values) {
         asEnum(enumClass);
@@ -261,7 +267,7 @@ public class EnumUtils {
         Collections.addAll(condensed, values);
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
-            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
+            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE); // #1
         }
         ArrayUtils.reverse(result);
         return result;

@@ -204,6 +204,10 @@ public class ClassUtils {
      * @param className  the className to get the short name for
      * @return the class name of the class without the package name or an empty string
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: className.startsWith("[") => @MinLen(1)
+    #2: className = className.substring(1) followed by arrayPrefix.append("[]") ensures @MinLen(2)
+    */
     public static String getShortClassName(String className) {
         if (StringUtils.isEmpty(className)) {
             return StringUtils.EMPTY;
@@ -213,13 +217,13 @@ public class ClassUtils {
 
         // Handle array encoding
         if (className.startsWith("[")) {
-            while (className.charAt(0) == '[') {
-                className = className.substring(1);
+            while (className.charAt(0) == '[') { // #1
+                className = className.substring(1); // #1
                 arrayPrefix.append("[]");
             }
             // Strip Object type encoding
-            if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
-                className = className.substring(1, className.length() - 1);
+            if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') { // #2
+                className = className.substring(1, className.length() - 1); // #2
             }
 
             if (reverseAbbreviationMap.containsKey(className)) {
@@ -375,18 +379,22 @@ public class ClassUtils {
      * @param className  the className to get the package name for, may be {@code null}
      * @return the package name or an empty string
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1, #2: According to the documentation, the name cannot end with '[', hence the subtring has @MinLen(1)
+    #3, #4: className after the previous loop has @MinLen(1) as explained in #1, #2
+    */
     public static String getPackageName(String className) {
         if (StringUtils.isEmpty(className)) {
             return StringUtils.EMPTY;
         }
 
         // Strip array encoding
-        while (className.charAt(0) == '[') {
-            className = className.substring(1);
+        while (className.charAt(0) == '[') { // #1
+            className = className.substring(1); // #2
         }
         // Strip Object type encoding
-        if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
-            className = className.substring(1);
+        if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') { // #3
+            className = className.substring(1); // #4
         }
 
         final int i = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
@@ -440,6 +448,10 @@ public class ClassUtils {
      * @throws IllegalArgumentException if len &lt;= 0
      * @since 3.4
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: -1 will not be assigned in #0.1 because the number of '.' is counted and the loop is run accordingly, hence the arguments will be @IndexOrHigh
+    #2: According to the documentation, the String is assumed to be a classname, and between two '.', a classname must have at least one character
+    */
     public static String getAbbreviatedName(final String className, final int len) {
       if (len <= 0) {
         throw new IllegalArgumentException("len must be > 0");
@@ -453,8 +465,8 @@ public class ClassUtils {
       final String[] output = new String[packageLevels + 1];
       int endIndex = className.length() - 1;
       for (int level = packageLevels; level >= 0; level--) {
-        final int startIndex = className.lastIndexOf('.', endIndex);
-        final String part = className.substring(startIndex + 1, endIndex + 1);
+        final int startIndex = className.lastIndexOf('.', endIndex); // #0.1
+        final String part = className.substring(startIndex + 1, endIndex + 1); // #1
         availableSpace -= part.length();
         if (level > 0) {
           // all elements except top level require an additional char space
@@ -468,7 +480,7 @@ public class ClassUtils {
             output[level] = part;
           } else {
             // if no space is left still the first char is used
-            output[level] = part.substring(0, 1);
+            output[level] = part.substring(0, 1); // #2
           }
         }
         endIndex = startIndex - 1;
@@ -673,8 +685,9 @@ public class ClassUtils {
      * @param autoboxing  whether to use implicit autoboxing/unboxing between primitives and wrappers
      * @return {@code true} if assignment possible
      */
+    @SuppressWarnings("index:array.access.unsafe.high") // #0.1 ensures toClassArray.length = classArray.length
     public static boolean isAssignable(Class<?>[] classArray, Class<?>[] toClassArray, final boolean autoboxing) {
-        if (!ArrayUtils.isSameLength(classArray, toClassArray)) {
+        if (!ArrayUtils.isSameLength(classArray, toClassArray)) { // #0.1
             return false;
         }
         if (classArray == null) {
@@ -684,7 +697,7 @@ public class ClassUtils {
             toClassArray = ArrayUtils.EMPTY_CLASS_ARRAY;
         }
         for (int i = 0; i < classArray.length; i++) {
-            if (!isAssignable(classArray[i], toClassArray[i], autoboxing)) {
+            if (!isAssignable(classArray[i], toClassArray[i], autoboxing)) { // #1
                 return false;
             }
         }

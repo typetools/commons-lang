@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>Operations to assist when working with a {@link Locale}.</p>
  *
@@ -87,7 +89,8 @@ public class LocaleUtils {
      * @throws IllegalArgumentException if the string is an invalid format
      * @see Locale#forLanguageTag(String)
      */
-    public static Locale toLocale(final String str) {
+    @SuppressWarnings("index:argument.type.incompatible") // #1: len >= 5 as checked by the previous if
+    public static Locale toLocale(final @MinLen(3) String str) {
         if (str == null) {
             return null;
         }
@@ -117,10 +120,10 @@ public class LocaleUtils {
             if (len < 5) {
                 throw new IllegalArgumentException("Invalid locale format: " + str);
             }
-            if (str.charAt(3) != '_') {
+            if (str.charAt(3) != '_') { // #1
                 throw new IllegalArgumentException("Invalid locale format: " + str);
             }
-            return new Locale(StringUtils.EMPTY, str.substring(1, 3), str.substring(4));
+            return new Locale(StringUtils.EMPTY, str.substring(1, 3), str.substring(4)); // #1
         }
 
         return parseLocale(str);
