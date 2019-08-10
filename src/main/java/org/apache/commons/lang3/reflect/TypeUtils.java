@@ -1860,7 +1860,7 @@ public class TypeUtils {
         for (int i = 0; i < filteredArgumentTypes.length; i++) {
             if (filteredArgumentTypes[i] instanceof TypeVariable<?>) {
                 if (containsVariableTypeSameParametrizedTypeBound(((TypeVariable<?>) filteredArgumentTypes[i]), p)) {
-                    indexesToRemove = ArrayUtils.add(indexesToRemove, i);
+                    indexesToRemove = ArrayUtils.add(indexesToRemove, i); // #4
                 }
             }
         }

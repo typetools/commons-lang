@@ -1036,7 +1036,6 @@
                   <compilerArgs>
                     <!-- location of the annotated JDK, which comes from a Maven dependency -->
                     <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                    <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.|^org\.apache\.commons\.lang3\.text\.</arg>
                     <arg>-Astubs=/Stubs/</arg>
                     <arg>-ArequirePrefixInWarningSuppressions</arg>
                     <arg>-AwarnUnneededSuppressions</arg>
@@ -1050,16 +1049,16 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <version>2.10</version>
             <executions>
-             <execution>
+              <execution>
                 <goals>
                   <goal>properties</goal>
                 </goals>
               </execution>
-           </executions>
+            </executions>
           </plugin>
-       </plugins>
+        </plugins>
       </build>
-   </profile>
+    </profile>
 
   </profiles>
 </project>
