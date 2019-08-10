@@ -25,6 +25,12 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.SameLen;
+
 /**
  * Substitutes variables within a string by values.
  * <p>
@@ -418,7 +424,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final String source, final int offset, final int length) {
+    public String replace(final String source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return null;
         }
@@ -460,7 +466,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final char[] source, final int offset, final int length) {
+    public String replace(final char[] source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -500,7 +506,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final StringBuffer source, final int offset, final int length) {
+    public String replace(final StringBuffer source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -539,7 +545,7 @@ public class StrSubstitutor {
      * @return the result of the replace operation
      * @since 3.2
      */
-    public String replace(final CharSequence source, final int offset, final int length) {
+    public String replace(final CharSequence source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -579,7 +585,7 @@ public class StrSubstitutor {
      * @param length  the length within the array to be processed, must be valid
      * @return the result of the replace operation
      */
-    public String replace(final StrBuilder source, final int offset, final int length) {
+    public String replace(final StrBuilder source, final @IndexOrHigh("#1") int offset, final @NonNegative int length) {
         if (source == null) {
             return null;
         }
@@ -615,11 +621,12 @@ public class StrSubstitutor {
      * @param source  the buffer to replace in, updated, null returns zero
      * @return true if altered
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1 source.length() is as required by the annotations @LTLengthOf(value = "source", offset = "-1")
     public boolean replaceIn(final StringBuffer source) {
         if (source == null) {
             return false;
         }
-        return replaceIn(source, 0, source.length());
+        return replaceIn(source, 0, source.length()); // #1
     }
 
     /**
@@ -635,7 +642,7 @@ public class StrSubstitutor {
      * @param length  the length within the buffer to be processed, must be valid
      * @return true if altered
      */
-    public boolean replaceIn(final StringBuffer source, final int offset, final int length) {
+    public boolean replaceIn(final StringBuffer source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return false;
         }
@@ -657,11 +664,12 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: source.length() is @LTEqLengthOf("source")
     public boolean replaceIn(final StringBuilder source) {
         if (source == null) {
             return false;
         }
-        return replaceIn(source, 0, source.length());
+        return replaceIn(source, 0, source.length()); // #1
     }
 
     /**
@@ -678,7 +686,7 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
-    public boolean replaceIn(final StringBuilder source, final int offset, final int length) {
+    public boolean replaceIn(final StringBuilder source, final @IndexOrHigh("#1") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return false;
         }
@@ -717,7 +725,7 @@ public class StrSubstitutor {
      * @param length  the length within the builder to be processed, must be valid
      * @return true if altered
      */
-    public boolean replaceIn(final StrBuilder source, final int offset, final int length) {
+    public boolean replaceIn(final StrBuilder source, final @IndexFor("#1.buffer") int offset, final @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int length) {
         if (source == null) {
             return false;
         }
@@ -739,7 +747,7 @@ public class StrSubstitutor {
      * @param length  the length within the builder to be processed, must be valid
      * @return true if altered
      */
-    protected boolean substitute(final StrBuilder buf, final int offset, final int length) {
+    protected boolean substitute(final StrBuilder buf, final @IndexOrHigh("#1.buffer") int offset, final @NonNegative int length) {
         return substitute(buf, offset, length, null) > 0;
     }
 
@@ -755,7 +763,17 @@ public class StrSubstitutor {
      * @return the length change that occurs, unless priorVariables is null when the int
      *  represents a boolean flag as to whether any change occurred.
      */
-    private int substitute(final StrBuilder buf, final int offset, final int length, List<String> priorVariables) {
+    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible", "index:array.access.unsafe.high.range"}) /*
+    #1, #2, #3: pos < bufEnd => pos is @LTLengthOf(chars)
+    #4: pos < bufEnd because if pos += endMatchLenpos happens, it is followed by continue statement, hence pos < bufEnd is always checked
+    #5: startPos + startMatchLen is the initial pos which is checked pos < bufEnd as a condition in this loop
+    #6: initial pos = startPos + startMatchLen , and pos is increased only, therefore pos - startPos - startMatchLen is @NonNegative
+    #7: valueDelimMatcher is @ LTLengthOf(value = "varNameExpChars", offset = "i - 1"), hence i + valueDelimiterMatchLen <= varNameExp
+    #8: chars -> @SameLen("buf.buffer") => offset is also a valid index for chars
+    #9: startPos = pos and pos < bufEnd is checked
+    #10: change can be anything in the positive range, but in the negative range it can only go so negative till it changes pos(= pos + change) to offset
+    */
+    private int substitute(final StrBuilder buf, final @IndexOrHigh("#1.buffer") int offset, final @NonNegative int length, List<String> priorVariables) {
         final StrMatcher pfxMatcher = getVariablePrefixMatcher();
         final StrMatcher suffMatcher = getVariableSuffixMatcher();
         final char escape = getEscapeChar();
@@ -765,17 +783,17 @@ public class StrSubstitutor {
         final boolean top = priorVariables == null;
         boolean altered = false;
         int lengthChange = 0;
-        char[] chars = buf.buffer;
+        char @SameLen("buf.buffer") [] chars = buf.buffer;
         int bufEnd = offset + length;
-        int pos = offset;
+        @NonNegative int pos = offset;
         while (pos < bufEnd) {
-            final int startMatchLen = pfxMatcher.isMatch(chars, pos, offset,
+            final int startMatchLen = pfxMatcher.isMatch(chars, pos, offset, // #1
                     bufEnd);
             if (startMatchLen == 0) {
                 pos++;
             } else {
                 // found variable start marker
-                if (pos > offset && chars[pos - 1] == escape) {
+                if (pos > offset && chars[pos - 1] == escape) { // #2
                     // escaped
                     if (preserveEscapes) {
                         pos++;
@@ -795,14 +813,14 @@ public class StrSubstitutor {
                     while (pos < bufEnd) {
                         if (substitutionInVariablesEnabled
                                 && (endMatchLen = pfxMatcher.isMatch(chars,
-                                        pos, offset, bufEnd)) != 0) {
+                                        pos, offset, bufEnd)) != 0) { // #3
                             // found a nested variable start
                             nestedVarCount++;
                             pos += endMatchLen;
                             continue;
                         }
 
-                        endMatchLen = suffMatcher.isMatch(chars, pos, offset,
+                        endMatchLen = suffMatcher.isMatch(chars, pos, offset, // #4
                                 bufEnd);
                         if (endMatchLen == 0) {
                             pos++;
@@ -810,8 +828,8 @@ public class StrSubstitutor {
                             // found variable end marker
                             if (nestedVarCount == 0) {
                                 String varNameExpr = new String(chars, startPos
-                                        + startMatchLen, pos - startPos
-                                        - startMatchLen);
+                                        + startMatchLen, pos - startPos // #5
+                                        - startMatchLen); // #6
                                 if (substitutionInVariablesEnabled) {
                                     final StrBuilder bufName = new StrBuilder(varNameExpr);
                                     substitute(bufName, 0, bufName.length());
@@ -834,7 +852,7 @@ public class StrSubstitutor {
                                         }
                                         if ((valueDelimiterMatchLen = valueDelimMatcher.isMatch(varNameExprChars, i)) != 0) {
                                             varName = varNameExpr.substring(0, i);
-                                            varDefaultValue = varNameExpr.substring(i + valueDelimiterMatchLen);
+                                            varDefaultValue = varNameExpr.substring(i + valueDelimiterMatchLen); // #7
                                             break;
                                         }
                                     }
@@ -844,7 +862,7 @@ public class StrSubstitutor {
                                 if (priorVariables == null) {
                                     priorVariables = new ArrayList<>();
                                     priorVariables.add(new String(chars,
-                                            offset, length));
+                                            offset, length)); // #8
                                 }
 
                                 // handle cyclic substitution
@@ -862,11 +880,11 @@ public class StrSubstitutor {
                                     final int varLen = varValue.length();
                                     buf.replace(startPos, endPos, varValue);
                                     altered = true;
-                                    int change = substitute(buf, startPos,
+                                    int change = substitute(buf, startPos, // #9
                                             varLen, priorVariables);
                                     change = change
                                             + varLen - (endPos - startPos);
-                                    pos += change;
+                                    pos += change; // #10
                                     bufEnd += change;
                                     lengthChange += change;
                                     chars = buf.buffer; // in case buffer was

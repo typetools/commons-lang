@@ -18,6 +18,11 @@ package org.apache.commons.lang3;
 
 import java.util.Random;
 
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LessThan;
+
 /**
  * <p>Operations for random {@code String}s.</p>
  * <p>Currently <em>private high surrogate</em> characters are ignored.
@@ -77,7 +82,7 @@ public class RandomStringUtils {
      * @param count  the length of random string to create
      * @return the random string
      */
-    public static String random(final int count) {
+    public static String random(final @NonNegative int count) {
         return random(count, false, false);
     }
 
@@ -91,7 +96,7 @@ public class RandomStringUtils {
      * @param count  the length of random string to create
      * @return the random string
      */
-    public static String randomAscii(final int count) {
+    public static String randomAscii(final @NonNegative int count) {
         return random(count, 32, 127, false, false);
     }
 
@@ -107,7 +112,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAscii(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAscii(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomAscii(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -121,7 +126,7 @@ public class RandomStringUtils {
      * @param count  the length of random string to create
      * @return the random string
      */
-    public static String randomAlphabetic(final int count) {
+    public static String randomAlphabetic(final @NonNegative int count) {
         return random(count, true, false);
     }
 
@@ -136,7 +141,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAlphabetic(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAlphabetic(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomAlphabetic(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -150,7 +155,7 @@ public class RandomStringUtils {
      * @param count  the length of random string to create
      * @return the random string
      */
-    public static String randomAlphanumeric(final int count) {
+    public static String randomAlphanumeric(final @NonNegative int count) {
         return random(count, true, true);
     }
 
@@ -166,7 +171,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomAlphanumeric(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomAlphanumeric(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomAlphanumeric(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -181,7 +186,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomGraph(final int count) {
+    public static String randomGraph(final @NonNegative int count) {
         return random(count, 33, 126, false, false);
     }
 
@@ -196,7 +201,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomGraph(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomGraph(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomGraph(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -210,7 +215,7 @@ public class RandomStringUtils {
      * @param count  the length of random string to create
      * @return the random string
      */
-    public static String randomNumeric(final int count) {
+    public static String randomNumeric(final @NonNegative int count) {
         return random(count, false, true);
     }
 
@@ -225,7 +230,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomNumeric(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomNumeric(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomNumeric(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -240,7 +245,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomPrint(final int count) {
+    public static String randomPrint(final @NonNegative int count) {
         return random(count, 32, 126, false, false);
     }
 
@@ -255,7 +260,7 @@ public class RandomStringUtils {
      * @return the random string
      * @since 3.5
      */
-    public static String randomPrint(final int minLengthInclusive, final int maxLengthExclusive) {
+    public static String randomPrint(final @NonNegative @LessThan("#2") int minLengthInclusive, final @NonNegative int maxLengthExclusive) {
         return randomPrint(RandomUtils.nextInt(minLengthInclusive, maxLengthExclusive));
     }
 
@@ -273,7 +278,7 @@ public class RandomStringUtils {
      *  numeric characters
      * @return the random string
      */
-    public static String random(final int count, final boolean letters, final boolean numbers) {
+    public static String random(final @NonNegative int count, final boolean letters, final boolean numbers) {
         return random(count, 0, 0, letters, numbers);
     }
 
@@ -293,7 +298,10 @@ public class RandomStringUtils {
      *  numeric characters
      * @return the random string
      */
-    public static String random(final int count, final int start, final int end, final boolean letters, final boolean numbers) {
+    @SuppressWarnings("index:argument.type.incompatible") /* If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
+    */
+    public static String random(final @NonNegative int count, final @NonNegative int start, final @NonNegative int end, final boolean letters, final boolean numbers) {
         return random(count, start, end, letters, numbers, null, RANDOM);
     }
 
@@ -317,7 +325,7 @@ public class RandomStringUtils {
      * @throws ArrayIndexOutOfBoundsException if there are not
      *  {@code (end - start) + 1} characters in the set array.
      */
-    public static String random(final int count, final int start, final int end, final boolean letters, final boolean numbers, final char... chars) {
+    public static String random(final @NonNegative int count, final @IndexFor("#6") int start, final @IndexOrHigh("#6") int end, final boolean letters, final boolean numbers, final char... chars) {
         return random(count, start, end, letters, numbers, chars, RANDOM);
     }
 
@@ -354,9 +362,16 @@ public class RandomStringUtils {
      * @throws IllegalArgumentException if {@code count} &lt; 0 or the provided chars array is empty.
      * @since 2.0
      */
-    public static String random(int count, int start, int end, final boolean letters, final boolean numbers,
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high", "index:assignment.type.incompatible", "lowerbound:unary.decrement.type.incompatible"}) /*
+    #1: end > start is ensured by previous if statements
+    #2: random.nextInt(gap) returns an integer less than gap, hence random.nextInt(gap) + start < end
+    #3: if char is null, all possible characters are used, and their codepoints are used instead of index.
+    #4: count != 0 as ensured by #0.1, hence count-- != 0 => count >= 0
+    #5: numberOfChars == 2 => count - 1 >= 0
+    */
+    public static String random(@NonNegative int count, @IndexFor("#6") int start, @IndexOrHigh("#6") int end, final boolean letters, final boolean numbers,
                                 final char[] chars, final Random random) {
-        if (count == 0) {
+        if (count == 0) { // #0.1
             return StringUtils.EMPTY;
         } else if (count < 0) {
             throw new IllegalArgumentException("Requested random string length " + count + " is less than 0.");
@@ -370,10 +385,10 @@ public class RandomStringUtils {
                 end = chars.length;
             } else {
                 if (!letters && !numbers) {
-                    end = Character.MAX_CODE_POINT;
+                    end = Character.MAX_CODE_POINT; // #3
                 } else {
-                    end = 'z' + 1;
-                    start = ' ';
+                    end = 'z' + 1; // #3
+                    start = ' '; // #3
                 }
             }
         } else {
@@ -394,10 +409,10 @@ public class RandomStringUtils {
         final StringBuilder builder = new StringBuilder(count);
         final int gap = end - start;
 
-        while (count-- != 0) {
+        while (count-- != 0) { // #4
             int codePoint;
             if (chars == null) {
-                codePoint = random.nextInt(gap) + start;
+                codePoint = random.nextInt(gap) + start; // #1
 
                 switch (Character.getType(codePoint)) {
                 case Character.UNASSIGNED:
@@ -408,7 +423,7 @@ public class RandomStringUtils {
                 }
 
             } else {
-                codePoint = chars[random.nextInt(gap) + start];
+                codePoint = chars[random.nextInt(gap) + start]; // #2
             }
 
             final int numberOfChars = Character.charCount(codePoint);
@@ -423,7 +438,7 @@ public class RandomStringUtils {
                 builder.appendCodePoint(codePoint);
 
                 if (numberOfChars == 2) {
-                    count--;
+                    count--; // #5
                 }
 
             } else {
@@ -448,7 +463,10 @@ public class RandomStringUtils {
      * @return the random string
      * @throws IllegalArgumentException if {@code count} &lt; 0 or the string is empty.
      */
-    public static String random(final int count, final String chars) {
+    @SuppressWarnings("index:argument.type.incompatible") /* If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
+    */
+    public static String random(final @NonNegative int count, final String chars) {
         if (chars == null) {
             return random(count, 0, 0, false, false, null, RANDOM);
         }
@@ -467,11 +485,16 @@ public class RandomStringUtils {
      * @return the random string
      * @throws IllegalArgumentException if {@code count} &lt; 0.
      */
-    public static String random(final int count, final char... chars) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: If the array passed is null, then the set of all chars is used.
+    The error is issued because if null is passed as the array parameter, the other two parameters which are supposed to be @IndexFor and @IndexOrHigh are not such
+    #2: if chars.length == 0 and chars != null, an IllegalArgumentException is thrown
+    */
+    public static String random(final @NonNegative int count, final char... chars) {
         if (chars == null) {
-            return random(count, 0, 0, false, false, null, RANDOM);
+            return random(count, 0, 0, false, false, null, RANDOM); // #1
         }
-        return random(count, 0, chars.length, false, false, chars, RANDOM);
+        return random(count, 0, chars.length, false, false, chars, RANDOM); //#2
     }
 
 }

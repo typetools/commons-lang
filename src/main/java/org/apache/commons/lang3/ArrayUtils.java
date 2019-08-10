@@ -31,6 +31,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.framework.qual.PolyAll;
+import org.checkerframework.checker.index.qual.SameLen;
+import org.checkerframework.common.value.qual.MinLen;
+
 /**
  * <p>Operations on arrays, primitive arrays (like {@code int[]}) and
  * primitive wrapper arrays (like {@code Integer[]}).
@@ -258,6 +266,7 @@ public class ArrayUtils {
         if (array == null) {
             return null;
         }
+        @SuppressWarnings("index:argument.type.incompatible") // array.length * 1.5 is always @NonNegative, hence the argument is @NonNegative
         final Map<Object, Object> map = new HashMap<>((int) (array.length * 1.5));
         for (int i = 0; i < array.length; i++) {
             final Object object = array[i];
@@ -339,7 +348,8 @@ public class ArrayUtils {
      * @param array  the array to shallow clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static <T> T[] clone(final T[] array) {
+    @SuppressWarnings("samelen:return.type.incompatible") // clone() returns an array of the same length
+    public static <T> T @SameLen("#1") [] clone(final T[] array) {
         if (array == null) {
             return null;
         }
@@ -355,7 +365,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static long[] clone(final long[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static long @SameLen("#1") [] clone(final long[] array) {
         if (array == null) {
             return null;
         }
@@ -371,7 +382,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static int[] clone(final int[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static int @SameLen("#1") [] clone(final int[] array) {
         if (array == null) {
             return null;
         }
@@ -387,7 +399,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static short[] clone(final short[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static short @SameLen("#1") [] clone(final short[] array) {
         if (array == null) {
             return null;
         }
@@ -403,7 +416,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static char[] clone(final char[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static char @SameLen("#1") [] clone(final char[] array) {
         if (array == null) {
             return null;
         }
@@ -419,7 +433,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static byte[] clone(final byte[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static byte @SameLen("#1") [] clone(final byte[] array) {
         if (array == null) {
             return null;
         }
@@ -435,7 +450,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static double[] clone(final double[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static double @SameLen("#1") [] clone(final double[] array) {
         if (array == null) {
             return null;
         }
@@ -451,7 +467,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static float[] clone(final float[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static float @SameLen("#1") [] clone(final float[] array) {
         if (array == null) {
             return null;
         }
@@ -467,7 +484,8 @@ public class ArrayUtils {
      * @param array  the array to clone, may be {@code null}
      * @return the cloned array, {@code null} if {@code null} input
      */
-    public static boolean[] clone(final boolean[] array) {
+    @SuppressWarnings("index:return.type.incompatible") // returns the same array, hence the same length
+    public static boolean @SameLen("#1") [] clone(final boolean[] array) {
         if (array == null) {
             return null;
         }
@@ -912,6 +930,7 @@ public class ArrayUtils {
      * @since 2.1
      * @see Arrays#copyOfRange(Object[], int, int)
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: newSize is subarray.size as in the previous line
     public static <T> T[] subarray(final T[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
             return null;
@@ -932,7 +951,7 @@ public class ArrayUtils {
         @SuppressWarnings("unchecked") // OK, because array is of type T
         final
         T[] subarray = (T[]) Array.newInstance(type, newSize);
-        System.arraycopy(array, startIndexInclusive, subarray, 0, newSize);
+        System.arraycopy(array, startIndexInclusive, subarray, 0, newSize); // #1
         return subarray;
     }
 
@@ -2127,6 +2146,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final boolean[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2137,11 +2160,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); //#0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final boolean aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final boolean aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2169,6 +2192,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final byte[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2179,11 +2206,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final byte aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final byte aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2211,6 +2238,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final char[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2221,11 +2252,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final char aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final char aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2253,6 +2284,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final double[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2263,11 +2298,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final double aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final double aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2295,6 +2330,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final float[] array, int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2305,11 +2344,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final float aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final float aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
 
     }
@@ -2338,6 +2377,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final int[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2348,11 +2391,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final int aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final int aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2380,6 +2423,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final long[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2390,11 +2437,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final long aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final long aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2422,6 +2469,10 @@ public class ArrayUtils {
      * @param len the number of elements to swap starting with the given indices
      * @since 3.5
      */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final Object[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2432,11 +2483,11 @@ public class ArrayUtils {
         if (offset2 < 0) {
             offset2 = 0;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final Object aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final Object aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -2464,6 +2515,10 @@ public class ArrayUtils {
     * @param len the number of elements to swap starting with the given indices
     * @since 3.5
     */
+    @SuppressWarnings("index:array.access.unsafe.high.range") /*
+    #1: #0.1 ensures that len is maximum the minimum of the lengths left from offset1 and offset2 in array,
+    hence offset1 + len - 1 and offset2 + len - 1 is @IndexFor("array")
+    */
     public static void swap(final short[] array,  int offset1, int offset2, int len) {
         if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
             return;
@@ -2477,11 +2532,11 @@ public class ArrayUtils {
         if (offset1 == offset2) {
             return;
         }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2); // #0.1
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final short aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
+            final short aux = array[offset1]; // #1
+            array[offset1] = array[offset2]; // #1
+            array[offset2] = aux; // #1
         }
     }
 
@@ -3213,7 +3268,7 @@ public class ArrayUtils {
      * @return the index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final Object[] array, final Object objectToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final Object[] array, final Object objectToFind) {
         return indexOf(array, objectToFind, 0);
     }
 
@@ -3231,7 +3286,7 @@ public class ArrayUtils {
      * @return the index of the object within the array starting at the index,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3264,7 +3319,7 @@ public class ArrayUtils {
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final Object[] array, final Object objectToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final Object[] array, final Object objectToFind) {
         return lastIndexOf(array, objectToFind, Integer.MAX_VALUE);
     }
 
@@ -3282,7 +3337,7 @@ public class ArrayUtils {
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final Object[] array, final Object objectToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final Object[] array, final Object objectToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3332,7 +3387,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final long[] array, final long valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final long[] array, final long valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3350,7 +3405,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final long[] array, final long valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final long[] array, final long valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3375,7 +3430,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final long[] array, final long valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final long[] array, final long valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3393,7 +3448,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final long[] array, final long valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final long[] array, final long valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3435,7 +3490,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final int[] array, final int valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final int[] array, final int valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3453,7 +3508,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final int[] array, final int valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final int[] array, final int valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3478,7 +3533,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final int[] array, final int valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final int[] array, final int valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3496,7 +3551,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final int[] array, final int valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final int[] array, final int valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3538,7 +3593,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final short[] array, final short valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final short[] array, final short valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3556,7 +3611,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final short[] array, final short valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final short[] array, final short valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3581,7 +3636,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final short[] array, final short valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final short[] array, final short valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3599,7 +3654,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final short[] array, final short valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final short[] array, final short valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3642,7 +3697,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int indexOf(final char[] array, final char valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final char[] array, final char valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3661,7 +3716,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int indexOf(final char[] array, final char valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3687,7 +3742,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int lastIndexOf(final char[] array, final char valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final char[] array, final char valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3706,7 +3761,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
      */
-    public static int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3749,7 +3804,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final byte[] array, final byte valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final byte[] array, final byte valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3767,7 +3822,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3792,7 +3847,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final byte[] array, final byte valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final byte[] array, final byte valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3810,7 +3865,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final byte[] array, final byte valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final byte[] array, final byte valueToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3852,7 +3907,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -3869,7 +3924,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, final double tolerance) {
         return indexOf(array, valueToFind, 0, tolerance);
     }
 
@@ -3887,7 +3942,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -3919,7 +3974,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -3946,7 +4001,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -3963,7 +4018,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, final double tolerance) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE, tolerance);
     }
 
@@ -3981,7 +4036,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4015,7 +4070,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4076,7 +4131,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final float[] array, final float valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final float[] array, final float valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -4094,7 +4149,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final float[] array, final float valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final float[] array, final float valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4119,7 +4174,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final float[] array, final float valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final float[] array, final float valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -4137,7 +4192,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final float[] array, final float valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final float[] array, final float valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4179,7 +4234,7 @@ public class ArrayUtils {
      * @return the index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int indexOf(final boolean[] array, final boolean valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final boolean[] array, final boolean valueToFind) {
         return indexOf(array, valueToFind, 0);
     }
 
@@ -4198,7 +4253,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null}
      *  array input
      */
-    public static int indexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int indexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -4224,7 +4279,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final boolean[] array, final boolean valueToFind) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final boolean[] array, final boolean valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
     }
 
@@ -4242,7 +4297,7 @@ public class ArrayUtils {
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
-    public static int lastIndexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
+    public static @GTENegativeOne @LTLengthOf("#1") int lastIndexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
         if (isEmpty(array)) {
             return INDEX_NOT_FOUND;
         }
@@ -5077,6 +5132,7 @@ public class ArrayUtils {
      * @since 2.1
      * @throws IllegalArgumentException if the array types are incompatible
      */
+    @SuppressWarnings("index:argument.type.incompatible") // By #0.1, joinedArray.length = array1.length + array2.length, hence array2.length is @LTLengthOf(value="joinedArray",offset="array1.length - 1")
     public static <T> T[] addAll(final T[] array1, final T... array2) {
         if (array1 == null) {
             return clone(array2);
@@ -5085,10 +5141,10 @@ public class ArrayUtils {
         }
         final Class<?> type1 = array1.getClass().getComponentType();
         @SuppressWarnings("unchecked") // OK, because array is of type T
-        final T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length);
-        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        final T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length); // #0.1
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length); // #1
         try {
-            System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+            System.arraycopy(array2, 0, joinedArray, array1.length, array2.length); // #1
         } catch (final ArrayStoreException ase) {
             // Check if problem was due to incompatible types
             /*
@@ -5377,9 +5433,8 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Arguments cannot both be null");
         }
         @SuppressWarnings("unchecked") // type must be T
-        final
-        T[] newArray = (T[]) copyArrayGrow1(array, type);
-        newArray[newArray.length - 1] = element;
+        final T[] newArray = (T @MinLen(1) []) copyArrayGrow1(array, type);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5405,8 +5460,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean[] add(final boolean[] array, final boolean element) {
-        final boolean[] newArray = (boolean[]) copyArrayGrow1(array, Boolean.TYPE);
-        newArray[newArray.length - 1] = element;
+        final boolean[] newArray = (boolean @MinLen(1) []) copyArrayGrow1(array, Boolean.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5432,8 +5487,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static byte[] add(final byte[] array, final byte element) {
-        final byte[] newArray = (byte[]) copyArrayGrow1(array, Byte.TYPE);
-        newArray[newArray.length - 1] = element;
+        final byte[] newArray = (byte @MinLen(1) []) copyArrayGrow1(array, Byte.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5459,8 +5514,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static char[] add(final char[] array, final char element) {
-        final char[] newArray = (char[]) copyArrayGrow1(array, Character.TYPE);
-        newArray[newArray.length - 1] = element;
+        final char[] newArray = (char @MinLen(1) []) copyArrayGrow1(array, Character.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5486,8 +5541,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static double[] add(final double[] array, final double element) {
-        final double[] newArray = (double[]) copyArrayGrow1(array, Double.TYPE);
-        newArray[newArray.length - 1] = element;
+        final double[] newArray = (double @MinLen(1) []) copyArrayGrow1(array, Double.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5513,8 +5568,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static float[] add(final float[] array, final float element) {
-        final float[] newArray = (float[]) copyArrayGrow1(array, Float.TYPE);
-        newArray[newArray.length - 1] = element;
+        final float[] newArray = (float @MinLen(1) []) copyArrayGrow1(array, Float.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5540,8 +5595,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static int[] add(final int[] array, final int element) {
-        final int[] newArray = (int[]) copyArrayGrow1(array, Integer.TYPE);
-        newArray[newArray.length - 1] = element;
+        final int[] newArray = (int @MinLen(1) []) copyArrayGrow1(array, Integer.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5567,8 +5622,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static long[] add(final long[] array, final long element) {
-        final long[] newArray = (long[]) copyArrayGrow1(array, Long.TYPE);
-        newArray[newArray.length - 1] = element;
+        final long[] newArray = (long @MinLen(1) []) copyArrayGrow1(array, Long.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5594,8 +5649,8 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static short[] add(final short[] array, final short element) {
-        final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
-        newArray[newArray.length - 1] = element;
+        final short[] newArray = (short @MinLen(1) []) copyArrayGrow1(array, Short.TYPE);
+        newArray[newArray.length - 1] = element; // #1
         return newArray;
     }
 
@@ -5608,14 +5663,19 @@ public class ArrayUtils {
      * size 1 array of this type.
      * @return A new copy of the array of size 1 greater than the input.
      */
-    private static Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
+    @SuppressWarnings({"index:argument.type.incompatible","value:return.type.incompatible"}) /*
+    #1: arrayLength < newArray.length as newArray.length = arrayLength + 1
+    #2: newArray has length array.length + 1, hence it is @MinLen(1)
+    #3: Array.newInstance(--,1) gives an array of length 1
+    */
+    private static @MinLen(1) Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
         if (array != null) {
             final int arrayLength = Array.getLength(array);
             final Object newArray = Array.newInstance(array.getClass().getComponentType(), arrayLength + 1);
-            System.arraycopy(array, 0, newArray, 0, arrayLength);
-            return newArray;
+            System.arraycopy(array, 0, newArray, 0, arrayLength); // #1
+            return newArray; // #2
         }
-        return Array.newInstance(newArrayComponentType, 1);
+        return Array.newInstance(newArrayComponentType, 1); // #3
     }
 
     /**
@@ -5651,7 +5711,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static <T> T[] add(final T[] array, final int index, final T element) {
+    public static <T> T[] add(final T[] array, final @IndexOrHigh("#1") int index, final T element) {
         Class<?> clss = null;
         if (array != null) {
             clss = array.getClass().getComponentType();
@@ -5695,7 +5755,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static boolean[] add(final boolean[] array, final int index, final boolean element) {
+    public static boolean[] add(final boolean[] array, final @IndexOrHigh("#1") int index, final boolean element) {
         return (boolean[]) add(array, index, Boolean.valueOf(element), Boolean.TYPE);
     }
 
@@ -5731,7 +5791,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static char[] add(final char[] array, final int index, final char element) {
+    public static char[] add(final char[] array, final @IndexOrHigh("#1") int index, final char element) {
         return (char[]) add(array, index, Character.valueOf(element), Character.TYPE);
     }
 
@@ -5766,7 +5826,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static byte[] add(final byte[] array, final int index, final byte element) {
+    public static byte[] add(final byte[] array, final @IndexOrHigh("#1") int index, final byte element) {
         return (byte[]) add(array, index, Byte.valueOf(element), Byte.TYPE);
     }
 
@@ -5801,7 +5861,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static short[] add(final short[] array, final int index, final short element) {
+    public static short[] add(final short[] array, final @IndexOrHigh("#1") int index, final short element) {
         return (short[]) add(array, index, Short.valueOf(element), Short.TYPE);
     }
 
@@ -5836,7 +5896,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static int[] add(final int[] array, final int index, final int element) {
+    public static int[] add(final int[] array, final @IndexOrHigh("#1") int index, final int element) {
         return (int[]) add(array, index, Integer.valueOf(element), Integer.TYPE);
     }
 
@@ -5871,7 +5931,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static long[] add(final long[] array, final int index, final long element) {
+    public static long[] add(final long[] array, final @IndexOrHigh("#1") int index, final long element) {
         return (long[]) add(array, index, Long.valueOf(element), Long.TYPE);
     }
 
@@ -5906,7 +5966,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static float[] add(final float[] array, final int index, final float element) {
+    public static float[] add(final float[] array, final @IndexOrHigh("#1") int index, final float element) {
         return (float[]) add(array, index, Float.valueOf(element), Float.TYPE);
     }
 
@@ -5941,7 +6001,7 @@ public class ArrayUtils {
      * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @Deprecated
-    public static double[] add(final double[] array, final int index, final double element) {
+    public static double[] add(final double[] array, final @IndexOrHigh("#1") int index, final double element) {
         return (double[]) add(array, index, Double.valueOf(element), Double.TYPE);
     }
 
@@ -5956,13 +6016,19 @@ public class ArrayUtils {
      * @param clss the type of the element being added
      * @return A new array containing the existing elements and the new element
      */
-    private static Object add(final Object array, final int index, final Object element, final Class<?> clss) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: joinedArray.length = 1 as in the previous line
+    #2: result.length = array.length + 1 as in the previous line, hence index < result.length
+    #3: index < array.length as explained in #2
+    #4: result.length - (index + 1 - 1) = length + 1 - index > length - index
+    */
+    private static Object add(final Object array, final @IndexOrHigh("#1") int index, final Object element, final Class<?> clss) {
         if (array == null) {
             if (index != 0) {
                 throw new IndexOutOfBoundsException("Index: " + index + ", Length: 0");
             }
             final Object joinedArray = Array.newInstance(clss, 1);
-            Array.set(joinedArray, 0, element);
+            Array.set(joinedArray, 0, element); // #1
             return joinedArray;
         }
         final int length = Array.getLength(array);
@@ -5970,10 +6036,10 @@ public class ArrayUtils {
             throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
         }
         final Object result = Array.newInstance(clss, length + 1);
-        System.arraycopy(array, 0, result, 0, index);
-        Array.set(result, index, element);
+        System.arraycopy(array, 0, result, 0, index); // #2
+        Array.set(result, index, element); // #3
         if (index < length) {
-            System.arraycopy(array, index, result, index + 1, length - index);
+            System.arraycopy(array, index, result, index + 1, length - index); // #4
         }
         return result;
     }
@@ -6007,8 +6073,11 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("unchecked") // remove() always creates an array of the same type as its input
-    public static <T> T[] remove(final T[] array, final int index) {
+    @SuppressWarnings({"unchecked", "index:argument.type.incompatible"}) /* remove() always creates an array of the same type as its input
+    index < length of (Object) array
+    https://github.com/typetools/checker-framework/issues/2603
+    */
+    public static <T> T[] remove(final T[] array, final @IndexFor("#1") int index) {
         return (T[]) remove((Object) array, index);
     }
 
@@ -6074,7 +6143,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static boolean[] remove(final boolean[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static boolean[] remove(final boolean[] array, final @IndexFor("#1") int index) {
         return (boolean[]) remove((Object) array, index);
     }
 
@@ -6139,7 +6209,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static byte[] remove(final byte[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static byte[] remove(final byte[] array, final @IndexFor("#1") int index) {
         return (byte[]) remove((Object) array, index);
     }
 
@@ -6204,7 +6275,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static char[] remove(final char[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static char[] remove(final char[] array, final @IndexFor("#1") int index) {
         return (char[]) remove((Object) array, index);
     }
 
@@ -6269,7 +6341,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static double[] remove(final double[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static double[] remove(final double[] array, final @IndexFor("#1") int index) {
         return (double[]) remove((Object) array, index);
     }
 
@@ -6334,7 +6407,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static float[] remove(final float[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static float[] remove(final float[] array, final @IndexFor("#1") int index) {
         return (float[]) remove((Object) array, index);
     }
 
@@ -6399,7 +6473,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static int[] remove(final int[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static int[] remove(final int[] array, final @IndexFor("#1") int index) {
         return (int[]) remove((Object) array, index);
     }
 
@@ -6464,7 +6539,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static long[] remove(final long[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static long[] remove(final long[] array, final @IndexFor("#1") int index) {
         return (long[]) remove((Object) array, index);
     }
 
@@ -6529,7 +6605,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    public static short[] remove(final short[] array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") // index < length of (Object) array. https://github.com/typetools/checker-framework/issues/2603
+    public static short[] remove(final short[] array, final @IndexFor("#1") int index) {
         return (short[]) remove((Object) array, index);
     }
 
@@ -6587,16 +6664,21 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 2.1
      */
-    private static Object remove(final Object array, final int index) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length - 1 by the previous line, hence index is @IndexOrHigh("result")
+    #2: length - index - 1 = result.length - index as result.length = length - 1
+    https://github.com/typetools/checker-framework/issues/2603
+    */
+    private static Object remove(final Object array, final @IndexFor("#1") int index) {
         final int length = getLength(array);
         if (index < 0 || index >= length) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
         }
 
         final Object result = Array.newInstance(array.getClass().getComponentType(), length - 1);
-        System.arraycopy(array, 0, result, 0, index);
+        System.arraycopy(array, 0, result, 0, index); // #1
         if (index < length - 1) {
-            System.arraycopy(array, index + 1, result, index, length - index - 1);
+            System.arraycopy(array, index + 1, result, index, length - index - 1); // #2
         }
 
         return result;
@@ -6628,8 +6710,10 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    @SuppressWarnings("unchecked") // removeAll() always creates an array of the same type as its input
-    public static <T> T[] removeAll(final T[] array, final int... indices) {
+    @SuppressWarnings({"unchecked","index:argument.type.incompatible"}) /* removeAll() always creates an array of the same type as its input
+    elements of indices are less than array.length, hence less than the length of (Object) array
+    */
+    public static <T> T[] removeAll(final T[] array, final @IndexFor("#1") int... indices) {
         return (T[]) removeAll((Object) array, indices);
     }
 
@@ -6720,7 +6804,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static byte[] removeAll(final byte[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static byte[] removeAll(final byte[] array, final @IndexFor("#1") int... indices) {
         return (byte[]) removeAll((Object) array, indices);
     }
 
@@ -6808,7 +6893,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static short[] removeAll(final short[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static short[] removeAll(final short[] array, final @IndexFor("#1") int... indices) {
         return (short[]) removeAll((Object) array, indices);
     }
 
@@ -6896,7 +6982,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static int[] removeAll(final int[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static int[] removeAll(final int[] array, final @IndexFor("#1") int... indices) {
         return (int[]) removeAll((Object) array, indices);
     }
 
@@ -6984,7 +7071,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static char[] removeAll(final char[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static char[] removeAll(final char[] array, final @IndexFor("#1") int... indices) {
         return (char[]) removeAll((Object) array, indices);
     }
 
@@ -7072,7 +7160,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static long[] removeAll(final long[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static long[] removeAll(final long[] array, final @IndexFor("#1") int... indices) {
         return (long[]) removeAll((Object) array, indices);
     }
 
@@ -7160,7 +7249,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static float[] removeAll(final float[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static float[] removeAll(final float[] array, final @IndexFor("#1") int... indices) {
         return (float[]) removeAll((Object) array, indices);
     }
 
@@ -7248,7 +7338,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static double[] removeAll(final double[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static double[] removeAll(final double[] array, final @IndexFor("#1") int... indices) {
         return (double[]) removeAll((Object) array, indices);
     }
 
@@ -7332,7 +7423,8 @@ public class ArrayUtils {
      * (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
      * @since 3.0.1
      */
-    public static boolean[] removeAll(final boolean[] array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") // elements of indices are less than array.length, hence less than the length of (Object) array
+    public static boolean[] removeAll(final boolean[] array, final @IndexFor("#1") int... indices) {
         return (boolean[]) removeAll((Object) array, indices);
     }
 
@@ -7399,7 +7491,14 @@ public class ArrayUtils {
      * @since 3.0.1
      */
     // package protected for access by unit tests
-    static Object removeAll(final Object array, final int... indices) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: length - no. of distinct indices(<=length) is @NonNegative
+    #2: index + 1 is @IndexOrHigh("array") as index is @IndexFor("array")
+        dest is the number of entries not copied so far which is @NonNegative and @LTEqLengthOf("result")
+        result.length - dest(new) = (length - diff)(total to be copied) - dest(old)(old left to be copied) + cp = cp + some @NonNegative value, hence cp <= this expression
+    #3: By #0.1, end is the smallest index. result.length = length - diff and end <= length - diff as it is the smallest index in clonedIndices[]
+    */
+    static Object removeAll(final Object array, final @IndexFor("#1") int... indices) {
         final int length = getLength(array);
         int diff = 0; // number of distinct indexes, i.e. number of entries that will be removed
         final int[] clonedIndices = clone(indices);
@@ -7423,7 +7522,7 @@ public class ArrayUtils {
         }
 
         // create result array
-        final Object result = Array.newInstance(array.getClass().getComponentType(), length - diff);
+        final Object result = Array.newInstance(array.getClass().getComponentType(), length - diff); // #1
         if (diff < length) {
             int end = length; // index just after last copy
             int dest = length - diff; // number of entries so far not copied
@@ -7432,13 +7531,13 @@ public class ArrayUtils {
                 if (end - index > 1) { // same as (cp > 0)
                     final int cp = end - index - 1;
                     dest -= cp;
-                    System.arraycopy(array, index + 1, result, dest, cp);
+                    System.arraycopy(array, index + 1, result, dest, cp); // #2
                     // Afer this copy, we still have room for dest items.
                 }
-                end = index;
+                end = index; // #0.1
             }
             if (end > 0) {
-                System.arraycopy(array, 0, result, 0, end);
+                System.arraycopy(array, 0, result, 0, end); // #3
             }
         }
         return result;
@@ -7453,6 +7552,11 @@ public class ArrayUtils {
      * @since 3.2
      */
     // package protected for access by unit tests
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: removals is the number of items removed, which cannot be greater than the length of the original array, so srcLength - removals is @NonNegative
+    #2: count = set - srcIndex, and set is the index of the next bit from srcIndex, set != -1 => set is @IndexFor("array"), hence set - srcIndex is also @IndexFor("array")
+        count = set - srcIndex < src.length as set < src.length
+    */
     static Object removeAll(final Object array, final BitSet indices) {
         final int srcLength = getLength(array);
         // No need to check maxIndex here, because method only currently called from removeElements()
@@ -7462,7 +7566,7 @@ public class ArrayUtils {
 //            throw new IndexOutOfBoundsException("Index: " + (maxIndex-1) + ", Length: " + srcLength);
 //        }
         final int removals = indices.cardinality(); // true bits are items to remove
-        final Object result = Array.newInstance(array.getClass().getComponentType(), srcLength - removals);
+        final Object result = Array.newInstance(array.getClass().getComponentType(), srcLength - removals); // #1
         int srcIndex = 0;
         int destIndex = 0;
         int count;
@@ -7470,14 +7574,14 @@ public class ArrayUtils {
         while ((set = indices.nextSetBit(srcIndex)) != -1) {
             count = set - srcIndex;
             if (count > 0) {
-                System.arraycopy(array, srcIndex, result, destIndex, count);
+                System.arraycopy(array, srcIndex, result, destIndex, count); // #2
                 destIndex += count;
             }
             srcIndex = indices.nextClearBit(set);
         }
         count = srcLength - srcIndex;
         if (count > 0) {
-            System.arraycopy(array, srcIndex, result, destIndex, count);
+            System.arraycopy(array, srcIndex, result, destIndex, count); // #2
         }
         return result;
     }
@@ -7491,10 +7595,11 @@ public class ArrayUtils {
      * @return whether the array is sorted
      * @since 3.4
      */
+    @SuppressWarnings({"value:override.param.invalid", "samelen:override.param.invalid", "lowerbound:override.param.invalid", "index:override.param.invalid"})
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
             @Override
-            public int compare(final T o1, final T o2) {
+            public int compare(final @PolyAll T o1, final @PolyAll T o2) {
                 return o1.compareTo(o2);
             }
         });
@@ -7748,21 +7853,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static boolean[] removeAllOccurences(final boolean[] array, final boolean element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final @IndexFor("array") int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7780,21 +7891,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static char[] removeAllOccurences(final char[] array, final char element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7812,21 +7929,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static byte[] removeAllOccurences(final byte[] array, final byte element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7844,21 +7967,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static short[] removeAllOccurences(final short[] array, final short element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7876,21 +8005,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static int[] removeAllOccurences(final int[] array, final int element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7908,21 +8043,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static long[] removeAllOccurences(final long[] array, final long element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7940,21 +8081,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static float[] removeAllOccurences(final float[] array, final float element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -7972,21 +8119,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static double[] removeAllOccurences(final double[] array, final double element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8005,21 +8158,27 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
+    @SuppressWarnings({"index:array.length.negative","index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
+    #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
+    #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
+    #4: the array made contains the indices of particular elements of array, hence, all the elements are @IndexFor("array")
+    */
     public static <T> T[] removeAllOccurences(final T[] array, final T element) {
         int index = indexOf(array, element);
         if (index == INDEX_NOT_FOUND) {
             return clone(array);
         }
 
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
+        final int[] indices = new int[array.length - index]; // #1
+        indices[0] = index; // #1
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
+        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) { // #2
+            indices[count++] = index; // #3
         }
 
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return removeAll(array, Arrays.copyOf(indices, count)); // #4
     }
 
     /**
@@ -8094,7 +8253,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static boolean[] insert(final int index, final boolean[] array, final boolean... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static boolean[] insert(final @IndexOrHigh("#2") int index, final boolean[] array, final boolean... values) {
         if (array == null) {
             return null;
         }
@@ -8107,12 +8274,12 @@ public class ArrayUtils {
 
         final boolean[] result = new boolean[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8136,7 +8303,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static byte[] insert(final int index, final byte[] array, final byte... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static byte[] insert(final @IndexOrHigh("#2") int index, final byte[] array, final byte... values) {
         if (array == null) {
             return null;
         }
@@ -8149,12 +8324,12 @@ public class ArrayUtils {
 
         final byte[] result = new byte[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8178,7 +8353,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static char[] insert(final int index, final char[] array, final char... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static char[] insert(final @IndexOrHigh("#2") int index, final char[] array, final char... values) {
         if (array == null) {
             return null;
         }
@@ -8191,12 +8374,12 @@ public class ArrayUtils {
 
         final char[] result = new char[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8220,7 +8403,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static double[] insert(final int index, final double[] array, final double... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static double[] insert(final @IndexOrHigh("#2") int index, final double[] array, final double... values) {
         if (array == null) {
             return null;
         }
@@ -8233,12 +8424,12 @@ public class ArrayUtils {
 
         final double[] result = new double[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8262,7 +8453,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static float[] insert(final int index, final float[] array, final float... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static float[] insert(final @IndexOrHigh("#2") int index, final float[] array, final float... values) {
         if (array == null) {
             return null;
         }
@@ -8275,12 +8474,12 @@ public class ArrayUtils {
 
         final float[] result = new float[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8304,7 +8503,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static int[] insert(final int index, final int[] array, final int... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static int[] insert(final @IndexOrHigh("#2") int index, final int[] array, final int... values) {
         if (array == null) {
             return null;
         }
@@ -8317,12 +8524,12 @@ public class ArrayUtils {
 
         final int[] result = new int[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8346,7 +8553,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static long[] insert(final int index, final long[] array, final long... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static long[] insert(final @IndexOrHigh("#2") int index, final long[] array, final long... values) {
         if (array == null) {
             return null;
         }
@@ -8359,12 +8574,12 @@ public class ArrayUtils {
 
         final long[] result = new long[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8388,7 +8603,15 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
-    public static short[] insert(final int index, final short[] array, final short... values) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
+    public static short[] insert(final @IndexOrHigh("#2") int index, final short[] array, final short... values) {
         if (array == null) {
             return null;
         }
@@ -8401,12 +8624,12 @@ public class ArrayUtils {
 
         final short[] result = new short[array.length + values.length];
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }
@@ -8431,8 +8654,16 @@ public class ArrayUtils {
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
      */
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1: result.length = array.length + values.length and index is @IndexOrHigh("array"), hence result.length >= values.length + index, so values.length <= resut.length - index
+    #2: index is @IndexOrHigh("result") as well because result.length >= array.length as result.length = array.length + values.length
+    #3: required: result.length - index - values.length >= array.length - index
+                array.length + values.length - index - values.length >= array.length - index
+                0 >= 0
+        Hence, this relation is true.
+    */
     @SafeVarargs
-    public static <T> T[] insert(final int index, final T[] array, final T... values) {
+    public static <T> T[] insert(final @IndexOrHigh("#2") int index, final T[] array, final T... values) {
         /*
          * Note on use of @SafeVarargs:
          *
@@ -8456,12 +8687,12 @@ public class ArrayUtils {
         final
         T[] result = (T[]) Array.newInstance(type, array.length + values.length);
 
-        System.arraycopy(values, 0, result, index, values.length);
+        System.arraycopy(values, 0, result, index, values.length); // #1
         if (index > 0) {
-            System.arraycopy(array, 0, result, 0, index);
+            System.arraycopy(array, 0, result, 0, index); // #2
         }
         if (index < array.length) {
-            System.arraycopy(array, index, result, index + values.length, array.length - index);
+            System.arraycopy(array, index, result, index + values.length, array.length - index); // #3
         }
         return result;
     }

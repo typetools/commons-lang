@@ -20,6 +20,10 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LTLengthOf;
+
 /**
  * A matcher class that can be queried to determine if a character array
  * portion matches.
@@ -245,7 +249,7 @@ public abstract class StrMatcher {
      * @param bufferEnd  the end index (exclusive) of the active buffer, valid for buffer
      * @return the number of matching characters, zero for no match
      */
-    public abstract int isMatch(char[] buffer, int pos, int bufferStart, int bufferEnd);
+    public abstract @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(char[] buffer, @IndexFor("#1") int pos, int bufferStart, int bufferEnd);
 
     /**
      * Returns the number of matching characters, zero for no match.
@@ -267,7 +271,7 @@ public abstract class StrMatcher {
      * @return the number of matching characters, zero for no match
      * @since 2.4
      */
-    public int isMatch(final char[] buffer, final int pos) {
+    public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, final @IndexFor("#1") int pos) {
         return isMatch(buffer, pos, 0, buffer.length);
     }
 
@@ -300,7 +304,8 @@ public abstract class StrMatcher {
          * @return the number of matching characters, zero for no match
          */
         @Override
-        public int isMatch(final char[] buffer, final int pos, final int bufferStart, final int bufferEnd) {
+        @SuppressWarnings("index:return.type.incompatible") // min value of buffer - (pos - 1) is 2, and the return values are less than 2
+        public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, final @IndexFor("#1") int pos, final int bufferStart, final int bufferEnd) {
             return Arrays.binarySearch(chars, buffer[pos]) >= 0 ? 1 : 0;
         }
     }
@@ -333,7 +338,8 @@ public abstract class StrMatcher {
          * @return the number of matching characters, zero for no match
          */
         @Override
-        public int isMatch(final char[] buffer, final int pos, final int bufferStart, final int bufferEnd) {
+        @SuppressWarnings("index:return.type.incompatible") // min value of buffer - (pos - 1) is 2, and the return values are less than 2
+        public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, final @IndexFor("#1") int pos, final int bufferStart, final int bufferEnd) {
             return ch == buffer[pos] ? 1 : 0;
         }
     }
@@ -366,13 +372,16 @@ public abstract class StrMatcher {
          * @return the number of matching characters, zero for no match
          */
         @Override
-        public int isMatch(final char[] buffer, int pos, final int bufferStart, final int bufferEnd) {
+        @SuppressWarnings({"index:unary.increment.type.incompatible", "index:return.type.incompatible"}) /* pos + len < bufferEnd as checker by previous if statement, hence pos++ will increment pos till less than bufferEnd, hence, less than buffer.length
+        pos + len < bufferEnd => len < bufferEnd - pos => len is @LTLengthOf(value = "buffer", offset = "pos")
+        */
+        public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, @IndexFor("#1") int pos, final int bufferStart, final int bufferEnd) {
             final int len = chars.length;
             if (pos + len > bufferEnd) {
                 return 0;
             }
             for (int i = 0; i < chars.length; i++, pos++) {
-                if (chars[i] != buffer[pos]) {
+                if (chars[i] != buffer[pos]) { // #1
                     return 0;
                 }
             }
@@ -408,8 +417,9 @@ public abstract class StrMatcher {
          * @param bufferEnd  the end index of the active buffer, valid for buffer
          * @return the number of matching characters, zero for no match
          */
+        @SuppressWarnings("index:return.type.incompatible") // min value of buffer - (pos - 1) is 2, and the return value is less than 2
         @Override
-        public int isMatch(final char[] buffer, final int pos, final int bufferStart, final int bufferEnd) {
+        public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, final int pos, final int bufferStart, final int bufferEnd) {
             return 0;
         }
     }
@@ -436,8 +446,9 @@ public abstract class StrMatcher {
          * @param bufferEnd  the end index of the active buffer, valid for buffer
          * @return the number of matching characters, zero for no match
          */
+        @SuppressWarnings("index:return.type.incompatible") // min value of buffer - (pos - 1) is 2, and the return values are less than 2
         @Override
-        public int isMatch(final char[] buffer, final int pos, final int bufferStart, final int bufferEnd) {
+        public @NonNegative @LTLengthOf(value = {"#1"}, offset = {"#2 - 1"}) int isMatch(final char[] buffer, final @IndexFor("#1") int pos, final int bufferStart, final int bufferEnd) {
             return buffer[pos] <= 32 ? 1 : 0;
         }
     }
