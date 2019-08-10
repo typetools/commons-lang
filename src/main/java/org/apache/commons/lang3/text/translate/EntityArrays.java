@@ -40,7 +40,7 @@ public class EntityArrays {
         return ISO8859_1_ESCAPE.clone();
     }
 
-    private static final String[][] ISO8859_1_ESCAPE = {
+    private static final String @ArrayLen(96) [] @ArrayLen(2) [] ISO8859_1_ESCAPE = {
         {"\u00A0", "&nbsp;"}, // non-breaking space
         {"\u00A1", "&iexcl;"}, // inverted exclamation mark
         {"\u00A2", "&cent;"}, // cent sign
