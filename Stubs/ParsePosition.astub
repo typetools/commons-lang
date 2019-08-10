@@ -1,6 +1,0 @@
-import org.checkerframework.checker.index.qual.NonNegative;
-package java.text;
-
-class ParsePosition {
-    @NonNegative int getIndex();
-}
