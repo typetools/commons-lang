@@ -41,7 +41,6 @@ import org.apache.commons.lang3.builder.Builder;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.SameLen;
-import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.common.value.qual.MinLen;
 
 /**
@@ -1826,7 +1825,7 @@ public class TypeUtils {
             buf.append('.').append(raw.getSimpleName());
         }
 
-        final int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
+        final @IndexFor("p.getActualTypeArguments()") int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
 
         if (recursiveTypeIndexes.length > 0) {
             appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments()); // #0.1
