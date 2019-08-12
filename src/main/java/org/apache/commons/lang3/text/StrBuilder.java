@@ -38,7 +38,6 @@ import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.checker.index.qual.IndexOrLow;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.SameLen;
-import org.checkerframework.checker.index.qual.LengthOf;
 
 /**
  * Builds a string from constituent parts providing a more flexible and powerful API

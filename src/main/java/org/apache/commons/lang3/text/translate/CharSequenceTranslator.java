@@ -81,7 +81,7 @@ public abstract class CharSequenceTranslator {
      * @param out Writer to translate the text to
      * @throws IOException if and only if the Writer produces an IOException
      */
-    @SuppressWarnings({"index:argument.type.incompatible","value:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "value:argument.type.incompatible"}) /*
     #1, #2: argument to write() need not be @NonNegative
     #3: consumed is the number of codepoints used to represent the character, hence, the value of pos remains a valid index for input throughout the loop
     #4: pos is 0 initially and pos < len as the loop condition ensures that if the code reached #4, len is min 1

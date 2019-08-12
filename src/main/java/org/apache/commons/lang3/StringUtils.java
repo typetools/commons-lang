@@ -29,10 +29,8 @@ import java.util.regex.Pattern;
 
 import org.checkerframework.common.value.qual.EnsuresMinLenIf;
 import org.checkerframework.checker.index.qual.NonNegative;
-import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.SameLen;
-import org.checkerframework.common.value.qual.MinLen;
 import org.checkerframework.checker.index.qual.GTENegativeOne;
 import org.checkerframework.checker.index.qual.LTEqLengthOf;
 import org.checkerframework.common.value.qual.ArrayLen;
@@ -1593,7 +1591,7 @@ public class StringUtils {
      * @param str  the String to delete whitespace from, may be null
      * @return the String without whitespaces, {@code null} if null String input
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:argument.type.incompatible"}) /*
     #1: count can be only incremented from 0 till a maximum of sz as it can be incremented only once per loop, also, since it is post-increment, in chs[index++], a maximum sz - 1 will be used as the index
     #2: count can be only a maximum of sz by #1
     */
@@ -3029,7 +3027,7 @@ public class StringUtils {
     @SuppressWarnings("index:return.type.incompatible") /* #1: when i exits from the previous loop, it is either one of the lengths of cs1 or cs2
     or less than both of these length(when there is a mismatch in between in characters), either way, i can't be more than min(cs1.length(), cs2.length())
     */
-    public static @GTENegativeOne @LTEqLengthOf({"#1","#2"}) int indexOfDifference(final CharSequence cs1, final CharSequence cs2) {
+    public static @GTENegativeOne @LTEqLengthOf({"#1", "#2"}) int indexOfDifference(final CharSequence cs1, final CharSequence cs2) {
         if (cs1 == cs2) {
             return INDEX_NOT_FOUND;
         }
@@ -5385,7 +5383,7 @@ public class StringUtils {
         return str.toLowerCase(locale);
     }
 
-    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:argument.type.incompatible"}) /*
     #1: matches (ms1's length) is equal to the number of non -1 elements of matchIndexes as ensured by the previous loop
     #2: matches (ms2's length) is equal to the number of boolean true elements of matchFlags as ensured by the previous loop
     #3: ms1.length = ms2.length = matches
@@ -5534,7 +5532,7 @@ public class StringUtils {
      *
      * @since 3.0
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:argument.type.incompatible"}) /*
     #1: inside the loop, count can reach a maximum size, as it is incremented only a maximum once per iteration,
         and it is post-increment, hence when it is used as index, it can reach a maximum size - 1
     #2: count is @IndexOrHigh("newChars") as it is incremented maximum once per iteration.
@@ -5847,7 +5845,7 @@ public class StringUtils {
      *  {@code null} if null String input
      * @since 2.1
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:argument.type.incompatible"}) /*
     #1: pos can be incremented till a maximum of chars.length times, but when used as the index, it can be a maximum chars.length - 1 as it is post increment
     #2: pos can reach only a maximum of chars.length as it is incremented maximum once in one iteration
     */
@@ -6269,7 +6267,7 @@ public class StringUtils {
      * @return a new String consisting of the original String repeated,
      *  {@code null} if null String input
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range"}) /*
     #1: str.length() is checked to be 1
     #2: str.length() is 2
     #3: output2 has a length repeat*2 and i goes from repeat*2 - 2 to 0, hence i + 1 can attain a maximum value repeat*2 - 1
@@ -6712,7 +6710,7 @@ public class StringUtils {
      *             and/or size 0)
      * @since 2.4
      */
-    @SuppressWarnings({"index:array.access.unsafe.high","index:argument.type.incompatible","index:array.access.unsafe.low"}) /*
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:argument.type.incompatible", "index:array.access.unsafe.low"}) /*
     #2: textIndex != -1 and is an index searched for in the string, hence a valid index
     #3: textIndex != -1 => replaceIndex != -1
     #4: searchLength = replacementLeng as checked in #0.1

@@ -686,7 +686,7 @@ public class ObjectUtils {
         Validate.noNullElements(items);
         final TreeSet<T> sort = new TreeSet<>();
         Collections.addAll(sort, items);
-        @SuppressWarnings({"unchecked","index:array.access.unsafe.high.range"}) //we know all items added were T instances
+        @SuppressWarnings({"unchecked", "index:array.access.unsafe.high.range"}) //we know all items added were T instances
         final T result = (T) sort.toArray()[(sort.size() - 1) / 2]; // (sort.size() - 1) / 2 < sort.size()
         return result;
     }
@@ -709,7 +709,7 @@ public class ObjectUtils {
         Validate.notNull(comparator, "null comparator");
         final TreeSet<T> sort = new TreeSet<>(comparator);
         Collections.addAll(sort, items);
-        @SuppressWarnings({"unchecked","index:array.access.unsafe.high.range"}) //we know all items added were T instances
+        @SuppressWarnings({"unchecked", "index:array.access.unsafe.high.range"}) //we know all items added were T instances
         final
         T result = (T) sort.toArray()[(sort.size() - 1) / 2]; // (sort.size() - 1) / 2 < sort.size()
         return result;

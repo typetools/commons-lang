@@ -17,8 +17,6 @@
 package org.apache.commons.lang3;
 
 import org.checkerframework.checker.index.qual.IndexOrHigh;
-import org.checkerframework.checker.index.qual.LTEqLengthOf;
-import org.checkerframework.checker.index.qual.NonNegative;
 
 /**
  * <p>Operations on {@link CharSequence} that are
@@ -177,7 +175,7 @@ public class CharSequenceUtils {
      * @return the index where the search char was found, -1 if not found
      * @since 3.6 updated to behave more like <code>String</code>
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:array.access.unsafe.high.constant"}) /* #1: 0 <= start <= sz - 2 when this loop is reached as ensured by the previous if statements,
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.constant"}) /* #1: 0 <= start <= sz - 2 when this loop is reached as ensured by the previous if statements,
     hence i + 1 has a max value of cs.length() - 1
     #2: minimum length of cz is 2 for this loop to be executed as i >= 0 i <= cz.length() - 2
     */

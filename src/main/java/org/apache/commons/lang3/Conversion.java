@@ -19,7 +19,6 @@ package org.apache.commons.lang3;
 import java.util.UUID;
 
 import org.checkerframework.checker.index.qual.IndexFor;
-import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.common.value.qual.MinLen;
@@ -446,7 +445,7 @@ public class Conversion {
     #1: beSrcPos + 1 - srcLen = beSrcPos + 1 - Math.min(4, beSrcPos + 1) which has min value 0
         4 - srcLen = 4 - Math.min(4, beSrcPos + 1) which has min value 0
         srcLen is @NonNegative and @LTLengthOf(value = "#1", offset = "#2 - 1"), i.e., srcLen < src.length - beSrcPos - 1 + srcLen + 1 => 0 < src.length - src.length + 1 + srcPos => 0 < 1 + srcPos which is true
-        Also, srcLen is @LTLengthOf(value = "#3", offset = "#4 - 1"), i.e., srcLen < paddedSrc.length - 4 + srclen + 1 => 0 < 4 - 4 + 1 which is true   
+        Also, srcLen is @LTLengthOf(value = "#3", offset = "#4 - 1"), i.e., srcLen < paddedSrc.length - 4 + srclen + 1 => 0 < 4 - 4 + 1 which is true
     */
     public static char binaryBeMsb0ToHexDigit(boolean @MinLen(1) [] src, @IndexFor("#1") int srcPos) {
         if (src.length == 0) {
@@ -1541,7 +1540,7 @@ public class Conversion {
      */
     @SuppressWarnings("index:argument.type.incompatible") /*
     #1: If nBytes > 8, 8 is @LTLengthOf(value="dst", offset="dstPos - 1"), as nBytes is @LTLengthOf(value = "dst", offset = "dstPos - 1") and 8 < nBytes
-    #2: The compiler shows found   : @LTLengthOf(value={"dst", "dst"}, offset={"dstPos + 7", "dstPos - 1"}) int 
+    #2: The compiler shows found   : @LTLengthOf(value={"dst", "dst"}, offset={"dstPos + 7", "dstPos - 1"}) int
         required: @LTLengthOf(value="dst", offset="? - 1") int
         the '?' is dstPos + 8, hence ? - 1 is dstPos + 7 which is inferred by the compiler, still an error is issued.
     */

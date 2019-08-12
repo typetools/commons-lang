@@ -198,7 +198,7 @@ public class EnumUtils {
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
      */
-    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1, 
+    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1,
     hence an enum position / Long.SIZE is @IndexFor("result")
     */
     public static <E extends Enum<E>> long[] generateBitVectors(final Class<E> enumClass, final Iterable<? extends E> values) {
@@ -256,7 +256,7 @@ public class EnumUtils {
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
      */
-    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1, 
+    @SuppressWarnings("index:array.access.unsafe.high.range") /* #1: value.ordinal() returns that enum's position, and result's length is last enum's position / Long.SIZE + 1,
     hence an enum position / Long.SIZE is @IndexFor("result")
     */
     @SafeVarargs

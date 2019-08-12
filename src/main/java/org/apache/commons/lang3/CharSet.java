@@ -188,7 +188,7 @@ public class CharSet implements Serializable {
      *
      * @param str  set definition string
      */
-    @SuppressWarnings({"index:argument.type.incompatible","index:compound.assignment.type.incompatible"}) /*
+    @SuppressWarnings({"index:argument.type.incompatible", "index:compound.assignment.type.incompatible"}) /*
     #1: remanider >= 4 => pos + 3 < str.length
     #2: remainder >= 4 => pos + 4 <= str.length
     #3: remanider >= 3 => pos + 2 < str.length
