@@ -8043,7 +8043,7 @@ public class ArrayUtils {
      * @return A new array containing the existing elements except the occurrences of the specified element.
      * @since 3.5
      */
-    @SuppressWarnings({"index:array.length.negative"," index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
+    @SuppressWarnings({"index:array.length.negative", "index:argument.type.incompatible", "index:array.access.unsafe.high.constant", "index:array.access.unsafe.high.range"}) /*
     #1: index != INDEX_NOT_FOUND => index < array.length and array.length - index is minimum 1 hence indices is @MinLen(1)
     #2: count is @IndexOrHigh("indices") as it is incremented only when a particular element is found, hence count - 1 is @IndexFor("indices")
     #3: count is @IndexOrHigh("indices") as explained in #2, as it is post increment, it is @IndexFor("indices") when used as the index of the array
