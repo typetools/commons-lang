@@ -32,9 +32,7 @@ import org.apache.commons.lang3.exception.CloneFailedException;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrBuilder;
 
-import org.checkerframework.checker.index.qual.PolySameLen;
-import org.checkerframework.checker.index.qual.PolyLowerBound;
-import org.checkerframework.checker.index.qual.PolyUpperBound;
+import org.checkerframework.framework.qual.PolyAll;
 
 /**
  * <p>Operations on {@code Object}.</p>
@@ -594,7 +592,7 @@ public class ObjectUtils {
      *  </ul>
      */
     @SafeVarargs
-    public static <T extends Comparable<? super T>> T min(final T... values) {
+    public static <T extends Comparable<? super T>> @PolyAll T min(final @PolyAll T... values) {
         T result = null;
         if (values != null) {
             for (final T value : values) {
@@ -620,7 +618,7 @@ public class ObjectUtils {
      *  </ul>
      */
     @SafeVarargs
-    public static <T extends Comparable<? super T>> T max(final T... values) {
+    public static <T extends Comparable<? super T>> @PolyAll T max(final @PolyAll T... values) {
         T result = null;
         if (values != null) {
             for (final T value : values) {
@@ -642,7 +640,7 @@ public class ObjectUtils {
      * @return a negative value if c1 &lt; c2, zero if c1 = c2
      *  and a positive value if c1 &gt; c2
      */
-    public static <T extends Comparable<? super T>> int compare(final @PolySameLen @PolyLowerBound @PolyUpperBound T c1, final @PolySameLen @PolyLowerBound @PolyUpperBound T c2) {
+    public static <T extends Comparable<? super T>> int compare(final @PolyAll T c1, final @PolyAll T c2) {
         return compare(c1, c2, false);
     }
 
@@ -659,7 +657,7 @@ public class ObjectUtils {
      *  and a positive value if c1 &gt; c2
      * @see java.util.Comparator#compare(Object, Object)
      */
-    public static <T extends Comparable<? super T>> int compare(final @PolySameLen @PolyLowerBound @PolyUpperBound T c1, final @PolySameLen @PolyLowerBound @PolyUpperBound T c2, final boolean nullGreater) {
+    public static <T extends Comparable<? super T>> int compare(final @PolyAll T c1, final @PolyAll T c2, final boolean nullGreater) {
         if (c1 == c2) {
             return 0;
         } else if (c1 == null) {
