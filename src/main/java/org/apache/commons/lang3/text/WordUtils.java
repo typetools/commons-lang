@@ -22,6 +22,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import org.checkerframework.checker.index.qual.IndexOrLow;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.NonNegative;
+
 /**
  * <p>Operations on Strings that contain words.</p>
  *
@@ -100,7 +104,7 @@ public class WordUtils {
      * @param wrapLength  the column to wrap the words at, less than 1 is treated as 1
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    public static String wrap(final String str, final int wrapLength) {
+    public static String wrap(final String str, final @NonNegative int wrapLength) {
         return wrap(str, wrapLength, null, false);
     }
 
@@ -177,7 +181,7 @@ public class WordUtils {
      * @param wrapLongWords  true if long words (such as URLs) should be wrapped
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    public static String wrap(final String str, final int wrapLength, final String newLineStr, final boolean wrapLongWords) {
+    public static String wrap(final String str, final @NonNegative int wrapLength, final String newLineStr, final boolean wrapLongWords) {
         return wrap(str, wrapLength, newLineStr, wrapLongWords, " ");
     }
 
@@ -271,7 +275,12 @@ public class WordUtils {
      *               if blank string is provided a space character will be used
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    public static String wrap(final String str, int wrapLength, String newLineStr, final boolean wrapLongWords, String wrapOn) {
+    @SuppressWarnings({"index:assignment.type.incompatible", "index:compound.assignment.type.incompatible"}) /*
+    #1: matcher is on the substring of str that starts with offset index, hence (offset + matcher.end())'s max value = offset + str.length() - 1 - offset = str.length() - 1
+    #2, #3: matcher is on the substring of str that starts with offset index, hence (offset + matcher.start())'s max value = offset + str.length() - 1 - offset = str.length() - 1, spaceToWrapAt's maximum value is str.length() - 1
+    #4: matcher is on the substring of str that starts with offset + wrapLength index, hence (offset + wrapLength + matcher.start())'s max value = offset + wrapLength + str.length() - 1 - offset - wrapLength = str.length() - 1
+    */
+    public static String wrap(final String str, @NonNegative int wrapLength, String newLineStr, final boolean wrapLongWords, String wrapOn) {
         if (str == null) {
             return null;
         }
@@ -286,19 +295,19 @@ public class WordUtils {
         }
         final Pattern patternToWrapOn = Pattern.compile(wrapOn);
         final int inputLineLength = str.length();
-        int offset = 0;
+        @IndexOrHigh("str") int offset = 0;
         final StringBuilder wrappedLine = new StringBuilder(inputLineLength + 32);
 
         while (offset < inputLineLength) {
-            int spaceToWrapAt = -1;
+            @IndexOrLow("str") int spaceToWrapAt = -1;
             Matcher matcher = patternToWrapOn.matcher(
                 str.substring(offset, Math.min((int) Math.min(Integer.MAX_VALUE, offset + wrapLength + 1L), inputLineLength)));
             if (matcher.find()) {
                 if (matcher.start() == 0) {
-                    offset += matcher.end();
+                    offset += matcher.end(); // #1
                     continue;
                 }
-                spaceToWrapAt = matcher.start() + offset;
+                spaceToWrapAt = matcher.start() + offset; // #2
             }
 
             // only last line without leading spaces is left
@@ -307,7 +316,7 @@ public class WordUtils {
             }
 
             while (matcher.find()) {
-                spaceToWrapAt = matcher.start() + offset;
+                spaceToWrapAt = matcher.start() + offset; // #3
             }
 
             if (spaceToWrapAt >= offset) {
@@ -327,7 +336,7 @@ public class WordUtils {
                     // do not wrap really long word, just extend beyond limit
                     matcher = patternToWrapOn.matcher(str.substring(offset + wrapLength));
                     if (matcher.find()) {
-                        spaceToWrapAt = matcher.start() + offset + wrapLength;
+                        spaceToWrapAt = matcher.start() + offset + wrapLength; // #4
                     }
 
                     if (spaceToWrapAt >= 0) {
@@ -654,6 +663,7 @@ public class WordUtils {
      * @see #initials(String)
      * @since 2.2
      */
+    @SuppressWarnings({"index:array.access.unsafe.high", "index:unary.increment.type.incompatible"}) // count can reach the maximum value of strLen/2 by this assignment, and the maximum value to be used in the index can be (strLen-1)/2, because when count++ happens, lastWasGap is set to false, and it will require at least one more run to set lastWasGapto true and then count++ can happen in the next iteration
     public static String initials(final String str, final char... delimiters) {
         if (StringUtils.isEmpty(str)) {
             return str;
@@ -663,7 +673,7 @@ public class WordUtils {
         }
         final int strLen = str.length();
         final char[] buf = new char[strLen / 2 + 1];
-        int count = 0;
+        @IndexOrHigh("buf") int count = 0;
         boolean lastWasGap = true;
         for (int i = 0; i < strLen; i++) {
             final char ch = str.charAt(i);
@@ -671,7 +681,7 @@ public class WordUtils {
             if (isDelimiter(ch, delimiters)) {
                 lastWasGap = true;
             } else if (lastWasGap) {
-                buf[count++] = ch;
+                buf[count++] = ch; // #1
                 lastWasGap = false;
             } else {
                 continue; // ignore ch

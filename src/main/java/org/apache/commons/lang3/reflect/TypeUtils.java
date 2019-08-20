@@ -39,9 +39,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
 
 import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.SameLen;
 import org.checkerframework.common.value.qual.MinLen;
-import org.checkerframework.checker.index.qual.LTLengthOf;
 
 /**
  * <p> Utility methods focusing on type inspection, particularly with regard to
@@ -1825,7 +1825,7 @@ public class TypeUtils {
             buf.append('.').append(raw.getSimpleName());
         }
 
-        final int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
+        final @IndexFor("p.getActualTypeArguments()") int[] recursiveTypeIndexes = findRecursiveTypes(p); // #0.2
 
         if (recursiveTypeIndexes.length > 0) {
             appendRecursiveTypes(buf, recursiveTypeIndexes, p.getActualTypeArguments()); // #0.1
@@ -1841,7 +1841,7 @@ public class TypeUtils {
     findRecursiveTypes(p) returns an array with length <= p.getActualTypeArguments().length as can be seen in the loop which adds an element to the array,
     it runs from 0 to p.getActualTypeArguments().length - 1
     */
-    private static void appendRecursiveTypes(final StringBuilder buf, final int[] recursiveTypeIndexes, final Type[] argumentTypes) {
+    private static void appendRecursiveTypes(final StringBuilder buf, final @IndexFor("#3") int[] recursiveTypeIndexes, final Type[] argumentTypes) {
         for (int i = 0; i < recursiveTypeIndexes.length; i++) {
             appendAllTo(buf.append('<'), ", ", argumentTypes[i].toString()).append('>'); // #1
         }
@@ -1852,13 +1852,11 @@ public class TypeUtils {
             appendAllTo(buf.append('<'), ", ", argumentsFiltered).append('>');
         }
     }
-    @SuppressWarnings("index:assignment.type.incompatible")/*
-    #3: Array.copyOf(array, n) returns an array of length n
-    #4: Keeps on adding an element every time this statement is carried out, hence no. of elements <= no. of times loop runs, hence @LTEqLengthOf("p.getActualTypeArguments()")
-    */
-    private static int @LTLengthOf(value = {"#1.getActualTypeArguments()"}, offset = {"-1"}) [] findRecursiveTypes(final ParameterizedType p) {
-        final Type @SameLen("p.getActualTypeArguments()") [] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length); // #3
-        int @LTLengthOf(value = {"p.getActualTypeArguments()"}, offset = {"-1"}) [] indexesToRemove = {};
+
+    @SuppressWarnings("index:return.type.incompatible") // only the indices of filteredArgumentTypes is added, which is a copy of p.getActualTypeArguments()
+    private static @IndexFor("#1.getActualTypeArguments()") int[] findRecursiveTypes(final ParameterizedType p) {
+        final Type[] filteredArgumentTypes = Arrays.copyOf(p.getActualTypeArguments(), p.getActualTypeArguments().length);
+        int[] indexesToRemove = {};
         for (int i = 0; i < filteredArgumentTypes.length; i++) {
             if (filteredArgumentTypes[i] instanceof TypeVariable<?>) {
                 if (containsVariableTypeSameParametrizedTypeBound(((TypeVariable<?>) filteredArgumentTypes[i]), p)) {

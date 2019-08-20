@@ -758,7 +758,7 @@
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
           <!-- Skipping checkstyle in these files as a error is issued of an unexpected token on the @MinLen annotation -->
-          <excludes>org/apache/commons/lang3/math/NumberUtils.java,org/apache/commons/lang3/math/IEEE754rUtils.java</excludes>
+          <excludes>org/apache/commons/lang3/math/NumberUtils.java,org/apache/commons/lang3/math/IEEE754rUtils.java,org/apache/commons/lang3/text/translate/LookupTranslator.java</excludes>
         </configuration>
         <dependencies>
           <dependency>
@@ -858,6 +858,11 @@
             </tagClasses>
           </tagListOptions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javancss-maven-plugin</artifactId>
+        <version>2.1</version>
       </plugin>
     </plugins>
   </reporting>
@@ -1031,8 +1036,8 @@
                   <compilerArgs>
                     <!-- location of the annotated JDK, which comes from a Maven dependency -->
                     <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-                    <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.</arg>
                     <arg>-Astubs=/Stubs/</arg>
+                    <arg>-AonlyDefs=^org\.apache\.commons\.lang3\.math\.|^org\.apache\.commons\.lang3\.builder\.|^org\.apache\.commons\.lang3\.exception\.|^org\.apache\.commons\.lang3\.reflect\.|^org\.apache\.commons\.lang3\.time\.|^org\.apache\.commons\.lang3\.text\.|^org\.apache\.commons\.lang3\.</arg>
                     <arg>-ArequirePrefixInWarningSuppressions</arg>
                     <arg>-AwarnUnneededSuppressions</arg>
                   </compilerArgs>

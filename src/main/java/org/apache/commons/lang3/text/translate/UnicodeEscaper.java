@@ -19,6 +19,8 @@ package org.apache.commons.lang3.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.checkerframework.common.value.qual.IntRange;
+
 /**
  * Translates codepoints to their Unicode escaped value.
  *
@@ -102,6 +104,7 @@ public class UnicodeEscaper extends CodePointTranslator {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("index:argument.type.incompatible") // argument of out.write() need not to @NonNegative
     @Override
     public boolean translate(final int codepoint, final Writer out) throws IOException {
         if (between) {
@@ -119,10 +122,10 @@ public class UnicodeEscaper extends CodePointTranslator {
             out.write(toUtf16Escape(codepoint));
         } else {
           out.write("\\u");
-          out.write(HEX_DIGITS[(codepoint >> 12) & 15]);
-          out.write(HEX_DIGITS[(codepoint >> 8) & 15]);
-          out.write(HEX_DIGITS[(codepoint >> 4) & 15]);
-          out.write(HEX_DIGITS[(codepoint) & 15]);
+          out.write(HEX_DIGITS[(codepoint >> 12) & 15]); // #1
+          out.write(HEX_DIGITS[(codepoint >> 8) & 15]); // #2
+          out.write(HEX_DIGITS[(codepoint >> 4) & 15]); // #3
+          out.write(HEX_DIGITS[(codepoint) & 15]); // #4
         }
         return true;
     }
@@ -136,7 +139,7 @@ public class UnicodeEscaper extends CodePointTranslator {
      *
      * @since 3.2
      */
-    protected String toUtf16Escape(final int codepoint) {
+    protected String toUtf16Escape(final @IntRange(from = 65535, to = Integer.MAX_VALUE) int codepoint) {
         return "\\u" + hex(codepoint);
     }
 }

@@ -32,6 +32,8 @@ import org.apache.commons.lang3.exception.CloneFailedException;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrBuilder;
 
+import org.checkerframework.framework.qual.PolyAll;
+
 /**
  * <p>Operations on {@code Object}.</p>
  *
@@ -590,7 +592,7 @@ public class ObjectUtils {
      *  </ul>
      */
     @SafeVarargs
-    public static <T extends Comparable<? super T>> T min(final T... values) {
+    public static <T extends Comparable<? super T>> @PolyAll T min(final @PolyAll T... values) {
         T result = null;
         if (values != null) {
             for (final T value : values) {
@@ -616,7 +618,7 @@ public class ObjectUtils {
      *  </ul>
      */
     @SafeVarargs
-    public static <T extends Comparable<? super T>> T max(final T... values) {
+    public static <T extends Comparable<? super T>> @PolyAll T max(final @PolyAll T... values) {
         T result = null;
         if (values != null) {
             for (final T value : values) {
@@ -638,7 +640,7 @@ public class ObjectUtils {
      * @return a negative value if c1 &lt; c2, zero if c1 = c2
      *  and a positive value if c1 &gt; c2
      */
-    public static <T extends Comparable<? super T>> int compare(final T c1, final T c2) {
+    public static <T extends Comparable<? super T>> int compare(final @PolyAll T c1, final @PolyAll T c2) {
         return compare(c1, c2, false);
     }
 
@@ -655,7 +657,7 @@ public class ObjectUtils {
      *  and a positive value if c1 &gt; c2
      * @see java.util.Comparator#compare(Object, Object)
      */
-    public static <T extends Comparable<? super T>> int compare(final T c1, final T c2, final boolean nullGreater) {
+    public static <T extends Comparable<? super T>> int compare(final @PolyAll T c1, final @PolyAll T c2, final boolean nullGreater) {
         if (c1 == c2) {
             return 0;
         } else if (c1 == null) {
@@ -682,8 +684,8 @@ public class ObjectUtils {
         Validate.noNullElements(items);
         final TreeSet<T> sort = new TreeSet<>();
         Collections.addAll(sort, items);
-        @SuppressWarnings("unchecked") //we know all items added were T instances
-        final T result = (T) sort.toArray()[(sort.size() - 1) / 2];
+        @SuppressWarnings({"unchecked", "index:array.access.unsafe.high.range"}) //we know all items added were T instances
+        final T result = (T) sort.toArray()[(sort.size() - 1) / 2]; // (sort.size() - 1) / 2 < sort.size()
         return result;
     }
 
@@ -705,9 +707,9 @@ public class ObjectUtils {
         Validate.notNull(comparator, "null comparator");
         final TreeSet<T> sort = new TreeSet<>(comparator);
         Collections.addAll(sort, items);
-        @SuppressWarnings("unchecked") //we know all items added were T instances
+        @SuppressWarnings({"unchecked", "index:array.access.unsafe.high.range"}) //we know all items added were T instances
         final
-        T result = (T) sort.toArray()[(sort.size() - 1) / 2];
+        T result = (T) sort.toArray()[(sort.size() - 1) / 2]; // (sort.size() - 1) / 2 < sort.size()
         return result;
     }
 
@@ -760,6 +762,7 @@ public class ObjectUtils {
      * @throws CloneFailedException if the object is cloneable and the clone operation fails
      * @since 3.0
      */
+    @SuppressWarnings("index:argument.type.incompatible") // #1: length-- > 0 as while condition ensures length to be @NonNegative inside the loop
     public static <T> T clone(final T obj) {
         if (obj instanceof Cloneable) {
             final Object result;
@@ -769,7 +772,7 @@ public class ObjectUtils {
                     int length = Array.getLength(obj);
                     result = Array.newInstance(componentType, length);
                     while (length-- > 0) {
-                        Array.set(result, length, Array.get(obj, length));
+                        Array.set(result, length, Array.get(obj, length)); // #1
                     }
                 } else {
                     result = ((Object[]) obj).clone();

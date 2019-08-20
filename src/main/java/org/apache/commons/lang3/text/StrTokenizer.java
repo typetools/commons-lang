@@ -26,6 +26,12 @@ import java.util.NoSuchElementException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.EnsuresLTLengthOfIf;
+
 /**
  * Tokenizes a string based on delimiters (separators)
  * and supporting quoting and ignored character concepts.
@@ -114,7 +120,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
     /** The parsed tokens */
     private String tokens[];
     /** The current iteration position */
-    private int tokenPos;
+    private @IndexOrHigh("tokens") int tokenPos;
 
     /** The delimiter matcher */
     private StrMatcher delimMatcher = StrMatcher.splitMatcher();
@@ -419,6 +425,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous sequential token, or null when no more tokens are found
      */
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:unary.decrement.type.incompatible"}) // hasPrevious() => tokenPos > 0
     public String previousToken() {
         if (hasPrevious()) {
             return tokens[--tokenPos];
@@ -500,6 +507,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return true if there are more tokens
      */
+    @EnsuresLTLengthOfIf(expression = "this.tokenPos", result = true, targetValue = "this.tokens")
     @Override
     public boolean hasNext() {
         checkTokenized();
@@ -526,7 +534,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @return the next token index
      */
     @Override
-    public int nextIndex() {
+    public @NonNegative int nextIndex() {
         return tokenPos;
     }
 
@@ -546,6 +554,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return the previous token
      */
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:unary.decrement.type.incompatible"}) // hasPrevious() => tokenPos > 0
     @Override
     public String previous() {
         if (hasPrevious()) {
@@ -560,7 +569,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @return the previous token index
      */
     @Override
-    public int previousIndex() {
+    public @GTENegativeOne int previousIndex() {
         return tokenPos - 1;
     }
 
@@ -682,36 +691,40 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @return the starting position of the next field (the character
      *  immediately after the delimiter), or -1 if end of string found
      */
-    private int readNextToken(final char[] srcChars, int start, final int len, final StrBuilder workArea, final List<String> tokenList) {
+    @SuppressWarnings("index:argument.type.incompatible") /*
+    #1, #2, #3, #4: start < len as it is the condition for the while loop
+    #5, #6: start < len as checked otherwise by the if statement #0
+    */
+    private int readNextToken(final char[] srcChars, @NonNegative int start, final int len, final StrBuilder workArea, final List<String> tokenList) {
         // skip all leading whitespace, unless it is the
         // field delimiter or the quote character
         while (start < len) {
             final int removeLen = Math.max(
-                    getIgnoredMatcher().isMatch(srcChars, start, start, len),
-                    getTrimmerMatcher().isMatch(srcChars, start, start, len));
+                    getIgnoredMatcher().isMatch(srcChars, start, start, len), // #1
+                    getTrimmerMatcher().isMatch(srcChars, start, start, len)); // #2
             if (removeLen == 0 ||
-                getDelimiterMatcher().isMatch(srcChars, start, start, len) > 0 ||
-                getQuoteMatcher().isMatch(srcChars, start, start, len) > 0) {
+                getDelimiterMatcher().isMatch(srcChars, start, start, len) > 0 || // #3
+                getQuoteMatcher().isMatch(srcChars, start, start, len) > 0) { // #4
                 break;
             }
             start += removeLen;
         }
 
         // handle reaching end
-        if (start >= len) {
+        if (start >= len) { // #0
             addToken(tokenList, StringUtils.EMPTY);
             return -1;
         }
 
         // handle empty token
-        final int delimLen = getDelimiterMatcher().isMatch(srcChars, start, start, len);
+        final int delimLen = getDelimiterMatcher().isMatch(srcChars, start, start, len); // #5
         if (delimLen > 0) {
             addToken(tokenList, StringUtils.EMPTY);
             return start + delimLen;
         }
 
         // handle found token
-        final int quoteLen = getQuoteMatcher().isMatch(srcChars, start, start, len);
+        final int quoteLen = getQuoteMatcher().isMatch(srcChars, start, start, len); // #6
         if (quoteLen > 0) {
             return readWithQuotes(srcChars, start + quoteLen, len, workArea, tokenList, start, quoteLen);
         }
@@ -732,7 +745,12 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *  immediately after the delimiter, or if end of string found,
      *  then the length of string
      */
-    private int readWithQuotes(final char[] srcChars, final int start, final int len, final StrBuilder workArea,
+    @SuppressWarnings({"index:argument.type.incompatible", "index:array.access.unsafe.high.range", "index:array.access.unsafe.low"}) /*
+    #1, #2, #3, #4, #5: pos < len is checked as the condition for the while loop, and when all the compound assignments happen (#0.1, #0.2, #0.3, #0.4, #0.5), there is a continue statement,
+    hence the loop starts again and pos < len is checked. Also, pos++ can happen only once, either in #1 or in #5 because both are complementary if-else parts,
+    hence srcChars[pos++] is also validin #1 and #5 as pos < len
+    */
+    private int readWithQuotes(final char[] srcChars, final @IndexFor("#1") int start, final int len, final StrBuilder workArea,
                                final List<String> tokenList, final int quoteStart, final int quoteLen) {
         // Loop until we've found the end of the quoted
         // string or the end of the input
@@ -756,26 +774,26 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
                     if (isQuote(srcChars, pos + quoteLen, len, quoteStart, quoteLen)) {
                         // matched pair of quotes, thus an escaped quote
                         workArea.append(srcChars, pos, quoteLen);
-                        pos += quoteLen * 2;
+                        pos += quoteLen * 2; // #0.1
                         trimStart = workArea.size();
                         continue;
                     }
 
                     // end of quoting
                     quoting = false;
-                    pos += quoteLen;
+                    pos += quoteLen; // #0.2
                     continue;
                 }
 
                 // copy regular character from inside quotes
-                workArea.append(srcChars[pos++]);
+                workArea.append(srcChars[pos++]); // #1
                 trimStart = workArea.size();
 
             } else {
                 // Not in quoting mode
 
                 // check for delimiter, and thus end of token
-                final int delimLen = getDelimiterMatcher().isMatch(srcChars, pos, start, len);
+                final int delimLen = getDelimiterMatcher().isMatch(srcChars, pos, start, len); // #2
                 if (delimLen > 0) {
                     // return condition when end of token found
                     addToken(tokenList, workArea.substring(0, trimStart));
@@ -785,29 +803,29 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
                 // check for quote, and thus back into quoting mode
                 if (quoteLen > 0 && isQuote(srcChars, pos, len, quoteStart, quoteLen)) {
                     quoting = true;
-                    pos += quoteLen;
+                    pos += quoteLen; // #0.3
                     continue;
                 }
 
                 // check for ignored (outside quotes), and ignore
-                final int ignoredLen = getIgnoredMatcher().isMatch(srcChars, pos, start, len);
+                final int ignoredLen = getIgnoredMatcher().isMatch(srcChars, pos, start, len); // #3
                 if (ignoredLen > 0) {
-                    pos += ignoredLen;
+                    pos += ignoredLen; // #0.4
                     continue;
                 }
 
                 // check for trimmed character
                 // don't yet know if its at the end, so copy to workArea
                 // use trimStart to keep track of trim at the end
-                final int trimmedLen = getTrimmerMatcher().isMatch(srcChars, pos, start, len);
+                final int trimmedLen = getTrimmerMatcher().isMatch(srcChars, pos, start, len); // #4
                 if (trimmedLen > 0) {
                     workArea.append(srcChars, pos, trimmedLen);
-                    pos += trimmedLen;
+                    pos += trimmedLen; // #0.5
                     continue;
                 }
 
                 // copy regular character from outside quotes
-                workArea.append(srcChars[pos++]);
+                workArea.append(srcChars[pos++]); // #5
                 trimStart = workArea.size();
             }
         }
@@ -828,9 +846,10 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      * @param quoteLen  the length of the matched quote, 0 if no quoting
      * @return true if a quote is matched
      */
-    private boolean isQuote(final char[] srcChars, final int pos, final int len, final int quoteStart, final int quoteLen) {
+    @SuppressWarnings({"index:array.access.unsafe.low", "index:array.access.unsafe.high"}) // #1: If pos + i >= len, srcChars[pos + i] and srcChars[quoteStart + i] does not happen.
+    private boolean isQuote(final char[] srcChars, final @NonNegative int pos, final @NonNegative int len, final int quoteStart, final int quoteLen) {
         for (int i = 0; i < quoteLen; i++) {
-            if (pos + i >= len || srcChars[pos + i] != srcChars[quoteStart + i]) {
+            if (pos + i >= len || srcChars[pos + i] != srcChars[quoteStart + i]) { // #1
                 return false;
             }
         }

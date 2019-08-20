@@ -204,7 +204,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             i = indexRef[0];
 
             final int tokenLen = token.length();
-            if (tokenLen == 0) {
+            if (tokenLen == 0) { // #0.1
                 break;
             }
 
@@ -303,7 +303,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                 }
                 break;
             case '\'': // literal text
-                @SuppressWarnings("index:argument.type.incompatible") // token has a minimum length 1
+                @SuppressWarnings("index:argument.type.incompatible") // token has a minimum length 1 as checked by #0.1
                 final String sub = token.substring(1);
                 if (sub.length() == 1) {
                     rule = new CharacterLiteral(sub.charAt(0));
@@ -909,8 +909,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         /**
          * {@inheritDoc}
          */
-        @SuppressWarnings("index:array.access.unsafe.high") // mValues has same number of elements as number of possible elements by calendar.get(mField), calendar.get(mField) starts from 0, hence a valid index
         @Override
+        @SuppressWarnings("index:array.access.unsafe.high") // mValues has same number of elements as number of possible elements by calendar.get(mField), calendar.get(mField) starts from 0, hence a valid index
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
             buffer.append(mValues[calendar.get(mField)]);
         }

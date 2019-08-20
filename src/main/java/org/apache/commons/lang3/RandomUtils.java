@@ -18,6 +18,9 @@ package org.apache.commons.lang3;
 
 import java.util.Random;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.LessThan;
+
 /**
  * <p>Utility library that supplements the standard {@link Random} class.</p>
  *
@@ -77,7 +80,7 @@ public class RandomUtils {
      * @return the random byte array
      * @throws IllegalArgumentException if {@code count} is negative
      */
-    public static byte[] nextBytes(final int count) {
+    public static byte[] nextBytes(final @NonNegative int count) {
         Validate.isTrue(count >= 0, "Count cannot be negative.");
 
         final byte[] result = new byte[count];
@@ -99,7 +102,7 @@ public class RandomUtils {
      *             {@code startInclusive} is negative
      * @return the random integer
      */
-    public static int nextInt(final int startInclusive, final int endExclusive) {
+    public static @NonNegative int nextInt(final @NonNegative @LessThan("#2") int startInclusive, final @NonNegative int endExclusive) {
         Validate.isTrue(endExclusive >= startInclusive,
                 "Start value must be smaller or equal to end value.");
         Validate.isTrue(startInclusive >= 0, "Both range values must be non-negative.");
@@ -118,7 +121,8 @@ public class RandomUtils {
      * @see #nextInt(int, int)
      * @since 3.5
      */
-    public static int nextInt() {
+    @SuppressWarnings("index:argument.type.incompatible") // 0 < Integer.MAX_VALUE. https://github.com/typetools/checker-framework/issues/2613
+    public static @NonNegative int nextInt() {
         return nextInt(0, Integer.MAX_VALUE);
     }
 
@@ -136,7 +140,7 @@ public class RandomUtils {
      *             {@code startInclusive} is negative
      * @return the random long
      */
-    public static long nextLong(final long startInclusive, final long endExclusive) {
+    public static long nextLong(final @NonNegative long startInclusive, final @NonNegative long endExclusive) {
         Validate.isTrue(endExclusive >= startInclusive,
                 "Start value must be smaller or equal to end value.");
         Validate.isTrue(startInclusive >= 0, "Both range values must be non-negative.");
@@ -173,7 +177,7 @@ public class RandomUtils {
      *             {@code startInclusive} is negative
      * @return the random double
      */
-    public static double nextDouble(final double startInclusive, final double endInclusive) {
+    public static double nextDouble(final @NonNegative double startInclusive, final @NonNegative double endInclusive) {
         Validate.isTrue(endInclusive >= startInclusive,
                 "Start value must be smaller or equal to end value.");
         Validate.isTrue(startInclusive >= 0, "Both range values must be non-negative.");
@@ -192,6 +196,7 @@ public class RandomUtils {
      * @see #nextDouble(double, double)
      * @since 3.5
      */
+    @SuppressWarnings("lowerbound:argument.type.incompatible") // Double.MAX_VALUE is @NonNegative
     public static double nextDouble() {
         return nextDouble(0, Double.MAX_VALUE);
     }
@@ -210,7 +215,7 @@ public class RandomUtils {
      *             {@code startInclusive} is negative
      * @return the random float
      */
-    public static float nextFloat(final float startInclusive, final float endInclusive) {
+    public static float nextFloat(final @NonNegative float startInclusive, final @NonNegative float endInclusive) {
         Validate.isTrue(endInclusive >= startInclusive,
                 "Start value must be smaller or equal to end value.");
         Validate.isTrue(startInclusive >= 0, "Both range values must be non-negative.");
@@ -229,6 +234,7 @@ public class RandomUtils {
      * @see #nextFloat()
      * @since 3.5
      */
+    @SuppressWarnings("lowerbound:argument.type.incompatible") // Float.MAX_VALUE is @NonNegative
     public static float nextFloat() {
         return nextFloat(0, Float.MAX_VALUE);
     }
